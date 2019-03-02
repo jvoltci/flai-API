@@ -26,10 +26,14 @@ app.post('/download', (req, res) => {
 		contentType = 'video/mp4';
 		file = "ergo";
 	}
-	else if(extension === ".mp3")
+	else if(extension === ".mp3") {
 		contentType = 'audio/mp3';
-	else if(extension === ".zip")
-		contentType = 'application/zip';
+		file = "sonorous";
+	}
+	else if(extension === ".mkv") {
+		contentType = 'video/mkv';
+		file = "limerence";
+	}
 	else
 		contentType = 'application/zip';
 
