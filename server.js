@@ -68,7 +68,7 @@ app.get('/link', (req, res) => {
 
 	else {
 		password = '';
-		res.send("<h1><a href='https://flai-herokuapp.com' >Go to FLai</a></h1>");
+		res.redirect('https://flai.herokuapp.com');
 	}
 })
 
@@ -93,7 +93,7 @@ app.get('/play', (req, res) => {
 		}
 	}
 	else {
-		res.send("<h1><a href='https://flai-herokuapp.com' >Go to FLai</a></h1>");
+		res.redirect('https://flai.herokuapp.com');
 	}
 })
 
