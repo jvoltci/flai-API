@@ -57,7 +57,7 @@ app.get('/play', (req, res) => {
 	}
 })
 
-app.listen(prot, () => {
+app.listen(port, () => {
     console.log("Listening on *:3000")
 })
 
