@@ -70,7 +70,6 @@ app.get('/play', (req, res) => {
 		if(url[4] !== 's') {
 			const request = http.get(url, function(response) {
 			res.writeHead(200, {
-				"Content-Disposition": "attachment;filename=" + file + extension,
 				'Content-Type': contentType
 			});
 			response.pipe(res);
@@ -79,7 +78,6 @@ app.get('/play', (req, res) => {
 		else {
 			const request = https.get(url, function(response) {
 				res.writeHead(200, {
-					"Content-Disposition": "attachment;filename=" + file + extension,
 					'Content-Type': contentType
 				});
 				response.pipe(res);
