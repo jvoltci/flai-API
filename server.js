@@ -33,8 +33,10 @@ app.post('/download', (req, res) => {
 		contentType = 'video/webm';
 		file = "limerence";
 	}
-	else
+	else {
 		contentType = 'application/zip';
+		file = "paradox";
+	}
 
 	return res.redirect('/link');
 
