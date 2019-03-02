@@ -61,4 +61,4 @@ app.listen(port, () => {
     console.log("Listening on *:3000")
 })
 
-module.exports = server;
+module.exports = app;
