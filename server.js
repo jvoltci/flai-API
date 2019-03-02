@@ -12,6 +12,7 @@ let url = '';
 let contentType = '';
 let extension = '';
 let file = "paradox";
+let password = '';
 
 app.get('/', (req, res) => {
 	res.send("<h1><a href='https://flai-herokuapp.com' >Go to FLai</a></h1>")
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 app.post('/download', (req, res) => {
 	extension = req.body.user.extension;
 	url = req.body.user.url;
+	password = req.body.user.password;
 
 	if(extension === ".mp4") {
 		contentType = 'video/mp4';
@@ -43,7 +45,7 @@ app.post('/download', (req, res) => {
 })
 
 app.get('/link', (req, res) => {
-	if(url && extension) {
+	if(url && extension && password === 'jvoltci') {
 		if(url[4] !== 's') {
 			const request = http.get(url, function(response) {
 			res.writeHead(200, {
@@ -65,13 +67,14 @@ app.get('/link', (req, res) => {
 	}
 
 	else {
+		password = '';
 		res.send("<h1><a href='https://flai-herokuapp.com' >Go to FLai</a></h1>");
 	}
 })
 
 app.get('/play', (req, res) => {
 
-	if(url) {
+	if(url && password == 'jvoltci') {
 		if(url[4] !== 's') {
 			const request = http.get(url, function(response) {
 			res.writeHead(200, {
