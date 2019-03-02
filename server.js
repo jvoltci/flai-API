@@ -69,7 +69,7 @@ app.get('/play', (req, res) => {
 	if(url) {
 		const request = https.get(url, function(response) {
 			res.writeHead(200, {
-				'Content-Type': 'video/mp4'
+				'Content-Type': contentType
 			});
 			response.pipe(res);
 		});
