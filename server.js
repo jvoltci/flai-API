@@ -67,12 +67,24 @@ app.get('/link', (req, res) => {
 app.get('/play', (req, res) => {
 
 	if(url) {
-		const request = https.get(url, function(response) {
+		if(url[4] !== 's') {
+			const request = http.get(url, function(response) {
 			res.writeHead(200, {
+				"Content-Disposition": "attachment;filename=" + file + extension,
 				'Content-Type': contentType
 			});
 			response.pipe(res);
-		});
+		});	
+		}
+		else {
+			const request = https.get(url, function(response) {
+				res.writeHead(200, {
+					"Content-Disposition": "attachment;filename=" + file + extension,
+					'Content-Type': contentType
+				});
+				response.pipe(res);
+			});
+		}
 	}
 	else {
 		res.send("<h1><a href='https://flai-herokuapp.com' >Go to FLai</a></h1>");
