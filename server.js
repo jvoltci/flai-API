@@ -40,12 +40,15 @@ app.post('/download', (req, res) => {
 		file = "paradox";
 	}
 
-	return res.redirect('/link');
+	if (password === 'jvoltci')
+		return res.redirect('/link');
+	else
+		return res.redirect('https://flai.herokuapp.com');
 
 })
 
 app.get('/link', (req, res) => {
-	if(url && extension && password === 'jvoltci') {
+	if(url && extension) {
 		if(url[4] !== 's') {
 			const request = http.get(url, function(response) {
 			res.writeHead(200, {
@@ -74,7 +77,7 @@ app.get('/link', (req, res) => {
 
 app.get('/play', (req, res) => {
 
-	if(url && password == 'jvoltci') {
+	if(url) {
 		if(url[4] !== 's') {
 			const request = http.get(url, function(response) {
 			res.writeHead(200, {
