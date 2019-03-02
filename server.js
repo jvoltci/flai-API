@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
+const port = process.env.PORT || 5000;
 let url = '';
 
 app.get('/', (req, res) => {
@@ -57,6 +57,8 @@ app.get('/play', (req, res) => {
 	}
 })
 
-app.listen(3000, () => {
+app.listen(prot, () => {
     console.log("Listening on *:3000")
 })
+
+module.exports = server;
