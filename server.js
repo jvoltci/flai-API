@@ -18,7 +18,6 @@ app.get('/', (req, res) => {
 })
 
 app.post('/download', (req, res) => {
-	contentType = '';
 	extension = req.body.user.extension;
 	url = req.body.user.url;
 
