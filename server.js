@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 app.post('/download', (req, res) => {
 	password = req.body.user.password;
 
-	if (password === 'jvoltci') {
+	if (password === process.env.PASS) {
 		extension = req.body.user.extension;
 		url = req.body.user.url;
 		
