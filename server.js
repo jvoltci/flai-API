@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const https = require('https');
 const http = require('http');
 const bodyParser = require('body-parser');
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 5000;
@@ -19,29 +21,30 @@ app.get('/', (req, res) => {
 })
 
 app.post('/download', (req, res) => {
-	extension = req.body.user.extension;
-	url = req.body.user.url;
 	password = req.body.user.password;
 
-	if(extension === ".mp4") {
-		contentType = 'video/mp4';
-		file = "ergo";
-	}
-	else if(extension === ".mp3") {
-		contentType = 'audio/mp3';
-		file = "sonorous";
-	}
-	else if(extension === ".mkv") {
-		contentType = 'video/webm';
-		file = "limerence";
-	}
-	else {
-		contentType = 'application/zip';
-		file = "paradox";
-	}
-
-	if (password === 'jvoltci')
+	if (password === 'jvoltci') {
+		extension = req.body.user.extension;
+		url = req.body.user.url;
+		
+		if(extension === ".mp4") {
+			contentType = 'video/mp4';
+			file = "ergo";
+		}
+		else if(extension === ".mp3") {
+			contentType = 'audio/mp3';
+			file = "sonorous";
+		}
+		else if(extension === ".mkv") {
+			contentType = 'video/webm';
+			file = "limerence";
+		}
+		else {
+			contentType = 'application/zip';
+			file = "paradox";
+		}
 		return res.redirect('/link');
+	}
 	else
 		return res.redirect('https://flai.herokuapp.com');
 
