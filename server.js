@@ -17,7 +17,7 @@ let file = "paradox";
 let password = '';
 
 app.get('/', (req, res) => {
-	res.send("<h1><a href='https://flai-herokuapp.com' >Go to FLai</a></h1>")
+	res.send("<h1><a href='https://flai.herokuapp.com' >Go to FLai</a></h1>")
 })
 
 app.post('/download', (req, res) => {
