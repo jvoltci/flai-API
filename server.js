@@ -17,7 +17,7 @@ let file = "paradox";
 let password = '';
 
 app.get('/', (req, res) => {
-	res.send("<h1><a href='https://flai.herokuapp.com' >Go to FLai</a></h1>")
+	res.send("<h1><a href='https://flai.herokuapp.com' >Go to flai</a></h1>")
 })
 
 app.post('/download', (req, res) => {
@@ -53,32 +53,32 @@ app.post('/download', (req, res) => {
 app.get('/link', (req, res) => {
 	if(url && extension) {
 		if(url[4] !== 's') {
-			const request = http.get(url, function(response) {
-			if(response) {
-				res.writeHead(200, {
-					"Content-Disposition": "attachment;filename=" + file + extension,
-					'Content-Type': contentType
-				});
-				response.pipe(res);
-			}
-			else {
-				res.redirect('https://flai.herokuapp.com/error');
-			}
-		});	
-		}
-		else {
-			const request = https.get(url, function(response) {
-				if(response) {
+			try {
+				const request = http.get(url, (response) => {
 					res.writeHead(200, {
 						"Content-Disposition": "attachment;filename=" + file + extension,
 						'Content-Type': contentType
 					});
 					response.pipe(res);
-				}
-				else {
-					res.redirect('https://flai.herokuapp.com/error');
-				}
-			});
+				});
+			}
+			catch(error) {
+				res.redirect('https://flai.herokuapp.com/error');
+			}
+		}
+		else {
+			try {
+				const request = https.get(url, (response) => {
+					res.writeHead(200, {
+						"Content-Disposition": "attachment;filename=" + file + extension,
+						'Content-Type': contentType
+					});
+					response.pipe(res);
+				});
+			}
+			catch(error) {
+				res.redirect('https://flai.herokuapp.com/error');
+			}
 		}
 	}
 
@@ -92,30 +92,30 @@ app.get('/play', (req, res) => {
 
 	if(url) {
 		if(url[4] !== 's') {
-			const request = http.get(url, function(response) {
-			if(response) {
-				res.writeHead(200, {
-					'Content-Type': contentType
-				});
-				response.pipe(res);
-			}
-			else {
-				res.redirect('https://flai.herokuapp.com/error');
-			}
-		});	
-		}
-		else {
-			const request = https.get(url, function(response) {
-				if(response) {
+			try {
+				const request = http.get(url, (response) => {
 					res.writeHead(200, {
 						'Content-Type': contentType
 					});
 					response.pipe(res);
-				}
-				else {
-					res.redirect('https://flai.herokuapp.com/error');
-				}
-			});
+				});
+			}
+			catch(error) {
+				res.redirect('https://flai.herokuapp.com/error');
+			}
+		}
+		else {
+			try {
+				const request = https.get(url, (response) => {
+					res.writeHead(200, {
+						'Content-Type': contentType
+					});
+					response.pipe(res);
+				});
+			}
+			catch(error) {
+				res.redirect('https://flai.herokuapp.com/error');
+			}
 		}
 	}
 	else {

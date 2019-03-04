@@ -24,3 +24,5 @@ I have used [Heroku](https://www.heroku.com/) hobby dyno server to implement it.
 ```
 
 * Use [https://flai.herokuapp.com](https://flai.herokuapp.com/link)/link to get download link for last request download file.
+
+* Note:- Do change the procces.env.PASS to your any password value!
