@@ -54,20 +54,30 @@ app.get('/link', (req, res) => {
 	if(url && extension) {
 		if(url[4] !== 's') {
 			const request = http.get(url, function(response) {
-			res.writeHead(200, {
-				"Content-Disposition": "attachment;filename=" + file + extension,
-				'Content-Type': contentType
-			});
-			response.pipe(res);
-		});	
-		}
-		else {
-			const request = https.get(url, function(response) {
+			if(response) {
 				res.writeHead(200, {
 					"Content-Disposition": "attachment;filename=" + file + extension,
 					'Content-Type': contentType
 				});
 				response.pipe(res);
+			}
+			else {
+				res.redirect('https://flai.herokuapp.com/error');
+			}
+		});	
+		}
+		else {
+			const request = https.get(url, function(response) {
+				if(response) {
+					res.writeHead(200, {
+						"Content-Disposition": "attachment;filename=" + file + extension,
+						'Content-Type': contentType
+					});
+					response.pipe(res);
+				}
+				else {
+					res.redirect('https://flai.herokuapp.com/error');
+				}
 			});
 		}
 	}
@@ -83,18 +93,28 @@ app.get('/play', (req, res) => {
 	if(url) {
 		if(url[4] !== 's') {
 			const request = http.get(url, function(response) {
-			res.writeHead(200, {
-				'Content-Type': contentType
-			});
-			response.pipe(res);
-		});	
-		}
-		else {
-			const request = https.get(url, function(response) {
+			if(response) {
 				res.writeHead(200, {
 					'Content-Type': contentType
 				});
 				response.pipe(res);
+			}
+			else {
+				res.redirect('https://flai.herokuapp.com/error');
+			}
+		});	
+		}
+		else {
+			const request = https.get(url, function(response) {
+				if(response) {
+					res.writeHead(200, {
+						'Content-Type': contentType
+					});
+					response.pipe(res);
+				}
+				else {
+					res.redirect('https://flai.herokuapp.com/error');
+				}
 			});
 		}
 	}
