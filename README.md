@@ -1,9 +1,9 @@
-# flai-api
+# flai
 
 This is a simple experiment to show the possibility of exploiting third party server as a proxy.
 I have used [Heroku](https://www.heroku.com/) hobby dyno server to implement it.
 
-## The link for demo: [flai](https://flai.herokuapp.com/)
+## The link for demo: [flai](https://flai.ml/)
 
 ## Documentation
 ### Start
@@ -17,12 +17,12 @@ I have used [Heroku](https://www.heroku.com/) hobby dyno server to implement it.
 ```
 /play
 ```
-* Use [https://flai.herokuapp.com](https://flai.herokuapp.com/play)/play to stream video file which was last requested for download.
+* Use [https://flai.ml](https://flai.ml/#/play)/#/play to stream video file which was last requested for download.
 
 ```
 /link
 ```
 
-* Use [https://flai.herokuapp.com](https://flai.herokuapp.com/link)/link to get download link for last request download file.
+* Use [https://flai.ml/#](https://flai.ml/#/link)/#/link to get download link for last request download file.
 
 * Note:- Do change the procces.env.PASS to your any password value!
