@@ -13,11 +13,11 @@ const port = process.env.PORT || 5000;
 let url = '';
 let contentType = '';
 let extension = '';
-let file = "paradox";
+let file = "Paradox";
 let password = '';
 
 app.get('/', (req, res) => {
-	res.send("<h1><a href='https://flai.herokuapp.com' >Go to flai</a></h1>")
+	res.send("<h1><a href='https://flai.ml' >Go to flai</a></h1>")
 })
 
 app.post('/download', (req, res) => {
@@ -29,24 +29,24 @@ app.post('/download', (req, res) => {
 		
 		if(extension === ".mp4") {
 			contentType = 'video/mp4';
-			file = "ergo";
+			file = "Ergo";
 		}
 		else if(extension === ".mp3") {
 			contentType = 'audio/mp3';
-			file = "sonorous";
+			file = "Sonorous";
 		}
 		else if(extension === ".mkv") {
 			contentType = 'video/webm';
-			file = "limerence";
+			file = "Limerence";
 		}
 		else {
 			contentType = 'application/zip';
-			file = "paradox";
+			file = "Paradox";
 		}
 		return res.redirect('/link');
 	}
 	else
-		return res.redirect('https://flai.herokuapp.com');
+		return res.redirect('https://flai.ml');
 
 })
 
@@ -63,7 +63,7 @@ app.get('/link', (req, res) => {
 				});
 			}
 			catch(error) {
-				res.redirect('https://flai.herokuapp.com/error');
+				res.redirect('https://flai.ml/#/error');
 			}
 		}
 		else {
@@ -77,14 +77,14 @@ app.get('/link', (req, res) => {
 				});
 			}
 			catch(error) {
-				res.redirect('https://flai.herokuapp.com/error');
+				res.redirect('https://flai.ml/#/error');
 			}
 		}
 	}
 
 	else {
 		password = '';
-		res.redirect('https://flai.herokuapp.com');
+		res.redirect('https://flai.ml');
 	}
 })
 
@@ -101,7 +101,7 @@ app.get('/play', (req, res) => {
 				});
 			}
 			catch(error) {
-				res.redirect('https://flai.herokuapp.com/error');
+				res.redirect('https://flai.ml/#/error');
 			}
 		}
 		else {
@@ -114,12 +114,12 @@ app.get('/play', (req, res) => {
 				});
 			}
 			catch(error) {
-				res.redirect('https://flai.herokuapp.com/error');
+				res.redirect('https://flai.ml/#/error');
 			}
 		}
 	}
 	else {
-		res.redirect('https://flai.herokuapp.com');
+		res.redirect('https://flai.ml');
 	}
 })
 
