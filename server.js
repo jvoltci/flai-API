@@ -28,7 +28,7 @@ let password = '';
 const db = knex({
   client: 'pg',
   connection: {
-    connectionString: process.env.DATABASE_URL,
+    connectionString: 'postgres://uutgoqaujsqwhx:795f5a6f6dc6ec0ecfefaf3a17192433b87d0bbf012a64a129390762cf04f2ee@ec2-50-17-231-192.compute-1.amazonaws.com:5432/d9mp47btr44qot',//process.env.DATABASE_URL,
     ssl: true
   }
 });
@@ -54,24 +54,26 @@ app.post('/download', (req, res) => {
 				db('flai').insert({link: xLink, url: url});
 			}
 		})
-
-		if(extension === ".mp4") {
-			contentType = 'video/mp4';
-			file = "Ergo";
+		.then(() => {
+			if(extension === ".mp4") {
+				contentType = 'video/mp4';
+				file = "Ergo";
+			}
+			else if(extension === ".mp3") {
+				contentType = 'audio/mp3';
+				file = "Sonorous";
+			}
+			else if(extension === ".mkv") {
+				contentType = 'video/webm';
+				file = "Limerence";
+			}
+			else {
+				contentType = 'application/zip';
+				file = "Paradox";
+			}
+			return res.redirect('/link/' + link);
 		}
-		else if(extension === ".mp3") {
-			contentType = 'audio/mp3';
-			file = "Sonorous";
-		}
-		else if(extension === ".mkv") {
-			contentType = 'video/webm';
-			file = "Limerence";
-		}
-		else {
-			contentType = 'application/zip';
-			file = "Paradox";
-		}
-		return res.redirect('/link/' + link);
+	)
 	}
 	else
 		return res.redirect('https://flai.ml');
