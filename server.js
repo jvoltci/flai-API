@@ -94,32 +94,10 @@ app.get('/link/:id', (req, res) => {
 
 	if(url && extension) {
 		if(url[4] !== 's') {
-			try {
-				const request = http.get(url, (response) => {
-					res.writeHead(200, {
-						"Content-Disposition": "attachment;filename=" + file + extension,
-						'Content-Type': contentType
-					});
-					response.pipe(res);
-				});
-			}
-			catch(error) {
-				res.redirect('https://flai.ml/#/error');
-			}
+			res.download(url);
 		}
 		else {
-			try {
-				const request = https.get(url, (response) => {
-					res.writeHead(200, {
-						"Content-Disposition": "attachment;filename=" + file + extension,
-						'Content-Type': contentType
-					});
-					response.pipe(res);
-				});
-			}
-			catch(error) {
-				res.redirect('https://flai.ml/#/error');
-			}
+			res.download(url);
 		}
 	}
 
