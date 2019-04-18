@@ -48,10 +48,12 @@ app.post('/download', (req, res) => {
 		.then(data => {
 			if(data[0]) {
 				link = data[0].link;
+				console.log(link, 'a');
 			}
 			else {
 				link = makeid(10);
-				db('flai').insert({link: link, url: url, extension: extension});
+				db('flai').insert({link: link, url: url, extension: extension}).returning('*')
+					.then(data => console.log(link));
 			}
 		})
 		.then(() => {
