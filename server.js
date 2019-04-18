@@ -82,15 +82,17 @@ app.post('/download', (req, res) => {
 
 app.get('/link/:id', (req, res) => {
 
-	let fetchedLink = req.params.id;
-	db('flai').where('link', '=', fetchedLink)
-		.then(data => {
-			if(data[0]) {
-				url = data[0].url;
-			}
-			else
-				url = '';
-		})
+	if(!url) {
+		let fetchedLink = req.params.id;
+		db('flai').where('link', '=', fetchedLink)
+			.then(data => {
+				if(data[0]) {
+					url = data[0].url;
+				}
+				else
+					url = '';
+			})
+	}
 
 	if(url && extension) {
 		if(url[4] !== 's') {
