@@ -13,7 +13,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.16.4",
-    "read-last-lines": "^1.7.1",
+    "knex": "^0.16.5",
+    "pg": "^7.10.0",
     "request": "^2.88.0"
   }
 }
