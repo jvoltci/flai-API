@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 5000;
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "https://flai.ml");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
@@ -28,7 +28,7 @@ let password = '';
 const db = knex({
   client: 'pg',
   connection: {
-    connectionString: 'postgres://uutgoqaujsqwhx:795f5a6f6dc6ec0ecfefaf3a17192433b87d0bbf012a64a129390762cf04f2ee@ec2-50-17-231-192.compute-1.amazonaws.com:5432/d9mp47btr44qot',//process.env.DATABASE_URL,
+    connectionString: process.env.DATABASE_URL,
     ssl: true
   }
 });
@@ -51,7 +51,7 @@ app.post('/download', (req, res) => {
 			}
 			else {
 				let xLink = makeid(10);
-				db('flai').insert({link: xLink, url: url});
+				db('flai').insert({link: xLink, url: url, extension: extension});
 			}
 		})
 		.then(() => {
@@ -73,7 +73,7 @@ app.post('/download', (req, res) => {
 			}
 			return res.redirect('/link/' + link);
 		}
-	)
+		)
 	}
 	else
 		return res.redirect('https://flai.ml');
@@ -82,24 +82,45 @@ app.post('/download', (req, res) => {
 
 app.get('/link/:id', (req, res) => {
 
-	if(!url) {
-		let fetchedLink = req.params.id;
-		db('flai').where('link', '=', fetchedLink)
-			.then(data => {
-				if(data[0]) {
-					url = data[0].url;
-				}
-				else
-					url = '';
-			})
-	}
+	let fetchedLink = req.params.id;
+	db('flai').where('link', '=', fetchedLink)
+		.then(data => {
+			if(data[0]) {
+				url = data[0].url;
+				extension = data[0].extension;
+			}
+			else
+				url = '';
+		})
 
 	if(url && extension) {
 		if(url[4] !== 's') {
-			res.download(url);
+			try {
+				const request = http.get(url, (response) => {
+					res.writeHead(200, {
+						"Content-Disposition": "attachment;filename=" + file + extension,
+						'Content-Type': contentType
+					});
+					response.pipe(res);
+				});
+			}
+			catch(error) {
+				res.redirect('https://flai.ml/#/error');
+			}
 		}
 		else {
-			res.download(url);
+			try {
+				const request = https.get(url, (response) => {
+					res.writeHead(200, {
+						"Content-Disposition": "attachment;filename=" + file + extension,
+						'Content-Type': contentType
+					});
+					response.pipe(res);
+				});
+			}
+			catch(error) {
+				res.redirect('https://flai.ml/#/error');
+			}
 		}
 	}
 
@@ -109,7 +130,18 @@ app.get('/link/:id', (req, res) => {
 	}
 })
 
-app.get('/play', (req, res) => {
+app.get('/play/:id', (req, res) => {
+
+	let fetchedLink = req.params.id;
+	db('flai').where('link', '=', fetchedLink)
+		.then(data => {
+			if(data[0]) {
+				url = data[0].url;
+				extension = data[0].extension;
+			}
+			else
+				url = '';
+		})
 
 	if(url) {
 		if(url[4] !== 's') {
