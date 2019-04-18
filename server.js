@@ -50,7 +50,7 @@ app.post('/download', (req, res) => {
 				link = data[0].link;
 			}
 			else {
-				let xLink = makeid(7);
+				let xLink = makeid(10);
 				db('flai').insert({link: xLink, url: url});
 			}
 		})
