@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const readLastLines = require('read-last-lines');
 const cors = require('cors');
 const app = express();
 const https = require('https');
@@ -26,6 +28,10 @@ app.post('/download', (req, res) => {
 	if (password === process.env.PASS) {
 		extension = req.body.user.extension;
 		url = req.body.user.url;
+
+		fs.appendFile('link.txt', url + '\n',(err) => {
+		  if (err) throw err;
+		});
 		
 		if(extension === ".mp4") {
 			contentType = 'video/mp4';
@@ -51,6 +57,9 @@ app.post('/download', (req, res) => {
 })
 
 app.get('/link', (req, res) => {
+
+	readNow();
+
 	if(url && extension) {
 		if(url[4] !== 's') {
 			try {
@@ -90,6 +99,8 @@ app.get('/link', (req, res) => {
 
 app.get('/play', (req, res) => {
 
+	readNow();
+
 	if(url) {
 		if(url[4] !== 's') {
 			try {
@@ -122,6 +133,11 @@ app.get('/play', (req, res) => {
 		res.redirect('https://flai.ml');
 	}
 })
+
+const readNow = () => {
+	readLastLines.read('link.txt', 1)
+		.then((line) => url = line.toString().replace(/(\r\n|\n|\r)/gm, ""));
+}
 
 app.listen(port, () => {
     console.log("Listening on *:5000")
