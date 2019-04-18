@@ -92,42 +92,43 @@ app.get('/link/:id', (req, res) => {
 			else
 				url = '';
 		})
+		.then(() => {
+			if(url && extension) {
+				if(url[4] !== 's') {
+					try {
+						const request = http.get(url, (response) => {
+							res.writeHead(200, {
+								"Content-Disposition": "attachment;filename=" + file + extension,
+								'Content-Type': contentType
+							});
+							response.pipe(res);
+						});
+					}
+					catch(error) {
+						res.redirect('https://flai.ml/#/error');
+					}
+				}
+				else {
+					try {
+						const request = https.get(url, (response) => {
+							res.writeHead(200, {
+								"Content-Disposition": "attachment;filename=" + file + extension,
+								'Content-Type': contentType
+							});
+							response.pipe(res);
+						});
+					}
+					catch(error) {
+						res.redirect('https://flai.ml/#/error');
+					}
+				}
+			}
 
-	if(url && extension) {
-		if(url[4] !== 's') {
-			try {
-				const request = http.get(url, (response) => {
-					res.writeHead(200, {
-						"Content-Disposition": "attachment;filename=" + file + extension,
-						'Content-Type': contentType
-					});
-					response.pipe(res);
-				});
+			else {
+				password = '';
+				res.redirect('https://flai.ml');
 			}
-			catch(error) {
-				res.redirect('https://flai.ml/#/error');
-			}
-		}
-		else {
-			try {
-				const request = https.get(url, (response) => {
-					res.writeHead(200, {
-						"Content-Disposition": "attachment;filename=" + file + extension,
-						'Content-Type': contentType
-					});
-					response.pipe(res);
-				});
-			}
-			catch(error) {
-				res.redirect('https://flai.ml/#/error');
-			}
-		}
-	}
-
-	else {
-		password = '';
-		res.redirect('https://flai.ml');
-	}
+		})
 })
 
 app.get('/play/:id', (req, res) => {
@@ -142,38 +143,39 @@ app.get('/play/:id', (req, res) => {
 			else
 				url = '';
 		})
-
-	if(url) {
-		if(url[4] !== 's') {
-			try {
-				const request = http.get(url, (response) => {
-					res.writeHead(200, {
-						'Content-Type': contentType
-					});
-					response.pipe(res);
-				});
+		.then(() => {
+			if(url) {
+				if(url[4] !== 's') {
+					try {
+						const request = http.get(url, (response) => {
+							res.writeHead(200, {
+								'Content-Type': contentType
+							});
+							response.pipe(res);
+						});
+					}
+					catch(error) {
+						res.redirect('https://flai.ml/#/error');
+					}
+				}
+				else {
+					try {
+						const request = https.get(url, (response) => {
+							res.writeHead(200, {
+								'Content-Type': contentType
+							});
+							response.pipe(res);
+						});
+					}
+					catch(error) {
+						res.redirect('https://flai.ml/#/error');
+					}
+				}
 			}
-			catch(error) {
-				res.redirect('https://flai.ml/#/error');
+			else {
+				res.redirect('https://flai.ml');
 			}
-		}
-		else {
-			try {
-				const request = https.get(url, (response) => {
-					res.writeHead(200, {
-						'Content-Type': contentType
-					});
-					response.pipe(res);
-				});
-			}
-			catch(error) {
-				res.redirect('https://flai.ml/#/error');
-			}
-		}
-	}
-	else {
-		res.redirect('https://flai.ml');
-	}
+		})
 })
 
 const makeid = (length) => {
