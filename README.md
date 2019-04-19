@@ -17,13 +17,13 @@ I have used [Heroku](https://www.heroku.com/) hobby dyno server to implement it.
 ```
 /play
 ```
-* Use [https://flai-api.herokuapp.com](https://flai-api.herokuapp.com/)/play/{unique hashed ID} to stream video file which was last generated request for download with unique hashed ID.
+* Use [https://flai-api.herokuapp.com](https://flai-api.herokuapp.com/)/play/{unique hashed ID} to stream video file which was last generated request for download with unique hashed ID. E.g. https://flai-api.herokuapp.com/link/xDthWTyr1n
 
 ```
 /link
 ```
 
-* Use [https://flai-api.herokuapp.com](https://flai-api.herokuapp.com/)/link/{unique hashed ID} to get download link for last generated request for download file with unique hashed ID.
+* Use [https://flai-api.herokuapp.com](https://flai-api.herokuapp.com/)/link/{unique hashed ID} to get download link for last generated request for download file with unique hashed ID. E.g. https://flai-api.herokuapp.com/play/xDthWTyr1n
 
 * Note:- Do change the procces.env.PASS to your any password value!
 * Warning:- This is only for demonstration purpose!
