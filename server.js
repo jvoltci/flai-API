@@ -85,7 +85,7 @@ app.post('/download', (req, res) => {
 app.get('/link/:id', (req, res) => {
 
 	let fetchedLink = req.params.id;
-	if(!fetchedLink) res.redirect('https://flai.ml');
+	if(fetchedLink.length < 10) res.redirect('https://flai.ml');
 	db('flai').where('link', '=', fetchedLink)
 		.then(data => {
 			if(data[0]) {
@@ -137,7 +137,7 @@ app.get('/link/:id', (req, res) => {
 app.get('/play/:id', (req, res) => {
 
 	let fetchedLink = req.params.id;
-	if(!fetchedLink) res.redirect('https://flai.ml');
+	if(fetchedLink.length < 10) res.redirect('https://flai.ml');
 	db('flai').where('link', '=', fetchedLink)
 		.then(data => {
 			if(data[0]) {
