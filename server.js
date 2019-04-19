@@ -126,7 +126,6 @@ app.get('/link/:id', (req, res) => {
 					}
 				}
 			}
-
 			else {
 				password = '';
 				res.redirect('https://flai.ml');
@@ -148,7 +147,7 @@ app.get('/play/:id', (req, res) => {
 				url = '';
 		})
 		.then(() => {
-			if(url) {
+			if(url && extension) {
 				if(url[4] !== 's') {
 					try {
 						const request = http.get(url, (response) => {
