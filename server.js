@@ -101,7 +101,8 @@ app.get('/link/:id', (req, res) => {
 						const request = http.get(url, (response) => {
 							res.writeHead(200, {
 								"Content-Disposition": "attachment;filename=" + file + extension,
-								'Content-Type': contentType
+								'Content-Type': contentType,
+								'Content-Length': response.headers['Content-Length']
 							});
 							response.pipe(res);
 						});
@@ -115,7 +116,8 @@ app.get('/link/:id', (req, res) => {
 						const request = https.get(url, (response) => {
 							res.writeHead(200, {
 								"Content-Disposition": "attachment;filename=" + file + extension,
-								'Content-Type': contentType
+								'Content-Type': contentType,
+								'Content-Length': response.headers['Content-Length']
 							});
 							response.pipe(res);
 						});
