@@ -91,6 +91,7 @@ app.get('/link/:id', (req, res) => {
 			if(data[0]) {
 				url = data[0].url;
 				extension = data[0].extension;
+				setFileName();
 			}
 			else
 				url = '';
@@ -189,6 +190,25 @@ const makeid = (length) => {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
+}
+
+const setFileName = () => {
+	if(extension === ".mp4") {
+		contentType = 'video/mp4';
+		file = "Ergo";
+	}
+	else if(extension === ".mp3") {
+		contentType = 'audio/mp3';
+		file = "Sonorous";
+	}
+	else if(extension === ".mkv") {
+		contentType = 'video/webm';
+		file = "Limerence";
+	}
+	else {
+		contentType = 'application/zip';
+		file = "Paradox";
+	}
 }
 
 app.listen(port, () => {
