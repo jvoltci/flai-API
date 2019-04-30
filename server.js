@@ -7,8 +7,6 @@ const bodyParser = require('body-parser');
 
 const knex = require('knex');
 
-const server = http.createServer(app);
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -215,11 +213,8 @@ const setFileName = () => {
 	}
 }
 
-server.listen(port, () => {
+app.listen(port, () => {
     console.log("Listening on *:5000")
-});
-server.on('clientError', (err) => {
-    console.log('ERROR', err);
-});
+})
 
 module.exports = app;
