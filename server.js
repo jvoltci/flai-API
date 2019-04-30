@@ -214,9 +214,8 @@ const setFileName = () => {
 	}
 }
 
-
 // Important stuffs`
-process.on('uncaughtException', function (err) {
+process.on('uncaughtException', (err) => {
     console.log(err);
 });
 
