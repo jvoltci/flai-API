@@ -213,6 +213,8 @@ const setFileName = () => {
 	}
 }
 
+
+// Important stuffs`
 process.on('uncaughtException', function (err) {
     console.log(err);
 });
