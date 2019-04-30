@@ -10,7 +10,6 @@ const knex = require('knex');
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-const port = process.env.PORT || 5000;
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://flai.ml");
@@ -132,6 +131,7 @@ app.get('/link/:id', (req, res) => {
 				res.redirect('https://flai.ml');
 			}
 		})
+		.catch(err => res.send(err))
 })
 
 app.get('/play/:id', (req, res) => {
@@ -180,6 +180,7 @@ app.get('/play/:id', (req, res) => {
 				res.redirect('https://flai.ml');
 			}
 		})
+		.catch(err => res.send(err))
 })
 
 const makeid = (length) => {
@@ -211,7 +212,7 @@ const setFileName = () => {
 	}
 }
 
-app.listen(port, () => {
+app.listen(process.env.PORT || 5000, () => {
     console.log("Listening on *:5000")
 })
 
