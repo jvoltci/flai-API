@@ -213,6 +213,10 @@ const setFileName = () => {
 	}
 }
 
+process.on('uncaughtException', function (err) {
+    console.log(err);
+});
+
 app.listen(port, () => {
     console.log("Listening on *:5000")
 })
