@@ -91,10 +91,10 @@ app.get('/link/:id', (req, res) => {
 			if(data[0]) {
 				url = data[0].url;
 				extension = data[0].extension;
-				setFileName();
+				return setFileName();
 			}
 			else
-				url = '';
+				return url = '';
 		})
 		.then(() => {
 			if(url && extension) {
@@ -144,9 +144,10 @@ app.get('/play/:id', (req, res) => {
 			if(data[0]) {
 				url = data[0].url;
 				extension = data[0].extension;
+				return setFileName();
 			}
 			else
-				url = '';
+				return url = '';
 		})
 		.then(() => {
 			if(url && extension) {
