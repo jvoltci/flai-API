@@ -102,7 +102,7 @@ app.get('/link/:id', (req, res) => {
 					try {
 						const request = http.get(url, (response) => {
 							res.writeHead(200, {
-								"Content-Disposition": response.headers['content-disposition'],
+								"Content-Disposition": "attachment;filename=" + file + extension,
 								'Content-Type': contentType
 							});
 							response.pipe(res);
@@ -116,7 +116,7 @@ app.get('/link/:id', (req, res) => {
 					try {
 						const request = https.get(url, (response) => {
 							res.writeHead(200, {
-								"Content-Disposition": response.headers['content-disposition'],
+								"Content-Disposition": "attachment;filename=" + file + extension,
 								'Content-Type': contentType
 							});
 							response.pipe(res);
