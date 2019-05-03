@@ -101,9 +101,8 @@ app.get('/link/:id', (req, res) => {
 				if(url[4] !== 's') {
 					try {
 						const request = http.get(url, (response) => {
-							console.log(response.headers);
 							res.writeHead(200, {
-								"Content-Disposition": response.headers('Content-Disposition'),
+								"Content-Disposition": response.headers['Content-Disposition'],
 								'Content-Type': contentType
 							});
 							response.pipe(res);
@@ -116,9 +115,8 @@ app.get('/link/:id', (req, res) => {
 				else {
 					try {
 						const request = https.get(url, (response) => {
-							console.log(response.headers);
 							res.writeHead(200, {
-								"Content-Disposition": response.headers('Content-Disposition'),
+								"Content-Disposition": response.headers['Content-Disposition'],
 								'Content-Type': contentType
 							});
 							response.pipe(res);
