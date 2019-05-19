@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const WebTorrent = require('webtorrent')
 const app = express();
 const https = require('https');
 const http = require('http');
