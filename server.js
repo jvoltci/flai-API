@@ -190,86 +190,96 @@ app.get('/play/:id', (req, res) => {
 })
 
 app.post('/metadata', (req, res) => {
-	password = req.body.password;
-	if(req.method === "POST" && password === process.env.PASS) {
-		magnetURI = req.body.url;
+	try {
+		password = req.body.password;
+		if(req.method === "POST" && password === process.env.PASS) {
+			magnetURI = req.body.url;
 
-		if(client.get(magnetURI)) {
-			const torrent = client.get(magnetURI);
-			const files = [];
-			torrent.files.forEach( (data) => {
-				files.push(data.name);
-			});
-			res.status(200);
-			res.json(files);
-		}
-		else {
-			client.add(magnetURI, torrent => {
+			if(client.get(magnetURI)) {
+				const torrent = client.get(magnetURI);
 				const files = [];
 				torrent.files.forEach( (data) => {
 					files.push(data.name);
 				});
 				res.status(200);
 				res.json(files);
-			})
+			}
+			else {
+				client.add(magnetURI, torrent => {
+					const files = [];
+					torrent.files.forEach( (data) => {
+						files.push(data.name);
+					});
+					res.status(200);
+					res.json(files);
+				})
+			}
 		}
+		else
+			return res.redirect('https://flai.ml/#/error');
 	}
-	else
-		return res.redirect('https://flai.ml/#/error');
+	catch(e) {
+		console.log("Z-Error: ",e);
+	}
 })
 
 app.get('/torrent/:file_name', (req, res, next) => {
 
-	if(client.get(magnetURI)) {
-		const torrent = client.get(magnetURI);
-		let id = 0;
-		for(i = 0; i < torrent.files.length; i++) {
-			if(torrent.files[i].name == req.params.file_name) {
-				id = i;
-			}
-		}
-		let stream = torrent.files[id].createReadStream();
-		stream.pipe(res);
-		stream.on("error", (err) => {
-			return next(err);
-		}).on('close', (err) => {
-			client.destroy(err => {
-		      console.log("error:", err);
-		      console.log("shutdown allegedly complete");
-		    });
-		});
-	}
-	else {
-		client.add(magnetURI, torrent => {
-			
+	try {
+		if(client.get(magnetURI)) {
+			const torrent = client.get(magnetURI);
 			let id = 0;
 			for(i = 0; i < torrent.files.length; i++) {
 				if(torrent.files[i].name == req.params.file_name) {
 					id = i;
 				}
 			}
-			db('flai').where('url', '=', url)
-			.then(data => {
-				if(data[0]) {
-					link = data[0].link;
-				}
-				else {
-					link = "torrent/" + req.params.file_name;
-					db('flai').insert({link: link, url: magnetURI, extension: "magnet"}).returning('*')
-						.then(data => console.log(link));
-				}
-			})
 			let stream = torrent.files[id].createReadStream();
 			stream.pipe(res);
 			stream.on("error", (err) => {
 				return next(err);
 			}).on('close', (err) => {
-			client.destroy(err => {
+				client.destroy(err => {
 			      console.log("error:", err);
 			      console.log("shutdown allegedly complete");
 			    });
 			});
-		});
+		}
+		else {
+			client.add(magnetURI, torrent => {
+				
+				let id = 0;
+				for(i = 0; i < torrent.files.length; i++) {
+					if(torrent.files[i].name == req.params.file_name) {
+						id = i;
+					}
+				}
+				db('flai').where('url', '=', url)
+				.then(data => {
+					if(data[0]) {
+						link = data[0].link;
+					}
+					else {
+						link = "torrent/" + req.params.file_name;
+						db('flai').insert({link: link, url: magnetURI, extension: "magnet"}).returning('*')
+							.then(data => console.log(link));
+					}
+				})
+				let stream = torrent.files[id].createReadStream();
+				stream.pipe(res);
+				stream.on("error", (err) => {
+					return next(err);
+				}).on('close', (err) => {
+				client.destroy(err => {
+				      console.log("error:", err);
+				      console.log("shutdown allegedly complete");
+				    });
+				});
+			});
+		}
+	}
+	catch(e) {
+		console.log("Z-Error: ",e);
 	}
 
 });
