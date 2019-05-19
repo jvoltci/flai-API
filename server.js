@@ -240,8 +240,8 @@ app.get('/torrent/:file_name', (req, res, next) => {
 		if(client.get(magnetURI)) {
 			const torrent = client.get(magnetURI);
 			torrent.files.forEach(file => {
-				const file.createReadStream();
-				file.pipe(res);
+				const stream = file.createReadStream();
+				stream.pipe(res);
 			})
 		}
 		else {
@@ -265,8 +265,8 @@ app.get('/torrent/:file_name', (req, res, next) => {
 					}
 				})
 				torrent.files.forEach(file => {
-					const file.createReadStream();
-					file.pipe(res);
+					const stream = file.createReadStream();
+					stream.pipe(res);
 				})
 			});
 		}
