@@ -267,6 +267,8 @@ const setFileName = () => {
 	}
 }
 
+
+process.setMaxListeners(0);
 // Important stuffs`
 process.on('uncaughtException', (err) => {
     console.log(err);
