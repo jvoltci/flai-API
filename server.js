@@ -13,11 +13,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 5000;
 
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://flai.ml");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
-});*/
+});
 
 let magnetURI = ''
 let url = '';
@@ -266,7 +266,9 @@ const setFileName = () => {
 	}
 }
 
-process.setMaxListeners(0);
+//process.setMaxListeners(0);
+
+
 // Important stuffs`
 process.on('uncaughtException', (err) => {
     console.log(err);
