@@ -319,7 +319,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 				      console.log("shutdown allegedly complete");
 				    });
 				});
-				console.log("Z-Error: ", e)''
+				console.log("Z-Error: ", e);
 			}
 		}
 	}
