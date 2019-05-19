@@ -16,11 +16,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 5000;
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://flai.ml");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
-});
+});*/
 
 let magnetURI = ''
 let url = '';
@@ -191,7 +191,7 @@ app.get('/play/:id', (req, res) => {
 
 app.post('/metadata', (req, res) => {
 	password = req.body.password;
-	if(password === process.env.PASS) {
+	if(req.method === "POST" && password === process.env.PASS) {
 		magnetURI = req.body.url;
 
 		if(client.get(magnetURI)) {
@@ -215,7 +215,7 @@ app.post('/metadata', (req, res) => {
 		}
 	}
 	else
-		return res.redirect('https://flai.ml');
+		return res.redirect('https://flai.ml/#/error');
 })
 
 app.get('/torrent/:file_name', (req, res, next) => {
