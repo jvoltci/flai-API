@@ -8,12 +8,14 @@ const bodyParser = require('body-parser');
 
 const knex = require('knex');
 
+const WebTorrent = require('webtorrent')
+//process.setMaxListeners(0);
+const client = new WebTorrent();
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 5000;
-
-process.setMaxListeners(0);
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://flai.ml");
@@ -192,7 +194,6 @@ app.post('/metadata', (req, res) => {
 	password = req.body.password;
 	if(password === process.env.PASS) {
 		magnetURI = req.body.url;
-		const client = new WebTorrent();
 
 		client.add(magnetURI, torrent => {
 			const files = [];
@@ -207,8 +208,7 @@ app.post('/metadata', (req, res) => {
 		return res.redirect('https://flai.ml');
 })
 
-app.get('/torrent/:file_name', (req, res, next) => {
-	const client = new WebTorrent();
+app.get('/torrent/:file_name', (req, res, next) => 
 
 	client.add(magnetURI, torrent => {
 		
