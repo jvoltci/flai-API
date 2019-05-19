@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const WebTorrent = require('webtorrent')
 const app = express();
 const https = require('https');
 const http = require('http');
@@ -190,8 +191,7 @@ app.post('/metadata', (req, res) => {
 	password = req.body.password;
 	if(password === process.env.PASS) {
 		magnetURI = req.body.url;
-		const WebTorrent = require('webtorrent')
-		const client = new WebTorrent()
+		const client = new WebTorrent();
 
 		client.add(magnetURI, torrent => {
 			const files = [];
@@ -207,7 +207,6 @@ app.post('/metadata', (req, res) => {
 })
 
 app.get('/torrent/:file_name', (req, res, next) => {
-	const WebTorrent = require('webtorrent');
 	const client = new WebTorrent();
 
 	client.add(magnetURI, torrent => {
