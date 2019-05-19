@@ -16,11 +16,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 5000;
 
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://flai.ml");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
-});*/
+});
 
 let magnetURI = ''
 let url = '';
@@ -239,10 +239,22 @@ app.get('/torrent/:file_name', (req, res, next) => {
 		})
 		if(client.get(magnetURI)) {
 			const torrent = client.get(magnetURI);
-			torrent.files.forEach(file => {
-				const stream = file.createReadStream();
-				stream.pipe(res);
-			})
+			let id = 0;
+			for(i = 0; i < torrent.files.length; i++) {
+				if(torrent.files[i].name == req.params.file_name) {
+					id = i;
+				}
+			}
+			let stream = torrent.files[id].createReadStream();
+			stream.pipe(res);
+			stream.on("error", (err) => {
+				return next(err);
+			}).on('close', (err) => {
+				client.destroy(err => {
+			      console.log("error:", err);
+			      console.log("shutdown allegedly complete");
+			    });
+			});
 		}
 		else {
 			client.add(magnetURI, torrent => {
@@ -264,10 +276,16 @@ app.get('/torrent/:file_name', (req, res, next) => {
 							.then(data => console.log(link));
 					}
 				})
-				torrent.files.forEach(file => {
-					const stream = file.createReadStream();
-					stream.pipe(res);
-				})
+				let stream = torrent.files[id].createReadStream();
+				stream.pipe(res);
+				stream.on("error", (err) => {
+					return next(err);
+				}).on('close', (err) => {
+				client.destroy(err => {
+				      console.log("error:", err);
+				      console.log("shutdown allegedly complete");
+				    });
+				});
 			});
 		}
 	}
