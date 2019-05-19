@@ -12,12 +12,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 5000;
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://flai.ml");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
+*/
 let url = '';
 let link = '';
 let contentType = '';
@@ -48,7 +48,6 @@ app.post('/download', (req, res) => {
 		.then(data => {
 			if(data[0]) {
 				link = data[0].link;
-				console.log(link, 'a');
 			}
 			else {
 				link = makeid(10);
@@ -185,11 +184,69 @@ app.get('/play/:id', (req, res) => {
 		.catch(err => res.send(err))
 })
 
-const makeid = (length) => {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+app.post('/metadata', (req, res) => {
+	password = req.body.password;
 
-  for (var i = 0; i < length; i++)
+	if(password === process.env.PASS) {
+		url = req.body.url;
+		const WebTorrent = require('webtorrent')
+		const client = new WebTorrent()
+
+		const magnetURI = url;
+		client.add(magnetURI, torrent => {
+			const files = [];
+			torrent.files.forEach( (data) => {
+				files.push({
+					name: data.name
+				});
+			});
+			res.status(200)
+			res.json(files);
+		})
+	}
+	else
+		return res.redirect('https://flai.ml');
+})
+
+app.get('/torrent/:file_name', function(req, res, next) {
+	const WebTorrent = require('webtorrent');
+	const client = new WebTorrent();
+
+	const magnetURI = url;
+	client.add(magnetURI, torrent => {
+		
+		let id = 0;
+		for(i = 0; i < torrent.files.length; i++) {
+			if(torrent.files[i].name == req.params.file_name) {
+				id = i;
+			}
+		}
+		db('flai').where('url', '=', url)
+		.then(data => {
+			if(data[0]) {
+				link = data[0].link;
+			}
+			else {
+				link = "torrent/" + req.params.file_name;
+				db('flai').insert({link: link, url: url, extension: "magnet"}).returning('*')
+					.then(data => console.log(link));
+			}
+		})
+		let stream = torrent.files[id].createReadStream();
+		stream.pipe(res);
+		stream.on("error", (err) => {
+			return next(err);
+		});
+
+	});
+
+});
+
+const makeid = (length) => {
+  let text = "";
+  let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (let i = 0; i < length; i++)
     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
