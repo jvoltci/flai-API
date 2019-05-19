@@ -196,6 +196,7 @@ app.post('/metadata', (req, res) => {
 			magnetURI = req.body.url;
 
 			if(client.get(magnetURI)) {
+				console.log("It has URI");
 				const torrent = client.get(magnetURI);
 				const files = [];
 				torrent.files.forEach( (data) => {
@@ -205,6 +206,7 @@ app.post('/metadata', (req, res) => {
 				res.json(files);
 			}
 			else {
+				console.log("Nope, It has not URI");
 				client.add(magnetURI, torrent => {
 					const files = [];
 					torrent.files.forEach( (data) => {
@@ -229,6 +231,14 @@ app.get('/torrent/:file_name', (req, res, next) => {
 	try {
 		let fetchedLink = req.params.id;
 		db('flai').where('link', '=', fetchedLink)
+		.then(data => {
+			if(data[0]) {
+				magnetURI = data[0].magnetURI;
+			}
+			else {
+				return res.redirect('https://flai.ml/#/error');
+			}
+		})
 		if(client.get(magnetURI)) {
 			const torrent = client.get(magnetURI);
 			let id = 0;
