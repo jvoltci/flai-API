@@ -206,7 +206,12 @@ app.post('/metadata', (req, res) => {
 				res.json(files);
 			}
 			else {
-				client.remove(magnetURI);
+				try {
+					client.remove(magnetURI);
+				}
+				catch(e) {
+					console.log("No URI")
+				}
 				client.add(magnetURI, torrent => {
 					const files = [];
 					torrent.files.forEach( (data) => {
