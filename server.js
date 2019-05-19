@@ -12,12 +12,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 5000;
 
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://flai.ml");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-*/
+
+let magnetURI = ''
 let url = '';
 let link = '';
 let contentType = '';
@@ -186,13 +187,11 @@ app.get('/play/:id', (req, res) => {
 
 app.post('/metadata', (req, res) => {
 	password = req.body.password;
-
 	if(password === process.env.PASS) {
-		url = req.body.url;
+		magnetURI = req.body.url;
 		const WebTorrent = require('webtorrent')
 		const client = new WebTorrent()
 
-		const magnetURI = url;
 		client.add(magnetURI, torrent => {
 			const files = [];
 			torrent.files.forEach( (data) => {
@@ -200,7 +199,7 @@ app.post('/metadata', (req, res) => {
 					name: data.name
 				});
 			});
-			res.status(200)
+			res.status(200);
 			res.json(files);
 		})
 	}
@@ -208,11 +207,10 @@ app.post('/metadata', (req, res) => {
 		return res.redirect('https://flai.ml');
 })
 
-app.get('/torrent/:file_name', function(req, res, next) {
+app.get('/torrent/:file_name', (req, res, next) => {
 	const WebTorrent = require('webtorrent');
 	const client = new WebTorrent();
 
-	const magnetURI = url;
 	client.add(magnetURI, torrent => {
 		
 		let id = 0;
@@ -228,7 +226,7 @@ app.get('/torrent/:file_name', function(req, res, next) {
 			}
 			else {
 				link = "torrent/" + req.params.file_name;
-				db('flai').insert({link: link, url: url, extension: "magnet"}).returning('*')
+				db('flai').insert({link: link, url: magnetURI, extension: "magnet"}).returning('*')
 					.then(data => console.log(link));
 			}
 		})
