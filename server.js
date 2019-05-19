@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
 app.post('/download', (req, res) => {
 	password = req.body.user.password;
 
-	if (password === process.env.PASS) {
+	if (password === process.env.PASS && extension !== 'magnet') {
 		extension = req.body.user.extension;
 		url = req.body.user.url;
 
@@ -82,7 +82,7 @@ app.post('/download', (req, res) => {
 		)
 	}
 	else
-		return res.redirect('https://flai.ml');
+		return res.redirect('https://flai.ml/#/error');
 
 })
 
@@ -220,12 +220,15 @@ app.post('/metadata', (req, res) => {
 	}
 	catch(e) {
 		console.log("Z-Error: ",e);
+		res.redirect('https://flai.ml/#/error');
 	}
 })
 
 app.get('/torrent/:file_name', (req, res, next) => {
 
 	try {
+		let fetchedLink = req.params.id;
+		db('flai').where('link', '=', fetchedLink)
 		if(client.get(magnetURI)) {
 			const torrent = client.get(magnetURI);
 			let id = 0;
@@ -280,6 +283,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 	}
 	catch(e) {
 		console.log("Z-Error: ",e);
+		res.redirect('https://flai.ml/#/error');
 	}
 
 });
