@@ -13,6 +13,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 5000;
 
+process.setMaxListeners(0);
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://flai.ml");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -265,9 +267,6 @@ const setFileName = () => {
 		file = "Paradox";
 	}
 }
-
-//process.setMaxListeners(0);
-
 
 // Important stuffs`
 process.on('uncaughtException', (err) => {
