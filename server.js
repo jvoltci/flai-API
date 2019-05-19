@@ -210,7 +210,7 @@ app.post('/metadata', (req, res) => {
 					client.remove(magnetURI);
 				}
 				catch(e) {
-					console.log("No URI", client.torrents)
+					console.log("No URI", client.torrents[0].magnetURI)
 				}
 				console.log(magnetURI, "inside");
 				client.add(magnetURI, torrent => {
