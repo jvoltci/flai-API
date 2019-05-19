@@ -194,8 +194,8 @@ app.post('/metadata', (req, res) => {
 	if(password === process.env.PASS) {
 		magnetURI = req.body.url;
 
-		if(client(magnetURI)) {
-			const torrent = client(magnetURI);
+		if(client.get(magnetURI)) {
+			const torrent = client.get(magnetURI);
 			const files = [];
 			torrent.files.forEach( (data) => {
 				files.push(data.name);
@@ -220,8 +220,8 @@ app.post('/metadata', (req, res) => {
 
 app.get('/torrent/:file_name', (req, res, next) => {
 
-	if(client(magnetURI)) {
-		const torrent = client(magnetURI);
+	if(client.get(magnetURI)) {
+		const torrent = client.get(magnetURI);
 		let id = 0;
 		for(i = 0; i < torrent.files.length; i++) {
 			if(torrent.files[i].name == req.params.file_name) {
