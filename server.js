@@ -195,9 +195,7 @@ app.post('/metadata', (req, res) => {
 		client.add(magnetURI, torrent => {
 			const files = [];
 			torrent.files.forEach( (data) => {
-				files.push({
-					name: data.name
-				});
+				files.push(data.name);
 			});
 			res.status(200);
 			res.json(files);
