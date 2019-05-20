@@ -9,6 +9,7 @@ const knex = require('knex');
 
 //const MultiStream = require('multistream');
 //const magnet = require('parse-torrent')
+const Archiver = require('archiver');
 const parseTorrent = require('archiver');
 const WebTorrent = require('webtorrent')
 //process.setMaxListeners(0);
