@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 const port = process.env.PORT || 5000;
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://www.flai.ml");
+  res.header("Access-Control-Allow-Origin", "https://flai.ml");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
@@ -43,7 +43,7 @@ const db = knex({
 });
 
 app.get('/', (req, res) => {
-	res.send("<h1><a href='https://www.flai.ml' >Go to flai</a></h1>")
+	res.send("<h1><a href='https://flai.ml' >Go to flai</a></h1>")
 })
 
 app.post('/download', (req, res) => {
@@ -86,14 +86,14 @@ app.post('/download', (req, res) => {
 		)
 	}
 	else
-		return res.redirect('https://www.flai.ml/#/error');
+		return res.redirect('https://flai.ml/#/error');
 
 })
 
 app.get('/link/:id', (req, res) => {
 
 	let fetchedLink = req.params.id;
-	if(fetchedLink.length < 10) res.redirect('https://www.flai.ml');
+	if(fetchedLink.length < 10) res.redirect('https://flai.ml');
 	db('flai').where('link', '=', fetchedLink)
 		.then(data => {
 			if(data[0]) {
@@ -117,7 +117,7 @@ app.get('/link/:id', (req, res) => {
 						});
 					}
 					catch(error) {
-						res.redirect('https://www.flai.ml/#/error');
+						res.redirect('https://flai.ml/#/error');
 					}
 				}
 				else {
@@ -131,13 +131,13 @@ app.get('/link/:id', (req, res) => {
 						});
 					}
 					catch(error) {
-						res.redirect('https://www.flai.ml/#/error');
+						res.redirect('https://flai.ml/#/error');
 					}
 				}
 			}
 			else {
 				password = '';
-				res.redirect('https://www.flai.ml');
+				res.redirect('https://flai.ml');
 			}
 		})
 		.catch(err => res.send(err))
@@ -146,7 +146,7 @@ app.get('/link/:id', (req, res) => {
 app.get('/play/:id', (req, res) => {
 
 	let fetchedLink = req.params.id;
-	if(fetchedLink.length < 10) res.redirect('https://www.flai.ml');
+	if(fetchedLink.length < 10) res.redirect('https://flai.ml');
 	db('flai').where('link', '=', fetchedLink)
 		.then(data => {
 			if(data[0]) {
@@ -169,7 +169,7 @@ app.get('/play/:id', (req, res) => {
 						});
 					}
 					catch(error) {
-						res.redirect('https://www.flai.ml/#/error');
+						res.redirect('https://flai.ml/#/error');
 					}
 				}
 				else {
@@ -182,12 +182,12 @@ app.get('/play/:id', (req, res) => {
 						});
 					}
 					catch(error) {
-						res.redirect('https://www.flai.ml/#/error');
+						res.redirect('https://flai.ml/#/error');
 					}
 				}
 			}
 			else {
-				res.redirect('https://www.flai.ml');
+				res.redirect('https://flai.ml');
 			}
 		})
 		.catch(err => res.send(err))
@@ -220,16 +220,16 @@ app.post('/metadata', (req, res) => {
 				.on('error', (err) => {
 					console.log('Z-', err);
 					client.remove(magnetURI);
-					res.redirect('https://www.flai.ml/#/error');
+					res.redirect('https://flai.ml/#/error');
 				})
 			}
 		}
 		else
-			return res.redirect('https://www.flai.ml/#/error');
+			return res.redirect('https://flai.ml/#/error');
 	}
 	catch(e) {
 		console.log("Z-Error: ",e);
-		res.redirect('https://www.flai.ml/#/error');
+		res.redirect('https://flai.ml/#/error');
 		/*res.send("<div style='height: 400px;width: 800px; background: red; display: flex; flex-direction: column; justify-content: center; text-align: center;'><h1>❝Vanilla Error❞</h1></div>");*/
 	}
 })
@@ -244,7 +244,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 				magnetURI = data[0].magnetURI;
 			}
 			else {
-				return res.redirect('https://www.flai.ml/#/error');
+				return res.redirect('https://flai.ml/#/error');
 			}
 		})*/
 		if(client.get(magnetURI)) {
@@ -257,7 +257,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 				}
 			}
 			if(id === -1)
-				return res.redirect('https://www.flai.ml/#/error');
+				return res.redirect('https://flai.ml/#/error');
 
 			let stream = torrent.files[id].createReadStream();
 			stream.pipe(res);
@@ -281,7 +281,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 					}
 				}
 				if(id === -1)
-					return res.redirect('https://www.flai.ml/#/error');
+					return res.redirect('https://flai.ml/#/error');
 
 				db('flai').where('url', '=', url)
 				.then(data => {
@@ -308,13 +308,13 @@ app.get('/torrent/:file_name', (req, res, next) => {
 			.on('error', (err) => {
 				console.log('Z-', err);
 				client.remove(magnetURI);
-				res.redirect('https://www.flai.ml/#/error');
+				res.redirect('https://flai.ml/#/error');
 			});
 		}
 	}
 	catch(e) {
 		console.log("Z-Error: ",e);
-		res.redirect('https://www.flai.ml/#/error');
+		res.redirect('https://flai.ml/#/error');
 	}
 
 });
@@ -332,7 +332,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 				}
 			}
 			if(id === -1)
-				return res.redirect('https://www.flai.ml/#/error');
+				return res.redirect('https://flai.ml/#/error');
 
 			/*let intervel = setInterval(() => {
 			    http.get("http://flai-api.herokuapp.com");
@@ -346,9 +346,23 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
 
-			for(i = 0; i < torrent.files.length; i++) {
+		    let j = 0;
+
+		    const autoStreamOnEnd = () => {
+		    	if(j < torrent.files.length) {
+		    		const heatStream = torrent.files[i].createReadStream(torrent.files[i].name);
+		    		zip.append(heatStream.on('close', (err) => {
+		    			if(j < torrent.files.length) {
+		    				j++;
+		    				autoStreamOnEnd();
+		    			}
+		    		}), {name: torrent.files[i].name});
+		    	}
+		    }
+
+			/*for(i = 0; i < torrent.files.length; i++) {
 				zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
-			}
+			}*/
 			zip.finalize()
 		}
 		else {
@@ -362,7 +376,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 					}
 				}
 				if(id === -1)
-					return res.redirect('https://www.flai.ml/#/error');
+					return res.redirect('https://flai.ml/#/error');
 
 				res.writeHead(200, {
 			        'Content-Type': 'application/zip',
@@ -371,22 +385,36 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    const zip = Archiver('zip');
 			    zip.pipe(res);
 
-				for(i = 0; i < torrent.files.length; i++) {
+			    let j = 0;
+
+			    const autoStreamOnEnd = () => {
+			    	if(j < torrent.files.length) {
+			    		const heatStream = torrent.files[i].createReadStream(torrent.files[i].name);
+			    		zip.append(heatStream.on('close', (err) => {
+			    			if(j < torrent.files.length) {
+			    				j++;
+			    				autoStreamOnEnd();
+			    			}
+			    		}), {name: torrent.files[i].name});
+			    	}
+			    }
+
+				/*for(i = 0; i < torrent.files.length; i++) {
 					zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
-				}
+				}*/
 				zip.finalize()
 			})
 			.on('error', (err) => {
 				console.log('Z-', err);
 				client.remove(magnetURI);
-				res.redirect('https://www.flai.ml/#/error');
+				res.redirect('https://flai.ml/#/error');
 			});
 		}
 	}
 	catch(e) {
 		console.log("Z-Error: ",e);
 		client.remove(magnetURI);
-		res.redirect('https://www.flai.ml/#/error');
+		res.redirect('https://flai.ml/#/error');
 	}
 
 });
