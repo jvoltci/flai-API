@@ -249,6 +249,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 			for(i = 0; i < torrent.files.length; i++) {
 				if(torrent.files[i].name == req.params.file_name) {
 					id = i;
+					break;
 				}
 			}
 			if(id === -1)
@@ -272,6 +273,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 				for(i = 0; i < torrent.files.length; i++) {
 					if(torrent.files[i].name == req.params.file_name) {
 						id = i;
+						break;
 					}
 				}
 				if(id === -1)
@@ -315,22 +317,13 @@ app.get('/torrent/:file_name', (req, res, next) => {
 app.get('/torrents/:file_name', (req, res, next) => {
 
 	try {
-		/*let fetchedLink = req.params.id;
-		db('flai').where('link', '=', fetchedLink)
-		.then(data => {
-			if(data[0]) {
-				magnetURI = data[0].magnetURI;
-			}
-			else {
-				return res.redirect('https://flai.ml/#/error');
-			}
-		})*/
 		if(client.get(magnetURI)) {
 			const torrent = client.get(magnetURI);
 			let id = -1;
 			for(i = 0; i < torrent.files.length; i++) {
 				if(torrent.files[i].name == req.params.file_name) {
 					id = i;
+					break;
 				}
 			}
 			if(id === -1)
@@ -338,7 +331,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 			const streams = [];
 			for(i = 0; i < torrent.files.length; i++) {
-				streams.push(torrent.files[i].createReadStream())
+				streams.push(torrent.files[i].createReadStream());
+				console.log(torrent.files[i].name);
 			}
 			new MultiStream(streams).pipe(res);
 		}
@@ -349,6 +343,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 				for(i = 0; i < torrent.files.length; i++) {
 					if(torrent.files[i].name == req.params.file_name) {
 						id = i;
+						break;
 					}
 				}
 				if(id === -1)
@@ -367,7 +362,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 				})
 				const streams = [];
 				for(i = 0; i < torrent.files.length; i++) {
-					streams.push(torrent.files[i].createReadStream())
+					streams.push(torrent.files[i].createReadStream());
+					console.log(torrent.files[i].name);
 				}
 				new MultiStream(streams).pipe(res);
 			})
