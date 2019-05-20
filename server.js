@@ -216,7 +216,8 @@ app.post('/metadata', (req, res) => {
 		}
 	}
 	else
-		return res.send("<div style='height: 400px;width: 800px; background: red; display: flex; flex-direction: column; justify-content: center; text-align: center;'><h1>❝Vanilla Error❞</h1></div>");
+		return res.redirect('https://flai.ml/#/error');
+		/*res.send("<div style='height: 400px;width: 800px; background: red; display: flex; flex-direction: column; justify-content: center; text-align: center;'><h1>❝Vanilla Error❞</h1></div>");*/
 })
 
 app.get('/torrent/:file_name', (req, res, next) => {
@@ -229,7 +230,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 				magnetURI = data[0].magnetURI;
 			}
 			else {
-				return res.send("<div style='height: 400px;width: 800px; background: red; display: flex; flex-direction: column; justify-content: center; text-align: center;'><h1>❝Vanilla Error❞</h1></div>");
+				return res.redirect('https://flai.ml/#/error');
 			}
 		})
 		if(client.get(magnetURI)) {
@@ -286,7 +287,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 	}
 	catch(e) {
 		console.log("Z-Error: ",e);
-		return res.send("<div style='height: 400px;width: 800px; background: red; display: flex; flex-direction: column; justify-content: center; text-align: center;'><h1>❝Vanilla Error❞</h1></div>");
+		return res.redirect('https://flai.ml/#/error');
 	}
 
 });
