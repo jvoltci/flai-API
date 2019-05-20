@@ -346,25 +346,9 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
 
-		    let j = 0;
-
-		    const autoStreamOnEnd = () => {
-		    	if(j < torrent.files.length) {
-		    		const heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
-		    		zip.append(heatStream.on('end', (err) => {
-		    			if(j < torrent.files.length) {
-		    				j++;
-		    				autoStreamOnEnd();
-		    			}
-		    		}), {name: torrent.files[j].name});
-		    	}
-		    }
-
-		    autoStreamOnEnd();
-
-			/*for(i = 0; i < torrent.files.length; i++) {
+			for(i = 0; i < torrent.files.length; i++) {
 				zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
-			}*/
+			}
 			zip.finalize()
 		}
 		else {
@@ -387,25 +371,9 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    const zip = Archiver('zip');
 			    zip.pipe(res);
 
-			    let j = 0;
-
-			    const autoStreamOnEnd = () => {
-			    	if(j < torrent.files.length) {
-			    		const heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
-			    		zip.append(heatStream.on('end', (err) => {
-			    			if(j < torrent.files.length) {
-			    				j++;
-			    				autoStreamOnEnd();
-			    			}
-			    		}), {name: torrent.files[j].name});
-			    	}
-			    }
-
-			    autoStreamOnEnd();
-
-				/*for(i = 0; i < torrent.files.length; i++) {
+				for(i = 0; i < torrent.files.length; i++) {
 					zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
-				}*/
+				}
 				zip.finalize()
 			})
 			.on('error', (err) => {
