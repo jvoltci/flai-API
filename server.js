@@ -350,13 +350,13 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    const autoStreamOnEnd = () => {
 		    	if(j < torrent.files.length) {
-		    		const heatStream = torrent.files[i].createReadStream(torrent.files[i].name);
+		    		const heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
 		    		zip.append(heatStream.on('close', (err) => {
 		    			if(j < torrent.files.length) {
 		    				j++;
 		    				autoStreamOnEnd();
 		    			}
-		    		}), {name: torrent.files[i].name});
+		    		}), {name: torrent.files[j].name});
 		    	}
 		    }
 
@@ -389,13 +389,13 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 			    const autoStreamOnEnd = () => {
 			    	if(j < torrent.files.length) {
-			    		const heatStream = torrent.files[i].createReadStream(torrent.files[i].name);
+			    		const heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
 			    		zip.append(heatStream.on('close', (err) => {
 			    			if(j < torrent.files.length) {
 			    				j++;
 			    				autoStreamOnEnd();
 			    			}
-			    		}), {name: torrent.files[i].name});
+			    		}), {name: torrent.files[j].name});
 			    	}
 			    }
 
