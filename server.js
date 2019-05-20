@@ -193,10 +193,10 @@ app.get('/play/:id', (req, res) => {
 app.post('/metadata', (req, res) => {
 
 	client.on('error', (err) => {
-		console.log("Z-Error: ",e);
+		console.log("Z-Error: ",err);
 		res.redirect('https://flai.ml/#/error');
 	})
-	
+
 	try {
 		password = req.body.password;
 		if(req.method === "POST" && password === process.env.PASS) {
@@ -235,7 +235,7 @@ app.post('/metadata', (req, res) => {
 app.get('/torrent/:file_name', (req, res, next) => {
 
 	client.on('error', (err) => {
-		console.log("Z-Error: ",e);
+		console.log("Z-Error: ",err);
 		res.redirect('https://flai.ml/#/error');
 	})
 
