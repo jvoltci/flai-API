@@ -229,7 +229,7 @@ app.post('/metadata', (req, res) => {
 app.get('/torrent/:file_name', (req, res, next) => {
 
 	try {
-		let fetchedLink = req.params.id;
+		/*let fetchedLink = req.params.id;
 		db('flai').where('link', '=', fetchedLink)
 		.then(data => {
 			if(data[0]) {
@@ -238,7 +238,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 			else {
 				return res.redirect('https://flai.ml/#/error');
 			}
-		})
+		})*/
 		if(client.get(magnetURI)) {
 			const torrent = client.get(magnetURI);
 			let id = 0;
