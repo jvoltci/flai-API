@@ -264,7 +264,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 		else {
 			client.add(magnetURI, torrent => {
 				
-				let id = 0;
+				let id = -1;
 				for(i = 0; i < torrent.files.length; i++) {
 					if(torrent.files[i].name == req.params.file_name) {
 						id = i;
@@ -272,7 +272,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 				}
 				if(id === -1)
 					return res.redirect('https://flai.ml/#/error');
-				
+
 				db('flai').where('url', '=', url)
 				.then(data => {
 					if(data[0]) {
