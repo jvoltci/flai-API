@@ -191,39 +191,45 @@ app.get('/play/:id', (req, res) => {
 })
 
 app.post('/metadata', (req, res) => {
-	password = req.body.password;
-	if(password === process.env.PASS) {
-		magnetURI = req.body.url;
+	try {
+		password = req.body.password;
+		if(req.method === "POST" && password === process.env.PASS) {
+			magnetURI = req.body.url;
 
-		if(client.get(magnetURI)) {
-			const torrent = client.get(magnetURI);
-			const files = [];
-			torrent.files.forEach( (data) => {
-				files.push(data.name);
-			});
-			res.status(200);
-			res.json(files);
-		}
-		else {
-			client.add(magnetURI, torrent => {
+			if(client.get(magnetURI)) {
+				const torrent = client.get(magnetURI);
 				const files = [];
 				torrent.files.forEach( (data) => {
 					files.push(data.name);
 				});
 				res.status(200);
 				res.json(files);
-			})
+			}
+			else {
+				client.add(magnetURI, torrent => {
+					const files = [];
+					torrent.files.forEach( (data) => {
+						files.push(data.name);
+					});
+					res.status(200);
+					res.json(files);
+				})
+			}
 		}
+		else
+			return res.redirect('https://flai.ml/#/error');
 	}
-	else
-		return res.redirect('https://flai.ml/#/error');
+	catch(e) {
+		console.log("Z-Error: ",e);
+		res.redirect('https://flai.ml/#/error');
 		/*res.send("<div style='height: 400px;width: 800px; background: red; display: flex; flex-direction: column; justify-content: center; text-align: center;'><h1>❝Vanilla Error❞</h1></div>");*/
+	}
 })
 
 app.get('/torrent/:file_name', (req, res, next) => {
 
 	try {
-		let fetchedLink = "torrent/" + req.params.file_name;
+		let fetchedLink = req.params.id;
 		db('flai').where('link', '=', fetchedLink)
 		.then(data => {
 			if(data[0]) {
@@ -287,7 +293,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 	}
 	catch(e) {
 		console.log("Z-Error: ",e);
-		return res.redirect('https://flai.ml/#/error');
+		res.redirect('https://flai.ml/#/error');
 	}
 
 });
