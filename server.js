@@ -329,10 +329,14 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			if(id === -1)
 				return res.redirect('https://flai.ml/#/error');
 
+			/*let intervel = setInterval(() => {
+			    http.get("http://flai-api.herokuapp.com");
+			}, 1000);
+			clearInterval(intervel);*/
+
 			const streams = [];
 			for(i = 0; i < torrent.files.length; i++) {
-				streams.push(torrent.files[i].createReadStream());
-				console.log(torrent.files[i].name);
+				streams.push(torrent.files[i].createReadStream(torrent.files[i].name));
 			}
 			new MultiStream(streams).pipe(res);
 		}
@@ -362,8 +366,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 				})
 				const streams = [];
 				for(i = 0; i < torrent.files.length; i++) {
-					streams.push(torrent.files[i].createReadStream());
-					console.log(torrent.files[i].name);
+					streams.push(torrent.files[i].createReadStream(torrent.files[i].name));
 				}
 				new MultiStream(streams).pipe(res);
 			})
