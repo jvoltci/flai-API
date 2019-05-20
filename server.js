@@ -345,6 +345,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			for(i = 0; i < torrent.files.length; i++) {
 				zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
 			}
+			zip.finalize()
 		}
 		else {
 			client.add(magnetURI, torrent => {
@@ -369,6 +370,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 				for(i = 0; i < torrent.files.length; i++) {
 					zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
 				}
+				zip.finalize()
 			})
 			.on('error', (err) => {
 				console.log('Z-', err);
