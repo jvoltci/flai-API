@@ -360,6 +360,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	}
 		    }
 
+		    autoStreamOnEnd()
+		    
 			/*for(i = 0; i < torrent.files.length; i++) {
 				zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
 			}*/
@@ -398,6 +400,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    		}), {name: torrent.files[j].name});
 			    	}
 			    }
+
+			    autoStreamOnEnd();
 
 				/*for(i = 0; i < torrent.files.length; i++) {
 					zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
