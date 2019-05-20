@@ -191,12 +191,6 @@ app.get('/play/:id', (req, res) => {
 })
 
 app.post('/metadata', (req, res) => {
-
-	client.on('error', (err) => {
-		console.log("Z-Error: ",err);
-		res.redirect('https://flai.ml/#/error');
-	})
-
 	try {
 		password = req.body.password;
 		if(req.method === "POST" && password === process.env.PASS) {
@@ -220,6 +214,10 @@ app.post('/metadata', (req, res) => {
 					res.status(200);
 					res.json(files);
 				})
+				.on('error', (err) => {
+					console.log('Z-', err);
+					res.redirect('https://flai.ml/#/error');
+				})
 			}
 		}
 		else
@@ -233,11 +231,6 @@ app.post('/metadata', (req, res) => {
 })
 
 app.get('/torrent/:file_name', (req, res, next) => {
-
-	client.on('error', (err) => {
-		console.log("Z-Error: ",err);
-		res.redirect('https://flai.ml/#/error');
-	})
 
 	try {
 		/*let fetchedLink = req.params.id;
@@ -305,6 +298,10 @@ app.get('/torrent/:file_name', (req, res, next) => {
 				      console.log("shutdown allegedly complete");
 				    });
 				});
+			})
+			.on('error', (err) => {
+				console.log('Z-', err);
+				res.redirect('https://flai.ml/#/error');
 			});
 		}
 	}
