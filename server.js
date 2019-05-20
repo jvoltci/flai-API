@@ -298,13 +298,13 @@ app.get('/torrent/:file_name', (req, res, next) => {
 				});
 			}
 			catch(e) {
-				console.log("Z-Error: ",e);
+				console.log("Z-Error: ", e);
 				res.redirect('https://flai.ml/#/error');
 			}
 		}
 	}
 	catch(e) {
-		console.log("Z-Error: ",e);
+		console.log("Z-Error: ", e);
 		res.redirect('https://flai.ml/#/error');
 	}
 
