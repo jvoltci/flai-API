@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 const knex = require('knex');
 
-//const MultiStream = require('multistream');
+const MultiStream = require('multistream');
 const WebTorrent = require('webtorrent')
 //process.setMaxListeners(0);
 const client = new WebTorrent();
