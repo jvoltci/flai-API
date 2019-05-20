@@ -7,7 +7,8 @@ const bodyParser = require('body-parser');
 
 const knex = require('knex');
 
-const MultiStream = require('multistream');
+//const MultiStream = require('multistream');
+const Archiver = require('archiver');
 const WebTorrent = require('webtorrent')
 //process.setMaxListeners(0);
 const client = new WebTorrent();
@@ -334,11 +335,16 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			}, 1000);
 			clearInterval(intervel);*/
 
-			const streams = [];
+			res.writeHead(200, {
+		        'Content-Type': 'application/zip',
+		        'Content-disposition': 'attachment; filename=Immortal.zip'
+		    });
+		    const zip = Archiver('zip');
+		    zip.pipe(res);
+
 			for(i = 0; i < torrent.files.length; i++) {
-				streams.push(torrent.files[i].createReadStream(torrent.files[i].name));
+				zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
 			}
-			new MultiStream(streams).pipe(res);
 		}
 		else {
 			client.add(magnetURI, torrent => {
@@ -353,22 +359,16 @@ app.get('/torrents/:file_name', (req, res, next) => {
 				if(id === -1)
 					return res.redirect('https://flai.ml/#/error');
 
-				db('flai').where('url', '=', url)
-				.then(data => {
-					if(data[0]) {
-						link = data[0].link;
-					}
-					else {
-						link = "torrent/" + req.params.file_name;
-						db('flai').insert({link: link, url: magnetURI, extension: "magnet"}).returning('*')
-							.then(data => console.log(link));
-					}
-				})
-				const streams = [];
+				res.writeHead(200, {
+			        'Content-Type': 'application/zip',
+			        'Content-disposition': 'attachment; filename=Immortal.zip'
+			    });
+			    const zip = Archiver('zip');
+			    zip.pipe(res);
+
 				for(i = 0; i < torrent.files.length; i++) {
-					streams.push(torrent.files[i].createReadStream(torrent.files[i].name));
+					zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
 				}
-				new MultiStream(streams).pipe(res);
 			})
 			.on('error', (err) => {
 				console.log('Z-', err);
