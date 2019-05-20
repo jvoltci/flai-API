@@ -8,7 +8,8 @@ const bodyParser = require('body-parser');
 const knex = require('knex');
 
 //const MultiStream = require('multistream');
-const Archiver = require('archiver');
+//const magnet = require('parse-torrent')
+const parseTorrent = require('archiver');
 const WebTorrent = require('webtorrent')
 //process.setMaxListeners(0);
 const client = new WebTorrent();
@@ -217,6 +218,7 @@ app.post('/metadata', (req, res) => {
 				})
 				.on('error', (err) => {
 					console.log('Z-', err);
+					client.remove(magnetURI);
 					res.redirect('https://flai.ml/#/error');
 				})
 			}
@@ -304,6 +306,7 @@ app.get('/torrent/:file_name', (req, res, next) => {
 			})
 			.on('error', (err) => {
 				console.log('Z-', err);
+				client.remove(magnetURI);
 				res.redirect('https://flai.ml/#/error');
 			});
 		}
@@ -374,12 +377,14 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			})
 			.on('error', (err) => {
 				console.log('Z-', err);
+				client.remove(magnetURI);
 				res.redirect('https://flai.ml/#/error');
 			});
 		}
 	}
 	catch(e) {
 		console.log("Z-Error: ",e);
+		client.remove(magnetURI);
 		res.redirect('https://flai.ml/#/error');
 	}
 
@@ -420,6 +425,10 @@ process.on('uncaughtException', (err) => {
 });
 
 app.listen(port, () => {
+	/*parseTorrent.remote('https://ftuforum.com/wp-content/uploads/2019/05/FreeTutorials.Us-Udemy-Mastering-Magento-2.torrent', (err, parsedTorrent) => {
+	  if (err) throw err
+	  console.log(parsedTorrent)
+	})*/
     console.log("Listening on *:5000")
 })
 
