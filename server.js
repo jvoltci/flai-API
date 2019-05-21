@@ -351,13 +351,14 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    let notStreamed = [];
 
 		    setInterval(() => {
-		    	if(betaLength !== 0 && (alphaLength != betaLength)) {
+		    	console.log(`${j} Inside interval`);
+		    	if(betaLength !== 0 && (alphaLength === betaLength)) {
 		    		console.log(torrent.files[j].name);
 		    		notStreamed.push(`${j} ${torrent.files[j].name}`);
 		    		j++;
 		    		autoStreamOnEnd();
 		    	}
-		    }, 50000);
+		    }, 20000);
 
 		    const autoStreamOnEnd = () => {
 		    	if(j < torrent.files.length) {
@@ -415,7 +416,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    let notStreamed = [];
 
 			    setInterval(() => {
-			    	if(betaLength !== 0 && (alphaLength != betaLength)) {
+			    	console.log(`${j} Inside interval`);
+			    	if(betaLength !== 0 && (alphaLength === betaLength)) {
 			    		console.log(torrent.files[j].name);
 			    		notStreamed.push(`${j} ${torrent.files[j].name}`);
 			    		j++;
