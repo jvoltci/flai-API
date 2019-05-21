@@ -340,6 +340,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    });
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
+		    zip.abort();
 
 		    let j = 0, haveTo = 0;
 
@@ -422,6 +423,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    });
 			    const zip = Archiver('zip');
 			    zip.pipe(res);
+			    zip.abort();
 
 			    let j = 0;
 
