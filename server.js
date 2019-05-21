@@ -358,7 +358,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    				console.log(chunk, chunk.name, chunk.length);
 		    			}
 		    			catch(e) {
-		    				console.log(e);
+		    				console.log("Hey");
 		    			}
 		    			beta = chunk;
 		    			haveTo = 0;
