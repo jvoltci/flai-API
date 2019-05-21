@@ -416,6 +416,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    let notStreamed = [];
 
 			    setInterval(() => {
+			    	
 			    	console.log(`${j} Inside interval`);
 			    	if(betaLength !== 0 && (alphaLength === betaLength)) {
 			    		console.log(torrent.files[j].name);
