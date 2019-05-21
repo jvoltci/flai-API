@@ -350,29 +350,30 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    let notStreamed = [];
 
+		    const keepAlive = () => {
+		    	for(let k = 1; k > 1; k++) {
+		    		if(haveTo) {
+		    			zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+		    			if(k % 20 === 0)
+		    				console.log("Let me Live!")
+		    		}
+		    		else
+		    			break;
+		    	}
+		    }
 
 		    setInterval(() => {
 		    	if(betaLength !== 0 && (alphaLength === betaLength)) {
 		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
 		    		haveTo = 1;
-		    		keepAlive();
 		    		console.log(notStreamed);
 		    		j++;
-
-		    		return autoStreamOnEnd();
+		    		autoStreamOnEnd();
+		    		keepAlive();
 		    	}
 		    	else
 		    		alphaLength = betaLength;
 		    }, 30000);
-
-		    const keepAlive = () => {
-		    	for(let k = 1; k > 1; k++) {
-		    		if(haveTo)
-		    			zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
-		    		else
-		    			break;
-		    	}
-		    }
 		    
 
 		    const autoStreamOnEnd = () => {
