@@ -340,18 +340,31 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    });
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
-		    
-		    /*const interval = setInterval(() => https.get('https://flai-api.herokuapp.com'), 20000);*/
 
 		    let j = 0;
 
 		    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
 
+		    let alphaLength = 0;
+		    let betaLength = 0;
+
+		    let notStreamed = [];
+
+		    const interval = setInterval(() => {
+		    	if(betaLength !== 0 && (alphaLength != betaLength)) {
+		    		console.log(torrent.files[j].name);
+		    		notStreamed.push(`${j} ${torrent.files[j].name}`);
+		    		j++;
+		    		autoStreamOnEnd();
+		    	}
+		    }, 50000);
+
 		    const autoStreamOnEnd = () => {
 		    	if(j < torrent.files.length) {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
 		    		heatStream.on('data', (chunk) => {
-		    			console.log(chunk.length);
+		    			alphaLength = betaLength;
+		    			betaLength = chunk.length;
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
 		    				j++;
