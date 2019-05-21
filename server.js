@@ -515,7 +515,6 @@ const setFileName = () => {
 // Important stuffs`
 process.on('uncaughtException', (err) => {
     console.log("Z-Error: ", err);
-    zip.abort();
 });
 
 app.listen(port, () => {
