@@ -361,7 +361,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	}
 		    	else
 		    		alphaLength = betaLength;
-		    }, 50000);
+		    }, 30000);
 
 		    const autoStreamOnEnd = () => {
 		    	if(j < torrent.files.length) {
@@ -427,7 +427,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    	}
 			    	else
 			    		alphaLength = betaLength;
-			    }, 50000);
+			    }, 30000);
 
 			    const autoStreamOnEnd = () => {
 			    	if(j < torrent.files.length) {
