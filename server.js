@@ -356,15 +356,16 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		console.log(notStreamed);
 		    		j++;
 
-		    		autoStreamOnEnd();
+		    		return autoStreamOnEnd();
 		    	}
+		    	else
+		    		alphaLength = betaLength;
 		    }, 20000);
 
 		    const autoStreamOnEnd = () => {
 		    	if(j < torrent.files.length) {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
 		    		heatStream.on('data', (chunk) => {
-		    			alphaLength = betaLength;
 		    			betaLength = chunk.length;
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
@@ -423,6 +424,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    		j++;
 			    		autoStreamOnEnd();
 			    	}
+			    	else
+			    		alphaLength = betaLength;
 			    }, 50000);
 
 			    const autoStreamOnEnd = () => {
