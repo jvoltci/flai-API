@@ -351,6 +351,10 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
 		    
+		    const interval = setInterval(() => {
+		    	https.get(url, (res) => console.log())
+		    }, 20000);
+		    
 		    let j = 0;
 
 		    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
@@ -366,6 +370,10 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		});
 
 		    		zip.append(heatStream, {name: torrent.files[j].name});
+		    	}
+		    	if(j === torrent.files.length) {
+		    		clearInterval(interval);
+		    		zip.finalize();
 		    	}
 		    }
 
@@ -395,6 +403,10 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    const zip = Archiver('zip');
 			    zip.pipe(res);
 			    
+			    const interval = setInterval(() => {
+			    	https.get(url, (res) => console.log())
+			    }, 20000);
+
 			    let j = 0;
 
 			    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
@@ -410,6 +422,10 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    		});
 
 			    		zip.append(heatStream, {name: torrent.files[j].name});
+			    	}
+			    	if(j === torrent.files.length) {
+			    		clearInterval(interval);
+			    		zip.finalize();
 			    	}
 			    }
 
