@@ -341,7 +341,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
 
-		    let j = 0;
+		    let j = 0, haveTo = 0;
 
 		    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
 
@@ -354,9 +354,10 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    const autoStreamOnEnd = () => {
 		    	if(j < torrent.files.length) {
-		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream.on('data', (chunk) => {
 		    			betaLength = chunk.length;
+		    			haveTo = 0;
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
 		    				j++;
@@ -380,7 +381,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    setInterval(() => {
 		    	if(betaLength !== 0 && (alphaLength === betaLength)) {
 		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
-		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+		    		haveTo = 1;
+		    		keepAlive();
 		    		console.log(notStreamed);
 		    		j++;
 
@@ -389,6 +391,15 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	else
 		    		alphaLength = betaLength;
 		    }, 30000);
+
+		    const keepAlive = () => {
+		    	for(let k = 1; k > 1; k++) {
+		    		if(haveTo)
+		    			zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+		    		else
+		    			break;
+		    	}
+		    }
 		}
 		else {
 			client.add(magnetURI, torrent => {
