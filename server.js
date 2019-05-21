@@ -341,6 +341,11 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
 
+		    zip.on('entry', (entries) => {
+		    	console.log("Total:", entries.total)
+				console.log("Processed:", entries.processed)
+		    })
+
 		    let j = 0;
 
 		    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
@@ -364,8 +369,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		}).on("error", (err) => {
 						return next(err);
 					});
-					console.log("Total:", zip.ProgressData.entries.total)
-					console.log("Processed:", zip.ProgressData.entries.processed)
 		    		zip.append(heatStream, {name: torrent.files[j].name});
 		    	}
 		    	//See here
