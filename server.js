@@ -341,9 +341,9 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
 
-		    zip.on('entry', (entries) => {
-		    	console.log("Total:", entries.total)
-				console.log("Processed:", entries.processed)
+		    zip.on('entry', (ProgressData) => {
+		    	console.log("Total:", ProgressData.entries.total)
+				console.log("Processed:", ProgressData.entries.processed)
 		    })
 
 		    let j = 0;
