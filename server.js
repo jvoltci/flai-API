@@ -383,7 +383,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		console.log("Inside keepAlive")
 		    		if(haveTo) {
 		    			zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
-		    			console.log("Let me Live!")
 		    		}
 		    		else
 		    			break;
