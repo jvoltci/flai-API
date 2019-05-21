@@ -354,7 +354,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	if(j < torrent.files.length) {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream.on('data', (chunk) => {
-		    			console.log(Object.keys(chunk))
+		    			console.log((Object.getOwnPropertyNames(chunk))
 		    			betaLength = chunk.length;
 		    			haveTo = 0;
 		    		}).on('end', (err) => {
