@@ -352,9 +352,9 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    zip.pipe(res);
 		    
 		    const interval = setInterval(() => {
-		    	https.get(url, (res) => console.log())
+		    	https.get('https://flai-api.herokuapp.com', (res) => console.log())
 		    }, 20000);
-		    
+
 		    let j = 0;
 
 		    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
@@ -404,7 +404,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    zip.pipe(res);
 			    
 			    const interval = setInterval(() => {
-			    	https.get(url, (res) => console.log())
+			    	https.get('https://flai-api.herokuapp.com', (res) => console.log())
 			    }, 20000);
 
 			    let j = 0;
