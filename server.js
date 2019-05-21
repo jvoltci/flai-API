@@ -334,19 +334,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			if(id === -1)
 				return res.redirect('https://flai.ml/#/error');
 
-			/*let intervel = setInterval(() => {
-			    http.get("http://flai-api.herokuapp.com");
-			}, 1000);
-			clearInterval(intervel);*/
-
-			res.writeHead(200, {
-		        'Content-Type': 'application/zip',
-		        'Content-disposition': 'attachment; filename=Immortal.zip'
-		    });
-		    const zip = Archiver('zip');
-		    zip.pipe(res);
-		    let j = 0;
-		    zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
+			/*zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
 		    j++;
 		    setInterval(() => {
 		    	if(j < torrent.files.length)
@@ -354,7 +342,34 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	j++;
 		    	if(j === torrent.files.length)
 		    		zip.finalize();
-		    }, 30000)
+		    }, 30000)*/
+
+			res.writeHead(200, {
+		        'Content-Type': 'application/zip',
+		        'Content-disposition': 'attachment; filename=Immortal.zip'
+		    });
+		    const zip = Archiver('zip');
+		    zip.pipe(res);
+		    
+		    let j = 0;
+
+		    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+
+		    const autoStreamOnEnd = () => {
+		    	if(j < torrent.files.length) {
+		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+		    		heatStream.on('end', (err) => {
+		    			if(j < torrent.files.length) {
+		    				j++;
+		    				autoStreamOnEnd();
+		    			}
+		    		}
+
+		    		zip.append(heatStream, {name: torrent.files[j].name});
+		    	}
+		    }
+
+		    autoStreamOnEnd();
 			/*for(i = 0; i < torrent.files.length; i++) {
 				zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
 			}
@@ -379,15 +394,26 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    });
 			    const zip = Archiver('zip');
 			    zip.pipe(res);
-			    zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
-			    j++;
-			    setInterval(() => {
-			    	if(j < torrent.files.length)
-			    		zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
-			    	j++;
-			    	if(j === torrent.files.length)
-			    		zip.finalize();
-			    }, 30000)
+			    
+			    let j = 0;
+
+			    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+
+			    const autoStreamOnEnd = () => {
+			    	if(j < torrent.files.length) {
+			    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+			    		heatStream.on('end', (err) => {
+			    			if(j < torrent.files.length) {
+			    				j++;
+			    				autoStreamOnEnd();
+			    			}
+			    		}
+
+			    		zip.append(heatStream, {name: torrent.files[j].name});
+			    	}
+			    }
+
+			    autoStreamOnEnd();
 				/*for(i = 0; i < torrent.files.length; i++) {
 					zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
 				}
