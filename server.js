@@ -354,13 +354,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	if(j < torrent.files.length) {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream.on('data', (chunk) => {
-		    			try {
-		    				console.log(chunk, chunk.name, chunk.length);
-		    			}
-		    			catch(e) {
-		    				console.log("Hey");
-		    			}
-		    			beta = chunk;
+		    			beta = `${chunk}`;
 		    			haveTo = 0;
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
@@ -383,26 +377,13 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    autoStreamOnEnd();		 
 
-		    const keepAlive = () => {
-		    	console.log("Inside keepAlive")
-		    	for(let k = 1; k > 0; k++) {
-		    		if(haveTo) {
-		    			zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
-		    		}
-		    		else
-		    			break;
-		    	}
-		    	console.log("Outside keepAlive");
-		    }
-
 		    setInterval(() => {
 		    	if(beta !== 0 && (alpha === beta)) {
 		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
-		    		haveTo = 1;
+		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
 		    		console.log(notStreamed);
 		    		j++;
 		    		autoStreamOnEnd();
-		    		keepAlive();
 		    	}
 		    	else
 		    		alpha = beta;
