@@ -334,16 +334,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			if(id === -1)
 				return res.redirect('https://flai.ml/#/error');
 
-			/*zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
-		    j++;
-		    setInterval(() => {
-		    	if(j < torrent.files.length)
-		    		zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
-		    	j++;
-		    	if(j === torrent.files.length)
-		    		zip.finalize();
-		    }, 30000)*/
-
 			res.writeHead(200, {
 		        'Content-Type': 'application/zip',
 		        'Content-disposition': 'attachment; filename=Immortal.zip'
@@ -378,10 +368,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    }
 
 		    autoStreamOnEnd();
-			/*for(i = 0; i < torrent.files.length; i++) {
-				zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
-			}
-			zip.finalize()*/
 		}
 		else {
 			client.add(magnetURI, torrent => {
@@ -430,10 +416,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    }
 
 			    autoStreamOnEnd();
-				/*for(i = 0; i < torrent.files.length; i++) {
-					zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
-				}
-				zip.finalize()*/
 			})
 			.on('error', (err) => {
 				console.log('Z-', err);
