@@ -353,6 +353,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    setInterval(() => {
 		    	if(betaLength !== 0 && (alphaLength === betaLength)) {
 		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
+		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
 		    		console.log(notStreamed);
 		    		j++;
 
@@ -360,7 +361,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	}
 		    	else
 		    		alphaLength = betaLength;
-		    }, 20000);
+		    }, 50000);
 
 		    const autoStreamOnEnd = () => {
 		    	if(j < torrent.files.length) {
