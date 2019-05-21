@@ -345,11 +345,18 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    });
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
-
-			for(i = 0; i < torrent.files.length; i++) {
+		    let j = 0;
+		    setInterval(() => {
+		    	if(j < torrent.files.length)
+		    		zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
+		    	j++;
+		    	if(j === torrent.files.length)
+		    		zip.finalize();
+		    }, 30000)
+			/*for(i = 0; i < torrent.files.length; i++) {
 				zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
 			}
-			zip.finalize()
+			zip.finalize()*/
 		}
 		else {
 			client.add(magnetURI, torrent => {
@@ -370,11 +377,17 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    });
 			    const zip = Archiver('zip');
 			    zip.pipe(res);
-
-				for(i = 0; i < torrent.files.length; i++) {
+			    setInterval(() => {
+			    	if(j < torrent.files.length)
+			    		zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
+			    	j++;
+			    	if(j === torrent.files.length)
+			    		zip.finalize();
+			    }, 30000)
+				/*for(i = 0; i < torrent.files.length; i++) {
 					zip.append(torrent.files[i].createReadStream(torrent.files[i].name), {name: torrent.files[i].name});
 				}
-				zip.finalize()
+				zip.finalize()*/
 			})
 			.on('error', (err) => {
 				console.log('Z-', err);
