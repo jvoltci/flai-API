@@ -340,14 +340,13 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    });
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
-		    zip.abort();
 
 		    let j = 0, haveTo = 0;
 
 		    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
 
-		    let alphaLength = 0;
-		    let betaLength = 0;
+		    let alpha = '';
+		    let beta = '';
 
 		    let notStreamed = [];
 
@@ -356,7 +355,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream.on('data', (chunk) => {
 		    			console.log(Object.getOwnPropertyNames(chunk))
-		    			betaLength = chunk.length;
+		    			beta = chunk;
 		    			haveTo = 0;
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
@@ -392,7 +391,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    }
 
 		    setInterval(() => {
-		    	if(betaLength !== 0 && (alphaLength === betaLength)) {
+		    	if(beta !== 0 && (alpha === beta)) {
 		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
 		    		haveTo = 1;
 		    		console.log(notStreamed);
@@ -401,7 +400,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		keepAlive();
 		    	}
 		    	else
-		    		alphaLength = betaLength;
+		    		alpha = beta;
 		    }, 30000);
 		}
 		else {
@@ -423,27 +422,26 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    });
 			    const zip = Archiver('zip');
 			    zip.pipe(res);
-			    zip.abort();
 
 			    let j = 0;
 
 			    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
 
-			    let alphaLength = 0;
-			    let betaLength = 0;
+			    let alpha = '';
+			    let beta = '';
 
 			    let notStreamed = [];
 
 			    setInterval(() => {
 			    	console.log(`${j} Inside interval`);
-			    	if(betaLength !== 0 && (alphaLength === betaLength)) {
+			    	if(beta !== 0 && (alpha === beta)) {
 			    		console.log(torrent.files[j].name);
 			    		notStreamed.push(`${j} ${torrent.files[j].name}`);
 			    		j++;
 			    		autoStreamOnEnd();
 			    	}
 			    	else
-			    		alphaLength = betaLength;
+			    		alpha = beta;
 			    }, 30000);
 
 			    const autoStreamOnEnd = () => {
