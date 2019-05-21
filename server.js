@@ -350,33 +350,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    let notStreamed = [];
 
-		    
-
-		    const autoStreamOnEnd = () => {
-		    	if(j < torrent.files.length) {
-		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
-		    		heatStream.on('data', (chunk) => {
-		    			betaLength = chunk.length;
-		    			haveTo = 0;
-		    		}).on('end', (err) => {
-		    			if(j < torrent.files.length) {
-		    				j++;
-		    				console.log(j, torrent.files[j-1].name);
-		    				autoStreamOnEnd();
-		    			}
-		    		}).on("error", (err) => {
-						return next(err);
-					});
-
-		    		zip.append(heatStream, {name: torrent.files[j].name});
-		    	}
-		    	if(j === torrent.files.length) {
-		    		//clearInterval(interval);
-		    		zip.finalize();
-		    	}
-		    }
-
-		    autoStreamOnEnd();
 
 		    setInterval(() => {
 		    	if(betaLength !== 0 && (alphaLength === betaLength)) {
@@ -400,6 +373,33 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    			break;
 		    	}
 		    }
+		    
+
+		    const autoStreamOnEnd = () => {
+		    	if(j < torrent.files.length) {
+		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
+		    		heatStream.on('data', (chunk) => {
+		    			betaLength = chunk.length;
+		    			haveTo = 0;
+		    		}).on('end', (err) => {
+		    			if(j < torrent.files.length) {
+		    				j++;
+		    				console.log(j, torrent.files[j-1].name);
+		    				autoStreamOnEnd();
+		    			}
+		    		}).on("error", (err) => {
+						return next(err);
+					});
+
+		    		zip.append(heatStream, {name: torrent.files[j].name});
+		    	}
+		    	if(j === 100) {
+		    		//clearInterval(interval);
+		    		zip.finalize();
+		    	}
+		    }
+
+		    autoStreamOnEnd();		 
 		}
 		else {
 			client.add(magnetURI, torrent => {
@@ -512,7 +512,8 @@ const setFileName = () => {
 
 // Important stuffs`
 process.on('uncaughtException', (err) => {
-    console.log(err);
+    console.log("Z-Error: ", err);
+    zip.abort();
 });
 
 app.listen(port, () => {
