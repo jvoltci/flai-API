@@ -363,7 +363,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    				j++;
 		    				autoStreamOnEnd();
 		    			}
-		    		}
+		    		});
 
 		    		zip.append(heatStream, {name: torrent.files[j].name});
 		    	}
@@ -407,7 +407,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    				j++;
 			    				autoStreamOnEnd();
 			    			}
-			    		}
+			    		});
 
 			    		zip.append(heatStream, {name: torrent.files[j].name});
 			    	}
