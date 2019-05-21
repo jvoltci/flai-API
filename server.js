@@ -350,10 +350,12 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const autoStreamOnEnd = () => {
 		    	if(j < torrent.files.length) {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
-		    		heatStream.on('end', (err) => {
+		    		heatStream.on('data', (chunk) => {
+		    			console.log(chunk.length);
+		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
 		    				j++;
-		    				console.log(j-1, "->" + torrent.files[j-1].name, "!!!")
+		    				console.log(j, torrent.files[j-1].name);
 		    				autoStreamOnEnd();
 		    			}
 		    		}).on("error", (err) => {
@@ -397,10 +399,12 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    const autoStreamOnEnd = () => {
 			    	if(j < torrent.files.length) {
 			    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
-			    		heatStream.on('end', (err) => {
+			    		heatStream.on('data', (chunk) => {
+			    			console.log(chunk.length);
+			    		}).on('end', (err) => {
 			    			if(j < torrent.files.length) {
 			    				j++;
-			    				console.log(j-1, "->" + torrent.files[j-1].name, "!!!")
+			    				console.log(j, torrent.files[j-1].name);
 			    				autoStreamOnEnd();
 			    			}
 			    		}).on("error", (err) => {
