@@ -350,7 +350,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    let notStreamed = [];
 
-		    const interval = setInterval(() => {
+		    setInterval(() => {
 		    	if(betaLength !== 0 && (alphaLength != betaLength)) {
 		    		console.log(torrent.files[j].name);
 		    		notStreamed.push(`${j} ${torrent.files[j].name}`);
@@ -408,6 +408,20 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    let j = 0;
 
 			    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+
+			    let alphaLength = 0;
+			    let betaLength = 0;
+
+			    let notStreamed = [];
+
+			    setInterval(() => {
+			    	if(betaLength !== 0 && (alphaLength != betaLength)) {
+			    		console.log(torrent.files[j].name);
+			    		notStreamed.push(`${j} ${torrent.files[j].name}`);
+			    		j++;
+			    		autoStreamOnEnd();
+			    	}
+			    }, 50000);
 
 			    const autoStreamOnEnd = () => {
 			    	if(j < torrent.files.length) {
