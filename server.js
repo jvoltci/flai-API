@@ -346,6 +346,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
 		    let j = 0;
+		    zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
+		    j++;
 		    setInterval(() => {
 		    	if(j < torrent.files.length)
 		    		zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
@@ -377,6 +379,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    });
 			    const zip = Archiver('zip');
 			    zip.pipe(res);
+			    zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
+			    j++;
 			    setInterval(() => {
 			    	if(j < torrent.files.length)
 			    		zip.append(torrent.files[j].createReadStream(torrent.files[j].name), {name: torrent.files[j].name});
