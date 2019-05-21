@@ -354,6 +354,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	if(j < torrent.files.length) {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream.on('data', (chunk) => {
+		    			console.log("Inside heatStream")
 		    			betaLength = chunk.length;
 		    			haveTo = 0;
 		    		}).on('end', (err) => {
@@ -379,6 +380,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    const keepAlive = () => {
 		    	for(let k = 1; k > 0; k++) {
+		    		console.log("Inside keepAlive")
 		    		if(haveTo) {
 		    			zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
 		    			console.log("Let me Live!")
@@ -386,6 +388,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		else
 		    			break;
 		    	}
+		    	console.log("Outside keepAlive");
 		    }
 
 		    setInterval(() => {
