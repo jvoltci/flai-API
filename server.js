@@ -355,7 +355,9 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    				j++;
 		    				autoStreamOnEnd();
 		    			}
-		    		});
+		    		}).on("error", (err) => {
+						return next(err);
+					});
 
 		    		zip.append(heatStream, {name: torrent.files[j].name});
 		    	}
@@ -399,7 +401,9 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    				j++;
 			    				autoStreamOnEnd();
 			    			}
-			    		});
+			    		}).on("error", (err) => {
+							return next(err);
+						});
 
 			    		zip.append(heatStream, {name: torrent.files[j].name});
 			    	}
