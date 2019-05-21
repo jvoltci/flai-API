@@ -355,7 +355,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream.on('data', (chunk) => {
 		    			try {
-		    				conconsole.log(chunk, chunk.name, chunk.length);
+		    				console.log(chunk, chunk.name, chunk.length);
 		    			}
 		    			catch(e) {
 		    				console.log(e);
