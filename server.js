@@ -379,8 +379,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    autoStreamOnEnd();		 
 
 		    const keepAlive = () => {
+		    	console.log("Inside keepAlive")
 		    	for(let k = 1; k > 0; k++) {
-		    		console.log("Inside keepAlive")
 		    		if(haveTo) {
 		    			zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
 		    		}
