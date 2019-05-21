@@ -353,6 +353,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		heatStream.on('end', (err) => {
 		    			if(j < torrent.files.length) {
 		    				j++;
+		    				console.log(torrent.files[j-1].name, "!")
 		    				autoStreamOnEnd();
 		    			}
 		    		}).on("error", (err) => {
@@ -399,6 +400,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    		heatStream.on('end', (err) => {
 			    			if(j < torrent.files.length) {
 			    				j++;
+			    				console.log(torrent.files[j-1].name, "!")
 			    				autoStreamOnEnd();
 			    			}
 			    		}).on("error", (err) => {
