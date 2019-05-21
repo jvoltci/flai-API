@@ -355,7 +355,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream.on('data', (chunk) => {
 		    			beta = `${chunk}`;
-		    			console.log(beta);
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
 		    				j++;
@@ -365,13 +364,12 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		}).on("error", (err) => {
 						return next(err);
 					});
-					console.log(Object.keys(zip));
-					console.log("alpha", alpha);
-					console.log("beta", beta);
+					console.log("Total:", zip.entries.total)
+					console.log("Processed:", zip.entries.processed)
 		    		zip.append(heatStream, {name: torrent.files[j].name});
 		    	}
 		    	//See here
-		    	if(j === 10) {
+		    	if(j === 100) {
 		    		//clearInterval(interval);
 		    		zip.finalize();
 		    	}
