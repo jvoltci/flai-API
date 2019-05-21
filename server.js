@@ -352,14 +352,13 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    setInterval(() => {
 		    	if(betaLength !== 0 && (alphaLength === betaLength)) {
-		    		notStreamed.push(`${j} ${torrent.files[j].name}`);
+		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
 		    		console.log(notStreamed);
-		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}.txt` });
 		    		j++;
 
 		    		autoStreamOnEnd();
 		    	}
-		    }, 50000);
+		    }, 20000);
 
 		    const autoStreamOnEnd = () => {
 		    	if(j < torrent.files.length) {
