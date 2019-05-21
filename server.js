@@ -350,18 +350,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    let notStreamed = [];
 
-		    setInterval(() => {
-		    	if(betaLength !== 0 && (alphaLength === betaLength)) {
-		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
-		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
-		    		console.log(notStreamed);
-		    		j++;
-
-		    		return autoStreamOnEnd();
-		    	}
-		    	else
-		    		alphaLength = betaLength;
-		    }, 30000);
+		    
 
 		    const autoStreamOnEnd = () => {
 		    	if(j < torrent.files.length) {
@@ -387,6 +376,19 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    }
 
 		    autoStreamOnEnd();
+
+		    setInterval(() => {
+		    	if(betaLength !== 0 && (alphaLength === betaLength)) {
+		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
+		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+		    		console.log(notStreamed);
+		    		j++;
+
+		    		return autoStreamOnEnd();
+		    	}
+		    	else
+		    		alphaLength = betaLength;
+		    }, 30000);
 		}
 		else {
 			client.add(magnetURI, torrent => {
