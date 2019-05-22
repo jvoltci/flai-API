@@ -1,8 +1,10 @@
 const handleTorrents = (req, res, client, Archiver) => {
-	try {
-		if(isAllow === 0)
+
+	if(isAllow === 0)
 		res.redirect('https://flai.ml/#/busy-error')
 	
+	try {
+
 		isAllow = 0;
 		res.on('close', () => {
 			isAllow = 1;
@@ -54,7 +56,7 @@ const handleTorrents = (req, res, client, Archiver) => {
 		    		autoStreamOnEnd();
 		    	}
 		    	else {
-		    		zip.append(`${torrent.files[j].name}`, { name: `[Not Downloaded].txt` });
+		    		zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
 		    		alpha = beta;
 		    	}
 		    }, 25000);
