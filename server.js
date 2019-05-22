@@ -372,7 +372,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream.on('data', (chunk) => {
 		    			beta += chunk.length;
-		    			console.log(beta, (new Date().getTime() - timeStart)/1000);
+		    			console.log(beta, (new Date().getTime() - timeStart)/1000, "Streaming: ", torrent.files[j].name);
 		    			timeStart = new Date().getTime();
 
 		    		}).on('end', (err) => {
