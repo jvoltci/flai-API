@@ -1,4 +1,4 @@
-const handleTorrents = (req, res, client, magnetURI, Archiver) => {
+const handleTorrents = (req, res, client, Archiver) => {
 	try {
 		if(client.get(magnetURI)) {
 			const torrent = client.get(magnetURI);
