@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 	next()
 })
 
+let interval = '';
 let magnetURI = ''
 let url = '';
 let link = '';
