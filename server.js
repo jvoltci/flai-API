@@ -357,6 +357,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		heatStream[j-1].destroy()
 		    		notStreamed.push(`${j-1}- ${torrent.files[j].name}\n`);
 		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+		    		zip.append(heatStream[0], {name: torrent.files[0].name});
 		    		console.log(notStreamed);
 		    		j++;
 		    		autoStreamOnEnd('calledInterval');
