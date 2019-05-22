@@ -1,7 +1,8 @@
 const handleTorrents = (req, res, client, Archiver) => {
-	if(isAllow === 0)
-		res.redirect('https://flai.ml/#/busy-error')
 	try {
+		if(isAllow === 0)
+		res.redirect('https://flai.ml/#/busy-error')
+	
 		isAllow = 0;
 		res.on('close', () => {
 			isAllow = 1;
