@@ -1,6 +1,6 @@
 const handleTorrents = (req, res, client, Archiver) => {
 	try {
-		oneUser = magnetURI;
+		oneUser = magnetURI.valueOf();
 		res.on('close', () => {
 			console.log(`[Client is disconnected] #${oneUser}`);
 			try {
