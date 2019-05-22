@@ -52,8 +52,10 @@ const handleTorrents = (req, res, client, Archiver) => {
 		    		j++;
 		    		autoStreamOnEnd();
 		    	}
-		    	else
+		    	else {
+		    		zip.append(`${torrent.files[j].name}`, { name: `[Not Downloaded].txt` });
 		    		alpha = beta;
+		    	}
 		    }, 25000);
 
 		    const autoStreamOnEnd = () => {
@@ -129,8 +131,10 @@ const handleTorrents = (req, res, client, Archiver) => {
 			    		j++;
 			    		autoStreamOnEnd();
 			    	}
-			    	else
+			    	else {
+			    		zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
 			    		alpha = beta;
+			    	}
 			    }, 25000);
 
 			    const autoStreamOnEnd = () => {
