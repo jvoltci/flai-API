@@ -35,7 +35,6 @@ const handleLinks = (req, res, db) => {
 				}
 				else {
 					try {
-						console.log(url);
 						const request = https.get(url, (response) => {
 							res.writeHead(200, {
 								"Content-Disposition": "attachment;filename=" + file + extension,

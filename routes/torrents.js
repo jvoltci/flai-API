@@ -1,18 +1,17 @@
 const handleTorrents = (req, res, client, Archiver) => {
 	try {
-		oneUser = magnetURI.valueOf();
 		res.on('close', () => {
-			console.log(`[Client is disconnected] #${oneUser}`);
+			console.log(`[Client is disconnected]`);
 			try {
-				client.remove(oneUser);
+				client.remove(magnetURI);
 				clearInterval(interval);
 			}
 			catch(err) {
 				console.log('Close Error:', err);
 			}
 		})
-		if(client.get(oneUser)) {
-			const torrent = client.get(oneUser);
+		if(client.get(magnetURI)) {
+			const torrent = client.get(magnetURI);
 			let id = -1;
 			for(i = 0; i < torrent.files.length; i++) {
 				if(torrent.files[i].name == req.params.file_name) {
@@ -82,14 +81,14 @@ const handleTorrents = (req, res, client, Archiver) => {
 		    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 		    		clearInterval(interval);
 		    		zip.finalize();
-		    		client.remove(oneUser);
+		    		client.remove(magnetURI);
 		    	}
 		    }
 
 		    autoStreamOnEnd();
 		}
 		else {
-			client.add(oneUser, (torrent) => {
+			client.add(magnetURI, (torrent) => {
 				let id = -1;
 				for(i = 0; i < torrent.files.length; i++) {
 					if(torrent.files[i].name == req.params.file_name) {
@@ -159,7 +158,7 @@ const handleTorrents = (req, res, client, Archiver) => {
 			    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 			    		clearInterval(interval);
 			    		zip.finalize();
-			    		client.remove(oneUser);
+			    		client.remove(magnetURI);
 			    	}
 			    }
 
@@ -167,7 +166,7 @@ const handleTorrents = (req, res, client, Archiver) => {
 			}).on('error', (err) => {
 				console.log('Cannot Add torrent:', err);
 
-				try { client.remove(oneUser) }
+				try { client.remove(magnetURI) }
 				catch(err) { console.log('Err:', err) }
 
 				res.redirect('https://flai.ml/#/error');
@@ -176,7 +175,7 @@ const handleTorrents = (req, res, client, Archiver) => {
 	}
 	catch(e) {
 		console.log("Z-ip Error: ", e);
-		client.remove(oneUser);
+		client.remove(magnetURI);
 		res.redirect('https://flai.ml/#/error');
 		//process.setMaxListeners(0);
 	}

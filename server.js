@@ -28,6 +28,7 @@ let contentType = '';
 let extension = '';
 let file = "Paradox";
 let password = '';
+isAllow = 1;
 
 const client = new WebTorrent();
 const app = express();
