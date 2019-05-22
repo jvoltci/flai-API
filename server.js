@@ -382,7 +382,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 					});
 		    	}
 		    	//See here
-		    	if(j === 50) {
+		    	if(j > 50) {
 
 		    		let count = 0;
 		    		for(q = 0; q < notStreamed.length; q++)
