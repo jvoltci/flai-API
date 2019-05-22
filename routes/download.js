@@ -1,4 +1,4 @@
-const makeid = require('./lib/makeid');
+const makeid = require('./lib/makeid')();
 
 const handleDownload = (req, res, db) => {
 
