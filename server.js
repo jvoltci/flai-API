@@ -353,8 +353,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    setInterval(() => {
 		    	zip.append(`Testing`, { name: `#Testing.txt` });
-		    }, 100);
-		    
+		    }, 1);
+
 		    setInterval(() => {
 		    	console.log("Interval ->", alpha, beta);
 		    	if(alpha === beta) {
@@ -366,7 +366,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	}
 		    	else
 		    		alpha = beta;
-		    }, 20000);
+		    }, 10000);
 
 		    const autoStreamOnEnd = (call='Else') => {
 		    	if(call === 'calledInterval')
