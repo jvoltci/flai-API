@@ -357,6 +357,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		console.log(notStreamed);
 		    		j++;
 		    		autoStreamOnEnd('calledInterval');
+		    		console.log('Moved');
 		    	}
 		    	else
 		    		alpha = beta;
@@ -365,7 +366,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    const autoStreamOnEnd = (call='Else') => {
 		    	if(call === 'calledInterval')
-		    		console.log(calledInterval);
+		    		console.log('calledInterval');
 
 		    	if(j < torrent.files.length) {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
