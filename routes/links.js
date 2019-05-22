@@ -1,3 +1,6 @@
+const http = require('http');
+const https = require('https');
+
 const { setFileName } = require('./lib/setFileName');
 
 const handleLinks = (req, res, db) => {
