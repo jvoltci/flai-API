@@ -43,7 +43,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 
 			    let notStreamed = '';
 
-			    const interval = setInterval(() => {
+			    interval = setInterval(() => {
 			    	if(alpha === beta && j <= torrent.files.length) {
 			    		if(j < torrent.files.length) {
 			    			heatStream[j].destroy()
