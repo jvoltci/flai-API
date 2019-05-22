@@ -372,10 +372,12 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    			if(j <= 50) {
 		    				console.log(`${j}: ${torrent.files[j].name}`);
 		    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
+		    				heatStream[j].on('end', () => {
+		    					console.log(`Finished ${j}th file`);
+		    					j++;
+		    					autoStreamOnEnd();
+		    				})
 		    				zip.append(heatStream[j], {name: torrent.files[j].name});
-
-		    				j++;
-		    				autoStreamOnEnd();
 		    			}
 		    		}).on("error", (err) => {
 						return next(err);
@@ -389,7 +391,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    			if(notStreamed[q] === '\n')
 		    				count += 1;
 
-		    		zip.append(notStreamed, {name: `#${count} Files Not Downloaded!`});
+		    		zip.append(notStreamed, {name: `#${count} Files Not Downloaded!.txt`});
 		    		clearInterval(interval);
 		    		zip.finalize();
 		    		console.log("Done Zip!");
