@@ -345,8 +345,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    let heatStream = [];
 
-		    let alpha = 0;
-		    let beta = 0;
 		    let timeStart = new Date().getTime();
 
 		    let notStreamed = [];
@@ -372,6 +370,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		console.log('calledInterval');
 
 		    	if(j < torrent.files.length) {
+		    		let alpha = 0, beta = 0;
 		    		heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream[j].on('data', (chunk) => {
 		    			alpha = beta;
@@ -380,15 +379,15 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    			timeStart = new Date().getTime();
 
 		    		}).on('end', (err) => {
-		    			console.log(`${j}: ${torrent.files[j].name}`);
+
 		    		}).on("error", (err) => {	
 						return next(err);
 					});
 
 					setTimeout(() => {
-						console.log(alpha, beta)
 						if(alpha !== beta) {
 							zip.append(heatStream[j], {name: torrent.files[j].name});
+							console.log(`${j}: ${torrent.files[j].name}`);
 							j++;
 							autoStreamOnEnd();
 						}
