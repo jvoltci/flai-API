@@ -8,6 +8,4 @@ const makeid = (length) => {
   return text;
 }
 
-module.exports = {
-	makeid: makeid
-}
+module.exports.makeid = makeid;

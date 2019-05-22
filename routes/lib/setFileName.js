@@ -17,6 +17,4 @@ const setFileName = () => {
 	}
 }
 
-module.exports = {
-	setFileName: setFileName
-}
+module.exports.setFileName = setFileName;
