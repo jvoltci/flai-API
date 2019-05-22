@@ -356,14 +356,15 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		//zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
 		    		console.log(notStreamed);
 		    		j++;
-		    		autoStreamOnEnd();
+		    		autoStreamOnEnd('callledIntervel');
 		    	}
 		    	else
 		    		alpha = beta;
 		    	console.log("Interval", alpha, beta);
 		    }, 30000);
 
-		    const autoStreamOnEnd = () => {
+		    const autoStreamOnEnd = (call = 'Else') => {
+		    	console.log(call);
 		    	if(j < torrent.files.length) {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream.on('data', (chunk) => {
