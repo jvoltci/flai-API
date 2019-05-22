@@ -341,17 +341,12 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
 
-		    zip.on('entry', (ProgressData) => {
-		    	console.log("Total:", ProgressData.entries.total)
-				console.log("Processed:", ProgressData.entries.processed)
-		    })
-
 		    let j = 0;
 
 		    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
 
-		    let alpha = '';
-		    let beta = '';
+		    let alpha = 0;
+		    let beta = 0;
 
 		    let notStreamed = [];
 
@@ -359,7 +354,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	if(j < torrent.files.length) {
 		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream.on('data', (chunk) => {
-		    			beta = `${chunk}`;
+		    			beta += chunk.length;
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
 		    				j++;
