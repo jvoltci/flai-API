@@ -367,7 +367,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    }, 20000);*/
 
 		    setInterval(() => {
-		    	if(alpha !== beta)
 		    		alpha = beta;
 		    }, 1000)
 
@@ -383,10 +382,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    			timeStart = new Date().getTime();
 
 		    		}).on('end', (err) => {
-		    			if(j < torrent.files.length) {
-		    				console.log(j, torrent.files[j-1].name);
-		    			}
-		    		}).on("error", (err) => {
+		    			console.log(`${j}: ${torrent.files[j].name}`);
+		    		}).on("error", (err) => {	
 						return next(err);
 					});
 
