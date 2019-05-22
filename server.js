@@ -378,24 +378,20 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    			console.log(beta, (new Date().getTime() - timeStart)/1000);
 		    			timeStart = new Date().getTime();
 
-		    		}).on('end', (err) => {
-
 		    		}).on("error", (err) => {	
 						return next(err);
 					});
 
-					setTimeout(() => {
-						if(alpha !== beta) {
-							zip.append(heatStream[j], {name: torrent.files[j].name});
-							console.log(`${j}: ${torrent.files[j].name}`);
-							j++;
-							autoStreamOnEnd();
-						}
-						else {
-							j++;
-							autoStreamOnEnd();
-						}
-					}, 5000);
+					if(alpha !== beta) {
+						zip.append(heatStream[j], {name: torrent.files[j].name});
+						console.log(`${j}: ${torrent.files[j].name}`);
+						j++;
+						autoStreamOnEnd();
+					}
+					else {
+						j++;
+						autoStreamOnEnd();
+					}
 		    	}
 		    	//See here
 		    	if(j === 14) {
