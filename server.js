@@ -321,10 +321,13 @@ app.get('/torrent/:file_name', (req, res, next) => {
 				});
 			})
 			.on('error', (err) => {
-				console.log('Z-', err);
-				client.remove(magnetURI);
-				res.redirect('https://flai.ml/#/error');
-			});
+	        console.log('Cannot Add torrent:', err);
+
+	        try { client.remove(magnetURI) }
+	        catch(err) { console.log('Err:', err) }
+
+	        res.redirect('https://flai.ml/#/error');
+	      });
 		}
 	}
 	catch(e) {
@@ -419,19 +422,14 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			client.add(magnetURI, torrent => {
 				
 				let id = -1;
-				try {
-					for(i = 0; i < torrent.files.length; i++) {
-						if(torrent.files[i].name == req.params.file_name) {
-							id = i;
-							break;
-						}
+				for(i = 0; i < torrent.files.length; i++) {
+					if(torrent.files[i].name == req.params.file_name) {
+						id = i;
+						break;
 					}
 				}
-				catch(err) {
-					console.log('timeout');
-				}
 				if(id === -1)
-					res.redirect('https://flai.ml/#/error');
+				 	return res.redirect('https://flai.ml/#/error');
 
 				res.writeHead(200, {
 			        'Content-Type': 'application/zip',
