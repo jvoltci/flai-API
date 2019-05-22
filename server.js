@@ -347,39 +347,30 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    let alpha = -1;
 		    let beta = 0;
-		    let timeStart = new Date().getTime();
 
-		    let notStreamed = [];
+		    let notStreamed = '';
 
-		    setInterval(() => {
-		    	console.log("Inside Interval after", ( new Date().getTime() - timeStart));
+		    const interval = setInterval(() => {
 		    	if(alpha === beta && j !== torrent.files.length) {
 		    		heatStream[j].destroy()
-		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
+		    		notStreamed += `${j}- ${torrent.files[j].name}\n`;
 		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
-		    		console.log("Sent");
-		    		console.log(notStreamed);
 		    		j++;
-		    		autoStreamOnEnd('calledInterval');
+		    		autoStreamOnEnd();
 		    	}
 		    	else
 		    		alpha = beta;
-		    }, 50000);
+		    }, 25000);
 
-		    const autoStreamOnEnd = (call='Else') => {
-		    	if(call === 'calledInterval')
-		    		console.log('Call By Interval');
+		    const autoStreamOnEnd = () => {
 
 		    	if(j < torrent.files.length) {
 		    		heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream[j].on('data', (chunk) => {
 		    			beta += chunk.length;
-		    			console.log(beta, (new Date().getTime() - timeStart)/1000);
-		    			timeStart = new Date().getTime();
-
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
-		    				console.log(j, torrent.files[j].name);
+		    				console.log(`${j}: ${torrent.files[j].name}`);
 		    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
 		    				zip.append(heatStream[j], {name: torrent.files[j].name});
 
@@ -389,13 +380,20 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		}).on("error", (err) => {
 						return next(err);
 					});
-		    		//zip.append(heatStream[j], {name: torrent.files[j].name});
 		    	}
 		    	//See here
-		    	if(j === torrent.files.length) {
+		    	if(j === 100) {
+
+		    		let count = 0;
+		    		for(q = 0; q < notStreamed.length; q++)
+		    			if(notStreamed[q] === '\n')
+		    				count += 1;
+
+		    		zip.append(notStreamed, {name: `#${count} Files Not Downloaded!`});
 		    		//clearInterval(interval);
 		    		zip.finalize();
 		    		console.log("Done Zip!")
+		    		client.remove(magnetURI);
 		    	}
 		    }
 
