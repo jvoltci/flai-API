@@ -373,6 +373,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		heatStream.on('data', (chunk) => {
 		    			beta += chunk.length;
 		    			console.log(beta, (new Date().getTime() - timeStart)/1000);
+		    			timeStart = new Date().getTime();
+
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
 		    				j++;
