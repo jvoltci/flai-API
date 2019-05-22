@@ -1,3 +1,5 @@
+const makeid = require('./lib/makeid')
+
 const handleDownload = (req, res, db) => {
 
 	password = req.body.user.password;
