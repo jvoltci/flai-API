@@ -1,6 +1,4 @@
 const handleTorrents = (req, res, client, Archiver) => {
-
-	console.log(isAllow, "connect");
 	if(isAllow === 0)
 		res.redirect('https://flai.ml/#/busy-error')
 	try {
@@ -15,7 +13,6 @@ const handleTorrents = (req, res, client, Archiver) => {
 			catch(err) {
 				console.log('Close Error:', err);
 			}
-			console.log(isAllow, "disconnected");
 		})
 		if(client.get(magnetURI)) {
 			const torrent = client.get(magnetURI);
@@ -64,7 +61,6 @@ const handleTorrents = (req, res, client, Archiver) => {
 		    	if(j < torrent.files.length) {
 		    		heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream[j].on('data', (chunk) => {
-		    			console.log(isAllow);
 		    			beta += chunk.length;
 		    		}).on('end', (err) => {
 		    			if(j <= torrent.files.length) {
