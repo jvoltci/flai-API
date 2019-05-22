@@ -351,18 +351,17 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    let notStreamed = [];
 
 		    setInterval(() => {
+		    	console.log("Interval ->", alpha, beta);
 		    	if(beta !== 0 && (alpha === beta)) {
 		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
 		    		//zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
 		    		console.log(notStreamed);
 		    		j++;
 		    		autoStreamOnEnd('calledInterval');
-		    		console.log('Moved');
 		    	}
 		    	else
 		    		alpha = beta;
-		    	console.log("Interval ->", alpha, beta);
-		    }, 25000);
+		    }, 20000);
 
 		    const autoStreamOnEnd = (call='Else') => {
 		    	if(call === 'calledInterval')
@@ -382,7 +381,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 						return next(err);
 					});
 		    		zip.append(heatStream, {name: torrent.files[j].name});
-		    		console.log(torrent.files[j].name + "APPENDED!!!");
 		    	}
 		    	//See here
 		    	if(j === torrent.files.length) {
