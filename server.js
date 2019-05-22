@@ -44,6 +44,19 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+/*app.use((req, res, next) => {
+	res.on('close', () => {
+		console.log("[Client is disconnected]");
+		try {
+			client.remove(magnetURI);
+			clearInterval(interval);
+		}
+		catch(err) {
+			console.log('Close Error:', err);
+		}
+	})
+	next()
+})*/
 
 app.get('/', (req, res) => {
 	res.send('It is working')

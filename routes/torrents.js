@@ -1,7 +1,18 @@
 const handleTorrents = (req, res, client, Archiver) => {
 	try {
-		if(client.get(magnetURI)) {
-			const torrent = client.get(magnetURI);
+		oneUser = magnetURI;
+		res.on('close', () => {
+			console.log(`[Client is disconnected] #${oneUser}`);
+			try {
+				client.remove(oneUser);
+				clearInterval(interval);
+			}
+			catch(err) {
+				console.log('Close Error:', err);
+			}
+		})
+		if(client.get(oneUser)) {
+			const torrent = client.get(oneUser);
 			let id = -1;
 			for(i = 0; i < torrent.files.length; i++) {
 				if(torrent.files[i].name == req.params.file_name) {
@@ -71,14 +82,14 @@ const handleTorrents = (req, res, client, Archiver) => {
 		    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 		    		clearInterval(interval);
 		    		zip.finalize();
-		    		client.remove(magnetURI);
+		    		client.remove(oneUser);
 		    	}
 		    }
 
 		    autoStreamOnEnd();
 		}
 		else {
-			client.add(magnetURI, (torrent) => {
+			client.add(oneUser, (torrent) => {
 				let id = -1;
 				for(i = 0; i < torrent.files.length; i++) {
 					if(torrent.files[i].name == req.params.file_name) {
@@ -148,7 +159,7 @@ const handleTorrents = (req, res, client, Archiver) => {
 			    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 			    		clearInterval(interval);
 			    		zip.finalize();
-			    		client.remove(magnetURI);
+			    		client.remove(oneUser);
 			    	}
 			    }
 
@@ -156,7 +167,7 @@ const handleTorrents = (req, res, client, Archiver) => {
 			}).on('error', (err) => {
 				console.log('Cannot Add torrent:', err);
 
-				try { client.remove(magnetURI) }
+				try { client.remove(oneUser) }
 				catch(err) { console.log('Err:', err) }
 
 				res.redirect('https://flai.ml/#/error');
@@ -165,7 +176,7 @@ const handleTorrents = (req, res, client, Archiver) => {
 	}
 	catch(e) {
 		console.log("Z-ip Error: ", e);
-		client.remove(magnetURI);
+		client.remove(oneUser);
 		res.redirect('https://flai.ml/#/error');
 		//process.setMaxListeners(0);
 	}
