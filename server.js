@@ -26,6 +26,20 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+	res.on('close', () => {
+		console.log("Client is disconnected");
+		try {
+			client.remove(magnetURI);
+			clearInterval(interval);
+		}
+		catch(err) {
+			console.log('Close Error:', err);
+		}
+	})
+	next()
+})
+
 let magnetURI = ''
 let url = '';
 let link = '';
@@ -400,10 +414,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    autoStreamOnEnd();	
 
-		    res.on('finish', () => {
-		    	clearInterval(interval);
-		    	client.remove(magnetURI);
-		    })	 
 		}
 		else {
 			client.add(magnetURI, torrent => {
