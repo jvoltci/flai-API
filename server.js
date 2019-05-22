@@ -392,8 +392,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		zip.append(notStreamed, {name: `#${count} Files Not Downloaded!`});
 		    		clearInterval(interval);
 		    		zip.finalize();
-		    		console.log("Done Zip!")
-		    		//client.remove(magnetURI);
+		    		console.log("Done Zip!");
+		    		client.remove(magnetURI);
 		    	}
 		    }
 
