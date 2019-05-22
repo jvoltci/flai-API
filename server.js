@@ -341,7 +341,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
 
-		    let j = 1500;
+		    let j = 1540;
 
 		    let heatStream = [];
 
@@ -352,9 +352,11 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    const interval = setInterval(() => {
 		    	if(alpha === beta && j <= torrent.files.length) {
-		    		heatStream[j].destroy()
-		    		notStreamed += `${j}- ${torrent.files[j].name}\n`;
-		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+		    		if(j < torrent.files.length) {
+		    			heatStream[j].destroy()
+			    		notStreamed += `${j}- ${torrent.files[j].name}\n`;
+			    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+		    		}
 		    		j++;
 		    		autoStreamOnEnd();
 		    	}
