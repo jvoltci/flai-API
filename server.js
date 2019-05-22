@@ -393,7 +393,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		//clearInterval(interval);
 		    		zip.finalize();
 		    		console.log("Done Zip!")
-		    		client.remove(magnetURI);
+		    		//client.remove(magnetURI);
 		    	}
 		    }
 
