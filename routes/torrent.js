@@ -1,4 +1,4 @@
-const handleTorrent = (req, res, next, client, magnetURI, db) => {
+const handleTorrent = (req, res, next, client, db) => {
 		try {
 		/*let fetchedLink = req.params.id;
 		db('flai').where('link', '=', fetchedLink)
