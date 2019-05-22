@@ -356,7 +356,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	if(alpha === beta) {
 		    		heatStream[j-1].destroy()
 		    		notStreamed.push(`${j-1}- ${torrent.files[j].name}\n`);
-		    		//zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
 		    		console.log(notStreamed);
 		    		j++;
 		    		autoStreamOnEnd('calledInterval');
@@ -388,7 +388,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		zip.append(heatStream[j], {name: torrent.files[j].name});
 		    	}
 		    	//See here
-		    	if(j === torrent.files.length) {
+		    	if(j === 14) {
 		    		//clearInterval(interval);
 		    		zip.finalize();
 		    	}
