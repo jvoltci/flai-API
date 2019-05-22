@@ -52,7 +52,7 @@ app.post('/metadata', (req, res) => { metadata.handleMetadata(req, res, client) 
 app.get('/torrent/:file_name', (req, res, next) => { torrent.handleTorrent(req, res, next, client, db)  })
 app.get('/torrents/:file_name', (req, res, next) => { torrents.handleTorrents(req, res, next, client, Archiver) })
 
-
+process.setMaxListeners(100);
 process.on('uncaughtException', (err) => {
     console.log("Z-Error: ", err);
 });
