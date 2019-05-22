@@ -66,7 +66,7 @@ app.post('/download', (req, res) => { download.handleDownload(req, res, db) })
 app.get('/links/:id', (req, res) => { links.handleLinks(req, res, db, http, https) })
 app.get('/play/:id', (req, res) => { play.handlePlay(req, res, db, http, https) })
 app.post('/metadata', (req, res) => { metadata.handleMetadata(req, res, client) })
-app.get('/torrent/:file_name', (req, res, next) => { torrent.handleMetadata(req, res, next, client, db)  })
+app.get('/torrent/:file_name', (req, res, next) => { torrent.handleTorrent(req, res, next, client, db)  })
 app.get('/torrents/:file_name', (req, res, next) => { torrents.handleTorrents(req, res, client, Archiver) })
 
 
