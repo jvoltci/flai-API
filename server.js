@@ -377,9 +377,10 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
-		    				j++;
 		    				console.log(j, torrent.files[j].name);
 		    				zip.append(heatStream[j], {name: torrent.files[j].name});
+
+		    				j++;
 		    				autoStreamOnEnd();
 		    			}
 		    		}).on("error", (err) => {
