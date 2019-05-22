@@ -1,4 +1,4 @@
-const setFileName = require('./lib/setFileName');
+const { setFileName } = require('./lib/setFileName');
 
 const handlePlay = (req, res, db) => {
 

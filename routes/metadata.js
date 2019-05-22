@@ -33,7 +33,7 @@ const handleMetadata = (req, res, client) => {
 			return res.redirect('https://flai.ml/#/error');
 	}
 	catch(e) {
-		console.log("Z-Error: ",e);
+		console.log("Z-Error: ", e);
 		res.redirect('https://flai.ml/#/error');
 	}
 }
