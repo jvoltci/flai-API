@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
 	res.on('close', () => {
-		console.log("Client is disconnected");
+		console.log("[Client is disconnected]");
 		try {
 			client.remove(magnetURI);
 			clearInterval(interval);
@@ -356,7 +356,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    const zip = Archiver('zip');
 		    zip.pipe(res);
 
-		    let j = 1540;
+		    let j = 0;
 
 		    let heatStream = [];
 
@@ -438,48 +438,62 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 			    let j = 0;
 
-			    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+			    let heatStream = [];
 
-			    let alpha = '';
-			    let beta = '';
+			    let alpha = -1;
+			    let beta = 0;
 
-			    let notStreamed = [];
+			    let notStreamed = '';
 
-			    setInterval(() => {
-			    	console.log(`${j} Inside interval`);
-			    	if(beta !== 0 && (alpha === beta)) {
-			    		console.log(torrent.files[j].name);
-			    		notStreamed.push(`${j} ${torrent.files[j].name}`);
+			    const interval = setInterval(() => {
+			    	if(alpha === beta && j <= torrent.files.length) {
+			    		if(j < torrent.files.length) {
+			    			heatStream[j].destroy()
+				    		notStreamed += `${j}- ${torrent.files[j].name}\n`;
+				    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+			    		}
 			    		j++;
 			    		autoStreamOnEnd();
 			    	}
 			    	else
 			    		alpha = beta;
-			    }, 30000);
+			    }, 25000);
 
 			    const autoStreamOnEnd = () => {
+
 			    	if(j < torrent.files.length) {
-			    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
-			    		heatStream.on('data', (chunk) => {
-			    			console.log(chunk.length);
+			    		heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);	
+			    		heatStream[j].on('data', (chunk) => {
+			    			beta += chunk.length;
 			    		}).on('end', (err) => {
-			    			if(j < torrent.files.length) {
-			    				j++;
-			    				console.log(j, torrent.files[j-1].name);
-			    				autoStreamOnEnd();
+			    			if(j <= torrent.files.length) {
+			    				console.log(`${j}: ${torrent.files[j].name}`);
+			    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
+			    				heatStream[j].on('end', () => {
+			    					j++;
+			    					autoStreamOnEnd();
+			    				})
+			    				zip.append(heatStream[j], {name: torrent.files[j].name});
 			    			}
 			    		}).on("error", (err) => {
 							return next(err);
 						});
-
-			    		zip.append(heatStream, {name: torrent.files[j].name});
 			    	}
-			    	if(j === torrent.files.length) {
+			    	if(j > torrent.files.length) {
+
+			    		let count = 0;
+			    		for(q = 0; q < notStreamed.length; q++)
+			    			if(notStreamed[q] === '\n')
+			    				count += 1;
+
+			    		zip.append(notStreamed, {name: `#${count} Files Not Downloaded!.txt`});
+			    		clearInterval(interval);
 			    		zip.finalize();
+			    		client.remove(magnetURI);
 			    	}
 			    }
 
-			    autoStreamOnEnd();
+			    autoStreamOnEnd();	
 			})
 			.on('error', (err) => {
 				console.log('Z-', err);
