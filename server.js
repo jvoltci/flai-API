@@ -352,7 +352,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    let notStreamed = [];
 
 		    setInterval(() => {
-		    	if(alpha === beta) {
+		    	if(alpha === beta && j !== torrent.files.length) {
 		    		heatStream[j].destroy()
 		    		notStreamed.push(`${j-1}- ${torrent.files[j].name}\n`);
 		    		//zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
@@ -378,6 +378,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
 		    				console.log(j, torrent.files[j].name);
+		    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
 		    				zip.append(heatStream[j], {name: torrent.files[j].name});
 
 		    				j++;
@@ -388,8 +389,10 @@ app.get('/torrents/:file_name', (req, res, next) => {
 					});
 		    		//zip.append(heatStream[j], {name: torrent.files[j].name});
 		    	}
+		    	else
+		    		client.remove(magnetURI);
 		    	//See here
-		    	if(j === 14) {
+		    	if(j === torrent.files.length) {
 		    		//clearInterval(interval);
 		    		zip.finalize();
 		    	}
