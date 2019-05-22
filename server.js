@@ -351,7 +351,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    let notStreamed = [];
 
-		    setInterval(() => {
+		    /*setInterval(() => {
 		    	console.log("Interval ->", alpha, beta);
 		    	if(alpha === beta) {
 		    		heatStream[j-1].destroy()
@@ -364,7 +364,12 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	}
 		    	else
 		    		alpha = beta;
-		    }, 20000);
+		    }, 20000);*/
+
+		    setInterval(() => {
+		    	if(alpha !== beta)
+		    		alpha = beta;
+		    }, 1000)
 
 		    const autoStreamOnEnd = (call='Else') => {
 		    	if(call === 'calledInterval')
@@ -374,19 +379,28 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream[j].on('data', (chunk) => {
 		    			beta += chunk.length;
-		    			console.log(beta, (new Date().getTime() - timeStart)/1000, "Streaming: ", torrent.files[j].name);
+		    			console.log(beta, (new Date().getTime() - timeStart)/1000);
 		    			timeStart = new Date().getTime();
 
 		    		}).on('end', (err) => {
 		    			if(j < torrent.files.length) {
-		    				j++;
 		    				console.log(j, torrent.files[j-1].name);
-		    				autoStreamOnEnd();
 		    			}
 		    		}).on("error", (err) => {
 						return next(err);
 					});
-		    		zip.append(heatStream[j], {name: torrent.files[j].name});
+
+					setTimeout(() => {
+						if(alpha !== beta) {
+							zip.append(heatStream[j], {name: torrent.files[j].name});
+							j++;
+							autoStreamOnEnd();
+						}
+						else {
+							j++;
+							autoStreamOnEnd();
+						}
+					}, 5000);
 		    	}
 		    	//See here
 		    	if(j === 14) {
