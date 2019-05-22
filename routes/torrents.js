@@ -1,6 +1,12 @@
 const handleTorrents = (req, res, client, Archiver) => {
+
+	console.log(isAllow);
+	if(isAllow === 0)
+		res.redirect('https://flai.ml/#/busy-error')
 	try {
+		isAllow = 0;
 		res.on('close', () => {
+			isAllow = 1;
 			console.log(`[Client is disconnected]`);
 			try {
 				client.remove(magnetURI);
@@ -9,6 +15,7 @@ const handleTorrents = (req, res, client, Archiver) => {
 			catch(err) {
 				console.log('Close Error:', err);
 			}
+			console.log(isAllow);
 		})
 		if(client.get(magnetURI)) {
 			const torrent = client.get(magnetURI);
