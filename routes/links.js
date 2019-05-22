@@ -54,5 +54,5 @@ const handleLinks = (req, res, db, http, https) => {
 }
 
 module.exports = {
-	handleLink: handleLinks
+	handleLinks: handleLinks
 }

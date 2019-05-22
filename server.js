@@ -1,7 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const https = require('https');
-const http = require('http');
 const bodyParser = require('body-parser');
 const knex = require('knex');
 const Archiver = require('archiver');
@@ -63,8 +61,8 @@ app.get('/', (req, res) => {
 })
 
 app.post('/download', (req, res) => { download.handleDownload(req, res, db) })
-app.get('/links/:id', (req, res) => { links.handleLinks(req, res, db, http, https) })
-app.get('/play/:id', (req, res) => { play.handlePlay(req, res, db, http, https) })
+app.get('/links/:id', (req, res) => { links.handleLinks(req, res, db) })
+app.get('/play/:id', (req, res) => { play.handlePlay(req, res, db) })
 app.post('/metadata', (req, res) => { metadata.handleMetadata(req, res, client) })
 app.get('/torrent/:file_name', (req, res, next) => { torrent.handleTorrent(req, res, next, client, db)  })
 app.get('/torrents/:file_name', (req, res, next) => { torrents.handleTorrents(req, res, client, Archiver) })
