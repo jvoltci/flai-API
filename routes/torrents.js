@@ -1,6 +1,6 @@
 const handleTorrents = (req, res, next, client, Archiver) => {
 
-	if(isAllow === 0) {
+	if(isAllow === 1) {
 		try {
 
 			isAllow = 0;
