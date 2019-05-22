@@ -345,55 +345,47 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    let heatStream = [];
 
+		    let alpha = -1;
+		    let beta = 0;
 		    let timeStart = new Date().getTime();
 
 		    let notStreamed = [];
 
-		    /*setInterval(() => {
-		    	console.log("Interval ->", alpha, beta);
+		    setInterval(() => {
 		    	if(alpha === beta) {
-		    		heatStream[j-1].destroy()
+		    		heatStream[j].destroy()
 		    		notStreamed.push(`${j-1}- ${torrent.files[j].name}\n`);
-		    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
-		    		zip.append(heatStream[0], {name: torrent.files[0].name});
+		    		//zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
 		    		console.log(notStreamed);
 		    		j++;
 		    		autoStreamOnEnd('calledInterval');
 		    	}
 		    	else
 		    		alpha = beta;
-		    }, 20000);*/
-
+		    }, 10000);
 
 		    const autoStreamOnEnd = (call='Else') => {
 		    	if(call === 'calledInterval')
-		    		console.log('calledInterval');
+		    		console.log('Call By Interval');
 
 		    	if(j < torrent.files.length) {
-		    		let alpha = 0, beta = 0;
 		    		heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);	
 		    		heatStream[j].on('data', (chunk) => {
-		    			alpha = beta;
 		    			beta += chunk.length;
 		    			console.log(beta, (new Date().getTime() - timeStart)/1000);
 		    			timeStart = new Date().getTime();
 
-		    		}).on("error", (err) => {	
+		    		}).on('end', (err) => {
+		    			if(j < torrent.files.length) {
+		    				j++;
+		    				console.log(j, torrent.files[j].name);
+		    				zip.append(heatStream[j], {name: torrent.files[j].name});
+		    				autoStreamOnEnd();
+		    			}
+		    		}).on("error", (err) => {
 						return next(err);
 					});
-
-					setTimeout(() => {
-						if(alpha !== beta) {
-							zip.append(heatStream[j], {name: torrent.files[j].name});
-							console.log(`${j}: ${torrent.files[j].name}`);
-							j++;
-							autoStreamOnEnd();
-						}
-						else {
-							j++;
-							autoStreamOnEnd();
-						}
-					}, 5000);
+		    		//zip.append(heatStream[j], {name: torrent.files[j].name});
 		    	}
 		    	//See here
 		    	if(j === 14) {
