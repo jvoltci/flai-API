@@ -352,10 +352,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    let notStreamed = [];
 
 		    setInterval(() => {
-		    	zip.append(`Testing`, { name: `#Testing.txt` });
-		    }, 1);
-
-		    setInterval(() => {
 		    	console.log("Interval ->", alpha, beta);
 		    	if(alpha === beta) {
 		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
