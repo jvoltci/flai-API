@@ -367,6 +367,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    }, 20000);*/
 
 		    setInterval(() => {
+		    	if(alpha !== beta)
 		    		alpha = beta;
 		    }, 1000)
 
@@ -388,6 +389,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 					});
 
 					setTimeout(() => {
+						console.log(alpha, beta)
 						if(alpha !== beta) {
 							zip.append(heatStream[j], {name: torrent.files[j].name});
 							j++;
