@@ -26,7 +26,7 @@ app.use((req, res, next) => {
   next();
 });
 
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
 	res.on('close', () => {
 		console.log("[Client is disconnected]");
 		try {
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 		}
 	})
 	next()
-})*/
+})
 
 let interval = '';
 let magnetURI = ''
