@@ -1,6 +1,6 @@
 const { setFileName } = require('./lib/setFileName');
 
-const handleLinks = (req, res, db, http, https) => {
+const handleLinks = (req, res, db) => {
 
 	let fetchedLink = req.params.id;
 	if(fetchedLink.length < 10) res.redirect('https://flai.ml');
