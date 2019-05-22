@@ -369,7 +369,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		heatStream[j].on('data', (chunk) => {
 		    			beta += chunk.length;
 		    		}).on('end', (err) => {
-		    			if(j <= 50) {
+		    			if(j <= torrent.files.length) {
 		    				console.log(`${j}: ${torrent.files[j].name}`);
 		    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
 		    				heatStream[j].on('end', () => {
@@ -382,8 +382,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 						return next(err);
 					});
 		    	}
-		    	//See here
-		    	if(j > 50) {
+		    	if(j > torrent.files.length) {
 
 		    		let count = 0;
 		    		for(q = 0; q < notStreamed.length; q++)
