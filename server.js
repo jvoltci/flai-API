@@ -373,7 +373,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    				console.log(`${j}: ${torrent.files[j].name}`);
 		    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
 		    				heatStream[j].on('end', () => {
-		    					console.log(`Finished ${j}th file`);
 		    					j++;
 		    					autoStreamOnEnd();
 		    				})
