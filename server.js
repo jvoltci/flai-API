@@ -343,7 +343,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 
 		    let j = 0;
 
-		    let heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+		    let heatStream = {};
 
 		    let alpha = -1;
 		    let beta = 0;
@@ -354,6 +354,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    setInterval(() => {
 		    	console.log("Interval ->", alpha, beta);
 		    	if(alpha === beta) {
+		    		let streamVar = `heatStream${j}`;
+		    		heatStream.streamVar.close();
 		    		notStreamed.push(`${j}- ${torrent.files[j].name}\n`);
 		    		//zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
 		    		console.log(notStreamed);
@@ -362,15 +364,16 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	}
 		    	else
 		    		alpha = beta;
-		    }, 10000);
+		    }, 20000);
 
 		    const autoStreamOnEnd = (call='Else') => {
 		    	if(call === 'calledInterval')
 		    		console.log('calledInterval');
 
 		    	if(j < torrent.files.length) {
-		    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
-		    		heatStream.on('data', (chunk) => {
+		    		let newStreamVar = `heatStream${j}`;
+		    		heatStream[newStreamVar] = torrent.files[j].createReadStream(torrent.files[j].name);	
+		    		heatStream.newStreamVar.on('data', (chunk) => {
 		    			beta += chunk.length;
 		    			console.log(beta, (new Date().getTime() - timeStart)/1000, "Streaming: ", torrent.files[j].name);
 		    			timeStart = new Date().getTime();
@@ -384,7 +387,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    		}).on("error", (err) => {
 						return next(err);
 					});
-		    		zip.append(heatStream, {name: torrent.files[j].name});
+		    		zip.append(heatStream.newStreamVar, {name: torrent.files[j].name});
 		    	}
 		    	//See here
 		    	if(j === torrent.files.length) {
