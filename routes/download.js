@@ -36,7 +36,7 @@ const handleDownload = (req, res, db) => {
 				contentType = 'application/zip';
 				file = "Paradox";
 			}
-			return res.redirect('/link/' + link);
+			return res.redirect('/links/' + link);
 		}
 		)
 	}
