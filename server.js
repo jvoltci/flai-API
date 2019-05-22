@@ -26,7 +26,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
 	res.on('close', () => {
 		console.log("[Client is disconnected]");
 		try {
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 		}
 	})
 	next()
-})
+})*/
 
 let interval = '';
 let magnetURI = ''
@@ -369,8 +369,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    	if(alpha === beta && j <= torrent.files.length) {
 		    		if(j < torrent.files.length) {
 		    			heatStream[j].destroy()
-			    		notStreamed += `${j}- ${torrent.files[j].name}\n`;
-			    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+			    		notStreamed += `${torrent.files[j].name}\n`;
+			    		zip.append(`${torrent.files[j].name}`, { name: `[Not Downloaded].txt` });
 		    		}
 		    		j++;
 		    		autoStreamOnEnd();
@@ -387,7 +387,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    			beta += chunk.length;
 		    		}).on('end', (err) => {
 		    			if(j <= torrent.files.length) {
-		    				console.log(`${j}: ${torrent.files[j].name}`);
 		    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
 		    				heatStream[j].on('end', () => {
 		    					j++;
@@ -406,7 +405,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 		    			if(notStreamed[q] === '\n')
 		    				count += 1;
 
-		    		zip.append(notStreamed, {name: `#${count} Files Not Downloaded!.txt`});
+		    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 		    		clearInterval(interval);
 		    		zip.finalize();
 		    		client.remove(magnetURI);
@@ -427,7 +426,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 					}
 				}
 				if(id === -1)
-					return res.redirect('https://flai.ml/#/error');
+					res.redirect('https://flai.ml/#/error');
 
 				res.writeHead(200, {
 			        'Content-Type': 'application/zip',
@@ -449,8 +448,8 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    	if(alpha === beta && j <= torrent.files.length) {
 			    		if(j < torrent.files.length) {
 			    			heatStream[j].destroy()
-				    		notStreamed += `${j}- ${torrent.files[j].name}\n`;
-				    		zip.append(`${torrent.files[j].name}`, { name: `#${torrent.files[j].name}[Not Downloaded].txt` });
+				    		notStreamed += `${torrent.files[j].name}\n`;
+				    		zip.append(`${torrent.files[j].name}`, { name: `[Not Downloaded].txt` });
 			    		}
 			    		j++;
 			    		autoStreamOnEnd();
@@ -467,7 +466,6 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    			beta += chunk.length;
 			    		}).on('end', (err) => {
 			    			if(j <= torrent.files.length) {
-			    				console.log(`${j}: ${torrent.files[j].name}`);
 			    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
 			    				heatStream[j].on('end', () => {
 			    					j++;
@@ -486,7 +484,7 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    			if(notStreamed[q] === '\n')
 			    				count += 1;
 
-			    		zip.append(notStreamed, {name: `#${count} Files Not Downloaded!.txt`});
+			    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 			    		clearInterval(interval);
 			    		zip.finalize();
 			    		client.remove(magnetURI);
@@ -496,8 +494,11 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			    autoStreamOnEnd();	
 			})
 			.on('error', (err) => {
-				console.log('Z-', err);
-				client.remove(magnetURI);
+				console.log('Cannot Add torrent:', err);
+
+				try { client.remove(magnetURI) }
+				catch(err) { console.log('Err:', err) }
+
 				res.redirect('https://flai.ml/#/error');
 			});
 		}
@@ -551,5 +552,5 @@ app.listen(port, () => {
 	})*/
     console.log("Listening on *:5000")
 })
-
+app.timeout = 100000;
 module.exports = app;
