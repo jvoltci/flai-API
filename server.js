@@ -419,11 +419,16 @@ app.get('/torrents/:file_name', (req, res, next) => {
 			client.add(magnetURI, torrent => {
 				
 				let id = -1;
-				for(i = 0; i < torrent.files.length; i++) {
-					if(torrent.files[i].name == req.params.file_name) {
-						id = i;
-						break;
+				try {
+					for(i = 0; i < torrent.files.length; i++) {
+						if(torrent.files[i].name == req.params.file_name) {
+							id = i;
+							break;
+						}
 					}
+				}
+				catch(err) {
+					console.log('timeout');
 				}
 				if(id === -1)
 					res.redirect('https://flai.ml/#/error');
