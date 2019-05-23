@@ -8,7 +8,9 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				isAllow = 1;
 				console.log(`[Client is disconnected]`);
 				try {
-					client.remove(magnetURI);
+					try { client.remove(magnetURI) }
+					catch(err) { console.log('Error: Magnet Remove') }
+
 					clearInterval(interval);
 				}
 				catch(err) {
@@ -88,7 +90,8 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 			    		clearInterval(interval);
 			    		zip.finalize();
-			    		client.remove(magnetURI);
+			    		try { client.remove(magnetURI) }
+						catch(err) { console.log('Error: Magnet Remove') }
 			    	}
 			    }
 
@@ -167,13 +170,14 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 				    		clearInterval(interval);
 				    		zip.finalize();
-				    		client.remove(magnetURI);
+				    		try { client.remove(magnetURI) }
+							catch(err) { console.log('Error: Magnet Remove') }
 				    	}
 				    }
 
 				    autoStreamOnEnd();
 				}).on('error', (err) => {
-					console.log('Cannot Add torrent:', err);
+					console.log('Error: Cannot Add Torrent');
 
 					try { client.remove(magnetURI) }
 					catch(err) { console.log('Err:', err) }
@@ -182,15 +186,18 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				});
 			}
 		}
-		catch(e) {
-			console.log("Z-ip Error: ", e);
-			client.remove(magnetURI);
+		catch(err) {
+			console.log("Error: Zip");
+
+			try { client.remove(magnetURI) }
+			catch(err) { console.log('Error: Magnet Remove') }
+
 			res.redirect('https://flai.ml/#/error');
 			//process.setMaxListeners(0);
 		}
 	}
 	else {
-		let err = new Error('[Busy Server]');
+		let err = new Error({name: 'Error: ' , message: '[Busy Server]'});
     	throw err;
 	}
 }

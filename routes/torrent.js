@@ -27,7 +27,8 @@ const handleTorrent = (req, res, next, client, db) => {
 			stream.on("error", (err) => {
 				return next(err);
 			}).on('close', (err) => {
-				client.remove(magnetURI);
+				try { client.remove(magnetURI) }
+				catch(err) { console.log('Error: Magnet Remove') }
 			});
 		}
 		else {
@@ -59,17 +60,15 @@ const handleTorrent = (req, res, next, client, db) => {
 				stream.on("error", (err) => {
 					return next(err);
 				}).on('close', (err) => {
-				client.destroy(err => {
-				      console.log("error:", err);
-				      console.log("shutdown allegedly complete");
-				    });
+					try { client.remove(magnetURI) }
+					catch(err) { console.log('Error: Magnet Remove') }
 				});
 			})
 			.on('error', (err) => {
 	        console.log('Cannot Add torrent:', err);
 
 	        try { client.remove(magnetURI) }
-	        catch(err) { console.log('Err:', err) }
+	        catch(err) { console.log('Error: Magnet Remove') }
 
 	        res.redirect('https://flai.ml/#/error');
 	      });
