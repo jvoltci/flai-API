@@ -197,8 +197,8 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 		}
 	}
 	else {
-		let err = new Error({name: 'Error: ' , message: '[Busy Server]'});
-    	throw err;
+		let err = new Error();
+    	throw err({name: 'Error: ' , message: '[Busy Server]'});
 	}
 }
 module.exports = {
