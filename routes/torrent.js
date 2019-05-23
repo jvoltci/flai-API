@@ -44,7 +44,7 @@ const handleTorrent = (req, res, next, client, db) => {
 				if(id === -1)
 					return res.redirect('https://flai.ml/#/error');
 
-				db('flai').where('url', '=', url)
+				db('flai').where('url', '=', magnetURI)
 				.then(data => {
 					if(data[0]) {
 						link = data[0].link;
