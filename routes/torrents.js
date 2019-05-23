@@ -90,6 +90,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 			    		clearInterval(interval);
 			    		zip.finalize();
+			    		isAllow = 1;
 			    		try { client.remove(magnetURI) }
 						catch(err) { console.log('Error: Magnet Remove') }
 			    	}
@@ -170,6 +171,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 				    		clearInterval(interval);
 				    		zip.finalize();
+				    		isAllow = 1;
 				    		try { client.remove(magnetURI) }
 							catch(err) { console.log('Error: Magnet Remove') }
 				    	}
