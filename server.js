@@ -54,12 +54,11 @@ app.get('/torrents/:file_name', (req, res, next) => { torrents.handleTorrents(re
 
 
 process.on('uncaughtException', (err) => {
-    console.log("Z-Error: ", err);
+    console.log('Error: Process');
 });
 
 app.listen(port, () => {
     console.log(`App is running on port ${port}`);
 })
 
-//app.timeout = 100000;
 module.exports = app;

@@ -23,8 +23,11 @@ const handleMetadata = (req, res, client) => {
 					res.json(files);
 				})
 				.on('error', (err) => {
-					console.log('Z-', err);
-					client.remove(magnetURI);
+					console.log('[metadata]Error: Client Add Error');
+					
+					try { client.remove(magnetURI) }
+					catch(err) { console.log('[metadata]Error: Magnet Remove') }
+
 					res.redirect('https://flai.ml/#/error');
 				})
 			}
@@ -32,8 +35,8 @@ const handleMetadata = (req, res, client) => {
 		else
 			return res.redirect('https://flai.ml/#/error');
 	}
-	catch(e) {
-		console.log("Z-Error: ", e);
+	catch(err) {
+		console.log('[metadata]Error: Metadata');
 		res.redirect('https://flai.ml/#/error');
 	}
 }

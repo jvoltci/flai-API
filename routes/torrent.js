@@ -27,10 +27,8 @@ const handleTorrent = (req, res, next, client, db) => {
 			stream.on("error", (err) => {
 				return next(err);
 			}).on('close', (err) => {
-				client.destroy(err => {
-			      console.log("error:", err);
-			      console.log("shutdown allegedly complete");
-			    });
+				try { client.remove(magnetURI) }
+				catch(err) { console.log('[torrent]Error: Magnet Remove') }
 			});
 		}
 		else {
@@ -46,7 +44,7 @@ const handleTorrent = (req, res, next, client, db) => {
 				if(id === -1)
 					return res.redirect('https://flai.ml/#/error');
 
-				db('flai').where('url', '=', url)
+				db('flai').where('url', '=', magnetURI)
 				.then(data => {
 					if(data[0]) {
 						link = data[0].link;
@@ -62,24 +60,22 @@ const handleTorrent = (req, res, next, client, db) => {
 				stream.on("error", (err) => {
 					return next(err);
 				}).on('close', (err) => {
-				client.destroy(err => {
-				      console.log("error:", err);
-				      console.log("shutdown allegedly complete");
-				    });
+					try { client.remove(magnetURI) }
+					catch(err) { console.log('[torrent]Error: Magnet Remove') }
 				});
 			})
 			.on('error', (err) => {
 	        console.log('Cannot Add torrent:', err);
 
 	        try { client.remove(magnetURI) }
-	        catch(err) { console.log('Err:', err) }
+	        catch(err) { console.log('[torrent]Error: Magnet Remove') }
 
 	        res.redirect('https://flai.ml/#/error');
 	      });
 		}
 	}
 	catch(e) {
-		console.log("Z-Error: ",e);
+		console.log("[torrent]Z-Error: ",e);
 		res.redirect('https://flai.ml/#/error');
 	}
 }

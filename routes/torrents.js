@@ -6,13 +6,15 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			isAllow = 0;
 			res.on('close', () => {
 				isAllow = 1;
-				console.log(`[Client is disconnected]`);
+				console.log(`[Client Is Disconnected]`);
 				try {
-					client.remove(magnetURI);
+					try { client.remove(magnetURI) }
+					catch(err) { console.log('[torrents]Error: Magnet Remove') }
+
 					clearInterval(interval);
 				}
 				catch(err) {
-					console.log('Close Error:', err);
+					console.log('[torrents]Close Error:', err);
 				}
 			})
 			if(client.get(magnetURI)) {
@@ -88,7 +90,9 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 			    		clearInterval(interval);
 			    		zip.finalize();
-			    		client.remove(magnetURI);
+			    		isAllow = 1;
+			    		try { client.remove(magnetURI) }
+						catch(err) { console.log('[torrents]Error: Magnet Remove') }
 			    	}
 			    }
 
@@ -167,13 +171,15 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
 				    		clearInterval(interval);
 				    		zip.finalize();
-				    		client.remove(magnetURI);
+				    		isAllow = 1;
+				    		try { client.remove(magnetURI) }
+							catch(err) { console.log('[torrents]Error: Magnet Remove') }
 				    	}
 				    }
 
 				    autoStreamOnEnd();
 				}).on('error', (err) => {
-					console.log('Cannot Add torrent:', err);
+					console.log('[torrents]Error: Cannot Add Torrent');
 
 					try { client.remove(magnetURI) }
 					catch(err) { console.log('Err:', err) }
@@ -182,16 +188,19 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				});
 			}
 		}
-		catch(e) {
-			console.log("Z-ip Error: ", e);
-			client.remove(magnetURI);
+		catch(err) {
+			console.log("[torrents]Error: Zip");
+
+			try { client.remove(magnetURI) }
+			catch(err) { console.log('Error: Magnet Remove') }
+
 			res.redirect('https://flai.ml/#/error');
 			//process.setMaxListeners(0);
 		}
 	}
 	else {
-		let err = new Error('[Busy Server]');
-    	throw err;
+		let error = new Error('[torrents][Busy Server]');
+    	throw error;
 	}
 }
 module.exports = {
