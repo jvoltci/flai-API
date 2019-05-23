@@ -6,7 +6,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			isAllow = 0;
 			res.on('close', () => {
 				isAllow = 1;
-				console.log(`[Client is disconnected]`);
+				console.log(`[Client Is Disconnected]`);
 				try {
 					try { client.remove(magnetURI) }
 					catch(err) { console.log('Error: Magnet Remove') }
