@@ -27,10 +27,7 @@ const handleTorrent = (req, res, next, client, db) => {
 			stream.on("error", (err) => {
 				return next(err);
 			}).on('close', (err) => {
-				client.destroy(err => {
-			      console.log("error:", err);
-			      console.log("shutdown allegedly complete");
-			    });
+				client.remove(magnetURI);
 			});
 		}
 		else {
