@@ -9,12 +9,12 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				console.log(`[Client Is Disconnected]`);
 				try {
 					try { client.remove(magnetURI) }
-					catch(err) { console.log('Error: Magnet Remove') }
+					catch(err) { console.log('[torrents]Error: Magnet Remove') }
 
 					clearInterval(interval);
 				}
 				catch(err) {
-					console.log('Close Error:', err);
+					console.log('[torrents]Close Error:', err);
 				}
 			})
 			if(client.get(magnetURI)) {
@@ -92,7 +92,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    		zip.finalize();
 			    		isAllow = 1;
 			    		try { client.remove(magnetURI) }
-						catch(err) { console.log('Error: Magnet Remove') }
+						catch(err) { console.log('[torrents]Error: Magnet Remove') }
 			    	}
 			    }
 
@@ -173,13 +173,13 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				    		zip.finalize();
 				    		isAllow = 1;
 				    		try { client.remove(magnetURI) }
-							catch(err) { console.log('Error: Magnet Remove') }
+							catch(err) { console.log('[torrents]Error: Magnet Remove') }
 				    	}
 				    }
 
 				    autoStreamOnEnd();
 				}).on('error', (err) => {
-					console.log('Error: Cannot Add Torrent');
+					console.log('[torrents]Error: Cannot Add Torrent');
 
 					try { client.remove(magnetURI) }
 					catch(err) { console.log('Err:', err) }
@@ -189,7 +189,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			}
 		}
 		catch(err) {
-			console.log("Error: Zip");
+			console.log("[torrents]Error: Zip");
 
 			try { client.remove(magnetURI) }
 			catch(err) { console.log('Error: Magnet Remove') }
@@ -199,7 +199,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 		}
 	}
 	else {
-		let error = new Error('Error: [Busy Server]');
+		let error = new Error('[torrents][Busy Server]');
     	throw error;
 	}
 }
