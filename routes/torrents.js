@@ -9,7 +9,9 @@ const streamHead = (req, res, next, client, torrent) => {
 		try { heatStream.destroy() }
 		catch { console.log("10|heatStream.destroy() Invalid") }
 		
-		try { client.destroy() }
+		try { client.destroy(() => {
+			client = new WebTorrent();
+		}) }
 		catch(err) { console.log('13|Cannot Destroy client') }
 
 		try { clearInterval(interval) }
@@ -86,7 +88,7 @@ const streamHead = (req, res, next, client, torrent) => {
     			if(notStreamed[q] === '\n')
     				count += 1;
 
-    		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
+    		zip.append(notStreamed, {name: `[${count} Not Downloaded].txt`});
     		clearInterval(interval);
     		zip.finalize();
     		node -= 1;
