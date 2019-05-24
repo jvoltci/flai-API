@@ -1,8 +1,6 @@
 const http = require('http');
 const https = require('https');
 
-//const { setFileName } = require('./lib/setFileName');
-
 const handlePlay = (req, res, db) => {
 
 	let fetchedLink = req.params.id;

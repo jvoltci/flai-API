@@ -16,7 +16,7 @@ const streamHead = (req, res, next, torrent, client) => {
 		try { clearInterval(interval) }
 		catch { console.log("16|Unable To Clear Interval") }
 	})
-
+	
 	let torrentFilesNumber = torrent.files.length;
 	let id = -1;
 	for(i = 0; i < torrentFilesNumber; i++) {

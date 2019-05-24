@@ -1,3 +1,4 @@
+
 const streamHead = (req, res, next, torrent, client, id) => {
 
 	let alpha = 0, beta = 0;
@@ -20,6 +21,7 @@ const streamHead = (req, res, next, torrent, client, id) => {
 }
 
 const handleTorrent = (req, res, next, client, db) => {
+
 		try {
 
 			if(client.get(magnetURI)) {
