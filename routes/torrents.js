@@ -10,7 +10,7 @@ const streamHead = (req, res, next, client, torrent) => {
 		catch { console.log("10|heatStream.destroy() Invalid") }
 		
 		try { client.destroy() }
-		catch(err) { console.log('13|Cannot Remove Magnet') }
+		catch(err) { console.log('13|Cannot Destroy client') }
 
 		try { clearInterval(interval) }
 		catch { console.log("16|Unable To Clear Interval") }
