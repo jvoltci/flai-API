@@ -22,8 +22,9 @@ const handleDownload = (req, res, db) => {
 					.then(data => console.log(link));
 			}
 		})
-		.then(() => res.redirect('/links/' + link))
-		.catch(err => console.log(err))
+		.then(() => {
+			return res.redirect('/links/' + link);
+		})
 	}
 	else
 		return res.redirect('https://flai.ml/#/error');
