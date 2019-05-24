@@ -21,7 +21,7 @@ const db = knex({
 
 let magnetURI = '';
 let password = '';
-node = 0; //Something msterious here
+isAllow = 0; //Something msterious here
 
 const client = new WebTorrent();
 const app = express();
