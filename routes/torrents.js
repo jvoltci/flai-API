@@ -36,7 +36,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    const zip = Archiver('zip');
 			    zip.pipe(res);
 
-			    let j = 100;
+			    let j = 0;
 
 			    let heatStream = [];
 
@@ -120,7 +120,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				    const zip = Archiver('zip');
 				    zip.pipe(res);
 
-				    let j = 100;
+				    let j = 0;
 
 				    let heatStream = [];
 
