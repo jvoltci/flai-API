@@ -29,7 +29,7 @@ const streamHead = (req, res, next, client, torrent) => {
 
 	res.writeHead(200, {
         'Content-Type': 'application/zip',
-        'Content-disposition': 'attachment; filename=Immortal.zip'
+        'Content-disposition': `attachment; filename=${torrent.name}.zip`
     });
     const zip = Archiver('zip');
     zip.pipe(res);
