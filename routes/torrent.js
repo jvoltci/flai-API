@@ -1,39 +1,8 @@
 const handleTorrent = (req, res, next, client, db) => {
 		try {
-		/*let fetchedLink = req.params.id;
-		db('flai').where('link', '=', fetchedLink)
-		.then(data => {
-			if(data[0]) {
-				magnetURI = data[0].magnetURI;
-			}
-			else {
-				return res.redirect('https://flai.ml/#/error');
-			}
-		})*/
-		if(client.get(magnetURI)) {
-			const torrent = client.get(magnetURI);
-			let id = -1;
-			for(i = 0; i < torrent.files.length; i++) {
-				if(torrent.files[i].name == req.params.file_name) {
-					id = i;
-					break;
-				}
-			}
-			if(id === -1)
-				return res.redirect('https://flai.ml/#/error');
 
-			let stream = torrent.files[id].createReadStream();
-			stream.pipe(res);
-			stream.on("error", (err) => {
-				return next(err);
-			}).on('close', (err) => {
-				try { client.remove(magnetURI) }
-				catch(err) { console.log('[torrent]Error: Magnet Remove') }
-			});
-		}
-		else {
-			client.add(magnetURI, torrent => {
-				
+			if(client.get(magnetURI)) {
+				const torrent = client.get(magnetURI);
 				let id = -1;
 				for(i = 0; i < torrent.files.length; i++) {
 					if(torrent.files[i].name == req.params.file_name) {
@@ -44,35 +13,77 @@ const handleTorrent = (req, res, next, client, db) => {
 				if(id === -1)
 					return res.redirect('https://flai.ml/#/error');
 
-				db('flai').where('url', '=', magnetURI)
-				.then(data => {
-					if(data[0]) {
-						link = data[0].link;
-					}
-					else {
-						link = "torrent/" + req.params.file_name;
-						db('flai').insert({link: link, url: magnetURI, extension: "magnet"}).returning('*')
-							.then(data => console.log(link));
-					}
-				})
+				let alpha = 0, beta = 0;
+				setTimeout(() => {
+					if(alpha === beta)
+						res.redirect('https://flai.ml/#/error/timeout');
+				}, 25000);
+
 				let stream = torrent.files[id].createReadStream();
 				stream.pipe(res);
-				stream.on("error", (err) => {
+				stream.on('data', chunk => {
+					alpha = beta;
+					beta += chunk.length;
+				}).on("error", (err) => {
 					return next(err);
 				}).on('close', (err) => {
 					try { client.remove(magnetURI) }
 					catch(err) { console.log('[torrent]Error: Magnet Remove') }
 				});
-			})
-			.on('error', (err) => {
-	        console.log('Cannot Add torrent:', err);
+			}
+			else {
+				client.add(magnetURI, (torrent) => {
+					
+					let id = -1;
+					for(i = 0; i < torrent.files.length; i++) {
+						if(torrent.files[i].name == req.params.file_name) {
+							id = i;
+							break;
+						}
+					}
+					if(id === -1)
+						return res.redirect('https://flai.ml/#/error');
 
-	        try { client.remove(magnetURI) }
-	        catch(err) { console.log('[torrent]Error: Magnet Remove') }
+					db('flai').where('url', '=', magnetURI)
+					.then(data => {
+						if(data[0]) {
+							link = data[0].link;
+						}
+						else {
+							link = "torrent/" + req.params.file_name;
+							db('flai').insert({link: link, url: magnetURI, extension: "magnet"}).returning('*')
+								.then(data => console.log(link));
+						}
+					})
+					.catch(err => console.log(err));
 
-	        res.redirect('https://flai.ml/#/error');
-	      });
-		}
+					let alpha = 0, beta = 0;
+					setTimeout(() => {
+						if(alpha === beta)
+							res.redirect('https://flai.ml/#/error/timeout');
+					}, 25000);
+
+					let stream = torrent.files[id].createReadStream();
+					stream.pipe(res);
+					stream.on('data', chunk => {
+						alpha = beta;
+						beta += chunk.length;
+					}).on("error", (err) => {
+						return next(err);
+					}).on('close', (err) => {
+						try { client.remove(magnetURI) }
+						catch(err) { console.log('[torrent]Error: Magnet Remove') }
+					});
+				})
+				.on('error', (err) => {
+		        console.log('Cannot Add torrent:', err);
+
+		        try { client.remove(magnetURI) }
+		        catch(err) { console.log('[torrent]Error: Magnet Remove') }
+
+		        res.redirect('https://flai.ml/#/error');
+		      });
+			}
 	}
 	catch(e) {
 		console.log("[torrent]Z-Error: ",e);
