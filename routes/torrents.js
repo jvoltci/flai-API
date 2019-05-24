@@ -48,14 +48,15 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    interval = setInterval(() => {
 			    	if(alpha === beta && j <= torrent.files.length) {
 			    		if(j < torrent.files.length) {
-			    			heatStream[j].destroy()
 				    		notStreamed += `${torrent.files[j].name}\n`;
 				    		zip.append(`${torrent.files[j].name}`, { name: `[Not Downloaded].txt` });
+				    		heatStream[j].destroy();
 			    		}
 			    		j++;
 			    		autoStreamOnEnd();
 			    	}
 			    	else {
+			    		console.log(` ${j} ${beta/1000000} alpha !== beta`);
 			    		zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
 			    		alpha = beta;
 			    	}
@@ -66,7 +67,6 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    	if(j < torrent.files.length) {
 			    		heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);	
 			    		heatStream[j].on('data', (chunk) => {
-			    			console.log(`${j} ${beta/1000000}`);
 			    			beta += chunk.length;
 			    		}).on('end', (err) => {
 			    			if(j <= torrent.files.length) {
