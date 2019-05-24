@@ -1,4 +1,3 @@
-const WebTorrent = require('webtorrent');
 const Archiver = require('archiver');
 
 const streamHead = (req, res, next, torrent, client) => {

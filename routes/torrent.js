@@ -1,4 +1,3 @@
-
 const streamHead = (req, res, next, torrent, client, id) => {
 
 	let alpha = 0, beta = 0;
