@@ -1,3 +1,24 @@
+const streamHead = (req, res, next, torrent) => {
+
+	let alpha = 0, beta = 0;
+	setTimeout(() => {
+		if(alpha === beta)
+			res.redirect('https://flai.ml/#/error/timeout');
+	}, 25000);
+
+	let stream = torrent.files[id].createReadStream();
+	stream.pipe(res);
+	stream.on('data', chunk => {
+		alpha = beta;
+		beta += chunk.length;
+	}).on("error", (err) => {
+		return next(err);
+	}).on('close', (err) => {
+		try { client.remove(magnetURI) }
+		catch(err) { console.log('[torrent]Error: Magnet Remove') }
+	});
+}
+
 const handleTorrent = (req, res, next, client, db) => {
 		try {
 
@@ -13,23 +34,7 @@ const handleTorrent = (req, res, next, client, db) => {
 				if(id === -1)
 					return res.redirect('https://flai.ml/#/error');
 
-				let alpha = 0, beta = 0;
-				setTimeout(() => {
-					if(alpha === beta)
-						res.redirect('https://flai.ml/#/error/timeout');
-				}, 25000);
-
-				let stream = torrent.files[id].createReadStream();
-				stream.pipe(res);
-				stream.on('data', chunk => {
-					alpha = beta;
-					beta += chunk.length;
-				}).on("error", (err) => {
-					return next(err);
-				}).on('close', (err) => {
-					try { client.remove(magnetURI) }
-					catch(err) { console.log('[torrent]Error: Magnet Remove') }
-				});
+				streamHead(req, res, next, torrent);
 			}
 			else {
 				client.add(magnetURI, (torrent) => {
@@ -57,23 +62,7 @@ const handleTorrent = (req, res, next, client, db) => {
 					})
 					.catch(err => console.log(err));
 
-					let alpha = 0, beta = 0;
-					setTimeout(() => {
-						if(alpha === beta)
-							res.redirect('https://flai.ml/#/error/timeout');
-					}, 25000);
-
-					let stream = torrent.files[id].createReadStream();
-					stream.pipe(res);
-					stream.on('data', chunk => {
-						alpha = beta;
-						beta += chunk.length;
-					}).on("error", (err) => {
-						return next(err);
-					}).on('close', (err) => {
-						try { client.remove(magnetURI) }
-						catch(err) { console.log('[torrent]Error: Magnet Remove') }
-					});
+					streamHead(req, res, next, torrent);
 				})
 				.on('error', (err) => {
 		        console.log('Cannot Add torrent:', err);
