@@ -7,8 +7,8 @@ const streamHead = (req, res, next, torrent) => {
 		isAllow = 1;
 		console.log(`[Client Is Disconnected]`);
 		try {
-			heatStream.destroy();
 			coolStream.destroy();
+			heatStream.destroy();
 			try { client.remove(magnetURI) }
 			catch(err) { console.log('[torrents]Error: Magnet Remove') }
 
