@@ -9,7 +9,7 @@ const streamHead = (req, res, next, client, torrent) => {
 		try { heatStream.destroy() }
 		catch { console.log("10|heatStream.destroy() Invalid") }
 		
-		try { client.remove(magnetURI) }
+		try { client.destroy() }
 		catch(err) { console.log('13|Cannot Remove Magnet') }
 
 		try { clearInterval(interval) }
@@ -90,7 +90,7 @@ const streamHead = (req, res, next, client, torrent) => {
     		clearInterval(interval);
     		zip.finalize();
     		node -= 1;
-    		try { client.remove(magnetURI) }
+    		try { client.destroy() }
 			catch(err) { console.log('95|Cannot Remove Torrent') }
     	}
     }
@@ -118,7 +118,7 @@ const handleTorrents = (req, res, next, client) => {
 
 					console.log('120|Cannot Add Torrent');
 
-					try { client.remove(magnetURI) }
+					try { client.destroy() }
 					catch(err) { console.log('123|Cannot Remove Torrent') }
 
 					res.redirect('https://flai.ml/#/error');
@@ -129,7 +129,7 @@ const handleTorrents = (req, res, next, client) => {
 			node -= 1;
 			console.log("[torrents]Error: Zip");
 
-			try { client.remove(magnetURI) }
+			try { client.destroy() }
 			catch(err) { console.log('134|Cannot Remove Torrent') }
 
 			res.redirect('https://flai.ml/#/error');
