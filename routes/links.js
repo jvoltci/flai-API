@@ -26,6 +26,7 @@ const handleLinks = (req, res, db) => {
 							"Content-Disposition": response.headers['content-disposition'],
 							'Content-Type': response.headers['content-type']
 						});
+						console.log(url, 9)
 						response.pipe(res);
 					});
 				}
@@ -35,12 +36,13 @@ const handleLinks = (req, res, db) => {
 			}
 			else {
 				try {
-					console.log(url, 2)
+					console.log(url, 3)
 					const request = https.get(url, (response) => {
 						res.writeHead(200, {
 							"Content-Disposition": response.headers['content-disposition'],
 							'Content-Type': response.headers['content-type']
 						});
+						console.log(url, 5)
 						response.pipe(res);
 					});
 				}
@@ -50,7 +52,7 @@ const handleLinks = (req, res, db) => {
 			}
 		}
 		else {
-			console.log(url, 2)
+			console.log(url, 66)
 			password = '';
 			res.redirect('https://flai.ml');
 		}
