@@ -38,7 +38,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 
 			    let j = 0;
 
-			    let heatStream = [];
+			    let heatStream = '';
 
 			    let alpha = -1;
 			    let beta = 0;
@@ -122,7 +122,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 
 				    let j = 0;
 
-				    let heatStream = [];
+				    let heatStream = '';
 
 				    let alpha = -1;
 				    let beta = 0;
