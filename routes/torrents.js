@@ -8,6 +8,7 @@ const streamHead = (req, res, next, torrent) => {
 		console.log(`[Client Is Disconnected]`);
 		try {
 			heatStream.destroy();
+			coolStream.destroy();
 			try { client.remove(magnetURI) }
 			catch(err) { console.log('[torrents]Error: Magnet Remove') }
 
@@ -70,12 +71,12 @@ const streamHead = (req, res, next, torrent) => {
     		}).on('end', (err) => {
     			if(j <= torrentFilesNumber) {
     				console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${(beta/1000000).toFixed(1)} mb`);
-    				heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
-    				heatStream.on('end', () => {
+    				coolStream = torrent.files[j].createReadStream(torrent.files[j].name);
+    				coolStream.on('end', () => {
     					j++;
     					autoStreamOnEnd();
     				})
-    				zip.append(heatStream, {name: torrent.files[j].name});
+    				zip.append(coolStream, {name: torrent.files[j].name});
     			}
     		}).on("error", (err) => {
 				return next(err);
