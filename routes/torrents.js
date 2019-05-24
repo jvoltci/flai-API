@@ -65,19 +65,19 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    const autoStreamOnEnd = () => {
 
 			    	if(j < torrent.files.length) {
-			    		heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);	
-			    		heatStream[j].on('data', (chunk) => {
+			    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
+			    		heatStream.on('data', (chunk) => {
 			    			console.log(`${j} ${beta/1000000}`);
 			    			beta += chunk.length;
 			    		}).on('end', (err) => {
 			    			if(j <= torrent.files.length) {
 			    				console.log(`${j} - ${torrent.files[j].name}`);
-			    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
-			    				heatStream[j].on('end', () => {
+			    				heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+			    				heatStream.on('end', () => {
 			    					j++;
 			    					autoStreamOnEnd();
 			    				})
-			    				zip.append(heatStream[j], {name: torrent.files[j].name});
+			    				zip.append(heatStream, {name: torrent.files[j].name});
 			    			}
 			    		}).on("error", (err) => {
 							return next(err);
@@ -147,19 +147,19 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				    const autoStreamOnEnd = () => {
 
 				    	if(j < torrent.files.length) {
-				    		heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);	
-				    		heatStream[j].on('data', (chunk) => {
+				    		heatStream = torrent.files[j].createReadStream(torrent.files[j].name);	
+				    		heatStream.on('data', (chunk) => {
 				    			console.log(`${j} ${data}`);
 				    			beta += chunk.length;
 				    		}).on('end', (err) => {
 				    			if(j <= torrent.files.length) {
 				    				console.log(`${j} - ${torrent.files[j].name}`);
-				    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
-				    				heatStream[j].on('end', () => {
+				    				heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+				    				heatStream.on('end', () => {
 				    					j++;
 				    					autoStreamOnEnd();
 				    				})
-				    				zip.append(heatStream[j], {name: torrent.files[j].name});
+				    				zip.append(heatStream, {name: torrent.files[j].name});
 				    			}
 				    		}).on("error", (err) => {
 								return next(err);
