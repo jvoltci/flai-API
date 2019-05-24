@@ -2,13 +2,9 @@ const Archiver = require('archiver');
 
 const streamHead = (req, res, next, client, torrent) => {
 
-	isAllow = 0;
 	res.on('close', () => {
-		isAllow = 1;
-		console.log(`[Client Is Disconnected]`);
-
-		try { coolStream.destroy() }
-		catch { console.log("10|coolStream.destroy() Invalid") }
+		node -= 1;
+		console.log(`[Client ${node+1} Is Disconnected]`);
 
 		try { heatStream.destroy() }
 		catch { console.log("10|heatStream.destroy() Invalid") }
@@ -41,7 +37,6 @@ const streamHead = (req, res, next, client, torrent) => {
     let j = 0;
 
     let heatStream = '';
-    let coolStream = '';
 
     let alpha = -1;
     let beta = 0;
@@ -73,12 +68,12 @@ const streamHead = (req, res, next, client, torrent) => {
     		}).on('end', (err) => {
     			if(j <= torrentFilesNumber) {
     				console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${(beta/1000000).toFixed(1)} mb`);
-    				coolStream = torrent.files[j].createReadStream(torrent.files[j].name);
-    				coolStream.on('end', () => {
+    				heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+    				heatStream.on('end', () => {
     					j++;
     					autoStreamOnEnd();
     				})
-    				zip.append(coolStream, {name: torrent.files[j].name});
+    				zip.append(heatStream, {name: torrent.files[j].name});
     			}
     		}).on("error", (err) => {
 				return next(err);
@@ -94,7 +89,7 @@ const streamHead = (req, res, next, client, torrent) => {
     		zip.append(notStreamed, {name: `[Not Downloaded].txt`});
     		clearInterval(interval);
     		zip.finalize();
-    		isAllow = 1;
+    		node -= 1;
     		try { client.remove(magnetURI) }
 			catch(err) { console.log('95|Cannot Remove Torrent') }
     	}
@@ -106,17 +101,17 @@ const streamHead = (req, res, next, client, torrent) => {
 
 const handleTorrents = (req, res, next, client) => {
 
-	if(isAllow === 1) {
+	if(node < 3) {
 		try {
 
 			if(client.get(magnetURI)) {
-
+				node += 1;
 				const torrent = client.get(magnetURI);
 				streamHead(req, res, next, client, torrent);
 			}
 			else {
 				client.add(magnetURI, (torrent) => {
-
+					node += 1;
 					streamHead(req, res, next, client, torrent);
 
 				}).on('error', (err) => {
@@ -131,7 +126,7 @@ const handleTorrents = (req, res, next, client) => {
 			}
 		}
 		catch(err) {
-			isAllow = 1;
+			node -= 1;
 			console.log("[torrents]Error: Zip");
 
 			try { client.remove(magnetURI) }

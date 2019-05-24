@@ -27,7 +27,7 @@ let contentType = '';
 let extension = '';
 let file = "Paradox";
 let password = '';
-isAllow = 1; //Something msterious here
+node = 0; //Something msterious here
 
 const client = new WebTorrent();
 const app = express();
