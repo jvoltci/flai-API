@@ -1,7 +1,7 @@
 const http = require('http');
 const https = require('https');
 
-const { setFileName } = require('./lib/setFileName');
+//const { setFileName } = require('./lib/setFileName');
 
 const handlePlay = (req, res, db) => {
 
@@ -13,19 +13,18 @@ const handlePlay = (req, res, db) => {
 		.then(data => {
 			if(data[0]) {
 				url = data[0].url;
-				extension = data[0].extension;
-				return setFileName();
+				return '';
 			}
 			else
 				return url = '';
 		})
 		.then(() => {
-			if(url && extension) {
+			if(url) {
 				if(url[4] !== 's') {
 					try {
 						const request = http.get(url, (response) => {
 							res.writeHead(200, {
-								'Content-Type': contentType
+								'Content-Type': response.headers['content-type']
 							});
 							response.pipe(res);
 						});
@@ -38,7 +37,7 @@ const handlePlay = (req, res, db) => {
 					try {
 						const request = https.get(url, (response) => {
 							res.writeHead(200, {
-								'Content-Type': contentType
+								'Content-Type': response.headers['content-type']
 							});
 							response.pipe(res);
 						});

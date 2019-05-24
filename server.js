@@ -19,13 +19,7 @@ const db = knex({
   }
 });
 
-let interval = '';
-let magnetURI = ''
-let url = '';
-let link = '';
-let contentType = '';
-let extension = '';
-let file = "Paradox";
+let magnetURI = '';
 let password = '';
 node = 0; //Something msterious here
 

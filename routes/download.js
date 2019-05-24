@@ -6,9 +6,8 @@ const { makeid } = require('./lib/makeid');
 const handleDownload = (req, res, db) => {
 
 	password = req.body.user.password;
-
+	let link = '';
 	if (password === process.env.PASS) {
-		extension = req.body.user.extension;
 		url = req.body.user.url;
 
 		db('flai').where('url', '=', url)
@@ -18,30 +17,12 @@ const handleDownload = (req, res, db) => {
 			}
 			else {
 				link = makeid(10);
-				db('flai').insert({link: link, url: url, extension: extension}).returning('*')
+				db('flai').insert({link: link, url: url}).returning('*')
 					.then(data => console.log(link));
 			}
 		})
-		.then(() => {
-			if(extension === ".mp4") {
-				contentType = 'video/mp4';
-				file = "Ergo";
-			}
-			else if(extension === ".mp3") {
-				contentType = 'audio/mp3';
-				file = "Sonorous";
-			}
-			else if(extension === ".mkv") {
-				contentType = 'video/webm';
-				file = "Limerence";
-			}
-			else {
-				contentType = 'application/zip';
-				file = "Paradox";
-			}
-			return res.redirect('/links/' + link);
-		}
-		)
+		.then(() => res.redirect('/links/' + link))
+		.catch(err => console.log(err))
 	}
 	else
 		return res.redirect('https://flai.ml/#/error');
