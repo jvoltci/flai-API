@@ -105,12 +105,12 @@ const handleTorrents = (req, res, next, client) => {
 			if(client.get(magnetURI)) {
 
 				const torrent = client.get(magnetURI);
-				streamHead(req, res, next, torrent);
+				streamHead(req, res, next, torrent, magnetURI);
 			}
 			else {
 				client.add(magnetURI, (torrent) => {
 
-					streamHead(req, res, next, torrent);
+					streamHead(req, res, next, torrent, magnetURI);
 
 				}).on('error', (err) => {
 
@@ -124,6 +124,7 @@ const handleTorrents = (req, res, next, client) => {
 			}
 		}
 		catch(err) {
+			isAllow = 1;
 			console.log("[torrents]Error: Zip");
 
 			try { client.remove(magnetURI) }
