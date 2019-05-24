@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const knex = require('knex');
-const Archiver = require('archiver');
 const WebTorrent = require('webtorrent')
 
 const download = require('./routes/download');
@@ -20,15 +19,9 @@ const db = knex({
   }
 });
 
-let interval = '';
-let magnetURI = ''
-let url = '';
-let link = '';
-let contentType = '';
-let extension = '';
-let file = "Paradox";
+let magnetURI = '';
 let password = '';
-isAllow = 1; //Something msterious here
+node = 0; //Something msterious here
 
 const client = new WebTorrent();
 const app = express();
@@ -50,7 +43,7 @@ app.get('/links/:id', (req, res) => { links.handleLinks(req, res, db) })
 app.get('/play/:id', (req, res) => { play.handlePlay(req, res, db) })
 app.post('/metadata', (req, res) => { metadata.handleMetadata(req, res, client) })
 app.get('/torrent/:file_name', (req, res, next) => { torrent.handleTorrent(req, res, next, client, db)  })
-app.get('/torrents/:file_name', (req, res, next) => { torrents.handleTorrents(req, res, next, client, Archiver) })
+app.get('/torrents/:file_name', (req, res, next) => { torrents.handleTorrents(req, res, next, client) })
 
 
 process.on('uncaughtException', (err) => {
