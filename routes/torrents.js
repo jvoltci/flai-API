@@ -1,6 +1,6 @@
 const Archiver = require('archiver');
 
-const streamHead = (req, res, next, client, torrent) => {
+const streamHead = (req, res, next, torrent) => {
 
 	res.on('close', () => {
 		node -= 1;
@@ -102,7 +102,7 @@ const streamHead = (req, res, next, client, torrent) => {
 }
 
 
-const handleTorrents = (req, res, next, client) => {
+const handleTorrents = (req, res, next) => {
 
 	if(node < 3) {
 		try {
@@ -110,12 +110,12 @@ const handleTorrents = (req, res, next, client) => {
 			if(client.get(magnetURI)) {
 				node += 1;
 				const torrent = client.get(magnetURI);
-				streamHead(req, res, next, client, torrent);
+				streamHead(req, res, next, torrent);
 			}
 			else {
 				client.add(magnetURI, (torrent) => {
 					node += 1;
-					streamHead(req, res, next, client, torrent);
+					streamHead(req, res, next, torrent);
 
 				}).on('error', (err) => {
 

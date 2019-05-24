@@ -19,7 +19,7 @@ const streamHead = (req, res, next, torrent, id) => {
 	});
 }
 
-const handleTorrent = (req, res, next, client, db) => {
+const handleTorrent = (req, res, next, db) => {
 		try {
 
 			if(client.get(magnetURI)) {

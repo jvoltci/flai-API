@@ -1,4 +1,4 @@
-const handleMetadata = (req, res, client) => {
+const handleMetadata = (req, res) => {
 	try {
 		password = req.body.password;
 		if(req.method === "POST" && password === process.env.PASS) {
