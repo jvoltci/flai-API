@@ -56,7 +56,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    		autoStreamOnEnd();
 			    	}
 			    	else {
-			    		//zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
+			    		zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
 			    		alpha = beta;
 			    	}
 			    }, 25000);
@@ -66,6 +66,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    	if(j < torrent.files.length) {
 			    		heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);	
 			    		heatStream[j].on('data', (chunk) => {
+			    			console.log(`${j} ${beta}`);
 			    			beta += chunk.length;
 			    		}).on('end', (err) => {
 			    			if(j <= torrent.files.length) {
@@ -138,7 +139,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				    		autoStreamOnEnd();
 				    	}
 				    	else {
-				    		//zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
+				    		zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
 				    		alpha = beta;
 				    	}
 				    }, 25000);
