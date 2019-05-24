@@ -54,7 +54,7 @@ app.get('/torrents/:file_name', (req, res, next) => { torrents.handleTorrents(re
 
 
 process.on('uncaughtException', (err) => {
-    console.log('Error: Process');
+    console.log('Error: Process', err);
 });
 
 app.listen(port, () => {
