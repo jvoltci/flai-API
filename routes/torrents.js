@@ -47,7 +47,7 @@ const streamHead = (req, res, next, torrent) => {
     interval = setInterval(() => {
     	if(alpha === beta && j <= torrentFilesNumber) {
     		if(j < torrentFilesNumber) {
-    			console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${((beta-alpha)/1000000).toFixed(1)} mb ! ${((beta-alpha)/1000000).toFixed(2)} mb`);
+    			console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${((beta-alpha)/1000000).toFixed(1)} mb`);
 	    		notStreamed += `${torrent.files[j].name}\n`;
 	    		zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
     		}
@@ -68,7 +68,7 @@ const streamHead = (req, res, next, torrent) => {
     			beta += chunk.length;
     		}).on('end', (err) => {
     			if(j <= torrentFilesNumber) {
-    				console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${((beta-alpha)/1000000).toFixed(1)} mb || ${((beta-alpha)/1000000).toFixed(2)} mb`);
+    				console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${((beta-alpha)/1000000).toFixed(1)} mb`);
     				heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
     				heatStream.on('end', () => {
     					j++;
