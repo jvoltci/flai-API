@@ -6,6 +6,7 @@
 .pnp.js
 
 # testing
+/heroku-flai-API
 /coverage
 
 # production
