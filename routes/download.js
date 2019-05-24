@@ -16,8 +16,9 @@ const handleDownload = (req, res, db) => {
 				link = data[0].link;
 			}
 			else {
+				now = Date().toString();
 				link = makeid(10);
-				db('flai').insert({link: link, url: url}).returning('*')
+				db('flai').insert({link: link, url: url, date: now}).returning('*')
 					.then(data => console.log(link));
 			}
 		})

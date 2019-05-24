@@ -55,8 +55,9 @@ const handleTorrent = (req, res, next, client, db) => {
 							link = data[0].link;
 						}
 						else {
-							link = "torrent/" + req.params.file_name;
-							db('flai').insert({link: link, url: magnetURI, extension: "magnet"}).returning('*')
+							now = Date().toString();
+							link = "torrent/" + torrent.name;
+							db('flai').insert({link: link, url: magnetURI, date: now}).returning('*')
 								.then(data => console.log(link));
 						}
 					})
