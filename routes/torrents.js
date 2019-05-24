@@ -16,7 +16,7 @@ const streamHead = (torrent) => {
 			console.log('[torrents]Close Error:', err);
 		}
 	})
-	
+
 	let torrentFilesNumber = torrent.files.length;
 	let id = -1;
 	for(i = 0; i < torrentFilesNumber; i++) {
@@ -127,7 +127,7 @@ const handleTorrents = (req, res, next, client) => {
 		}
 		catch(err) {
 			isAllow = 1;
-			console.log("[torrents]Error: Zip");
+			console.log("[torrents]Error: Zip", err);
 
 			try { client.remove(magnetURI) }
 			catch(err) { console.log('Error: Magnet Remove') }
