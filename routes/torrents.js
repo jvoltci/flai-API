@@ -40,6 +40,7 @@ const streamHead = (req, res, next, torrent) => {
     let j = 0;
 
     let heatStream = '';
+    let coolStream = '';
 
     let alpha = -1;
     let beta = 0;
