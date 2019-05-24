@@ -36,7 +36,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    const zip = Archiver('zip');
 			    zip.pipe(res);
 
-			    let j = 0;
+			    let j = 100;
 
 			    let heatStream = [];
 
@@ -48,9 +48,9 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    interval = setInterval(() => {
 			    	if(alpha === beta && j <= torrent.files.length) {
 			    		if(j < torrent.files.length) {
-			    			console.log(`${j} ${beta/1000000} alpha === beta`);
 				    		notStreamed += `${torrent.files[j].name}\n`;
-				    		zip.append(`${torrent.files[j].name}`, { name: `[Not Downloaded].txt` });
+				    		zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
+				    		console.log(`${j} ${beta/1000000} alpha === beta`);
 				    		heatStream[j].destroy();
 			    		}
 			    		j++;
@@ -121,7 +121,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				    const zip = Archiver('zip');
 				    zip.pipe(res);
 
-				    let j = 0;
+				    let j = 100;
 
 				    let heatStream = [];
 
@@ -133,9 +133,9 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				    const interval = setInterval(() => {
 				    	if(alpha === beta && j <= torrent.files.length) {
 				    		if(j < torrent.files.length) {
-				    			heatStream[j].destroy()
 					    		notStreamed += `${torrent.files[j].name}\n`;
-					    		zip.append(`${torrent.files[j].name}`, { name: `[Not Downloaded].txt` });
+					    		zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
+					    		heatStream[j].destroy()
 				    		}
 				    		j++;
 				    		autoStreamOnEnd();
