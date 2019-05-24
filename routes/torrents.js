@@ -67,7 +67,7 @@ const streamHead = (req, res, next, torrent, magnetURI) => {
     			beta += chunk.length;
     		}).on('end', (err) => {
     			if(j <= torrentFilesNumber) {
-    				console.log(`(${j} of ${torrentFilesNumber}): ${torrent.files[j].name} ${beta/1000000} mb`);
+    				console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${beta/1000000} mb`);
     				heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
     				heatStream.on('end', () => {
     					j++;
