@@ -1,6 +1,6 @@
 const Archiver = require('archiver');
 
-const streamHead = (torrent) => {
+const streamHead = (req, res, next, torrent, magnetURI) => {
 
 	isAllow = 0;
 	res.on('close', () => {
@@ -127,7 +127,7 @@ const handleTorrents = (req, res, next, client) => {
 		}
 		catch(err) {
 			isAllow = 1;
-			console.log("[torrents]Error: Zip", err);
+			console.log("[torrents]Error: Zip");
 
 			try { client.remove(magnetURI) }
 			catch(err) { console.log('Error: Magnet Remove') }
