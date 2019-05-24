@@ -69,6 +69,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 			    			beta += chunk.length;
 			    		}).on('end', (err) => {
 			    			if(j <= torrent.files.length) {
+			    				console.log(`${j} - ${torrent.files[j].name}`);
 			    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
 			    				heatStream[j].on('end', () => {
 			    					j++;
@@ -150,6 +151,7 @@ const handleTorrents = (req, res, next, client, Archiver) => {
 				    			beta += chunk.length;
 				    		}).on('end', (err) => {
 				    			if(j <= torrent.files.length) {
+				    				console.log(`${j} - ${torrent.files[j].name}`);
 				    				heatStream[j] = torrent.files[j].createReadStream(torrent.files[j].name);
 				    				heatStream[j].on('end', () => {
 				    					j++;
