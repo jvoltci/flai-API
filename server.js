@@ -23,7 +23,7 @@ let magnetURI = '';
 let password = '';
 node = 0; //Something msterious here
 
-const client = new WebTorrent();
+let client = new WebTorrent();
 const app = express();
 const port = process.env.PORT || 5000;
 

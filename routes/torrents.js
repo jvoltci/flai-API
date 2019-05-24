@@ -10,6 +10,7 @@ const streamHead = (req, res, next, client, torrent) => {
 		catch { console.log("10|heatStream.destroy() Invalid") }
 		
 		try { client.destroy(() => {
+			console.log("Intantianated")
 			client = new WebTorrent();
 		}) }
 		catch(err) { console.log('13|Cannot Destroy client') }
