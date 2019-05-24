@@ -1,6 +1,6 @@
 const Archiver = require('archiver');
 
-const streamHead = (req, res, next, torrent, magnetURI) => {
+const streamHead = (req, res, next, torrent) => {
 
 	isAllow = 0;
 	res.on('close', () => {
@@ -47,7 +47,7 @@ const streamHead = (req, res, next, torrent, magnetURI) => {
     interval = setInterval(() => {
     	if(alpha === beta && j <= torrentFilesNumber) {
     		if(j < torrentFilesNumber) {
-    			console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${((beta-alpha)/1000000).toFixed(1)} mb || ${((beta-alpha)/1000000).toFixed(2)} mb`);
+    			console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${((beta-alpha)/1000000).toFixed(1)} mb ! ${((beta-alpha)/1000000).toFixed(2)} mb`);
 	    		notStreamed += `${torrent.files[j].name}\n`;
 	    		zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
     		}
@@ -108,12 +108,12 @@ const handleTorrents = (req, res, next, client) => {
 			if(client.get(magnetURI)) {
 
 				const torrent = client.get(magnetURI);
-				streamHead(req, res, next, torrent, magnetURI);
+				streamHead(req, res, next, torrent);
 			}
 			else {
 				client.add(magnetURI, (torrent) => {
 
-					streamHead(req, res, next, torrent, magnetURI);
+					streamHead(req, res, next, torrent);
 
 				}).on('error', (err) => {
 
