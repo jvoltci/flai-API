@@ -1,6 +1,22 @@
 const Archiver = require('archiver');
 
 const streamHead = (torrent) => {
+
+	isAllow = 0;
+	res.on('close', () => {
+		isAllow = 1;
+		console.log(`[Client Is Disconnected]`);
+		try {
+			try { client.remove(magnetURI) }
+			catch(err) { console.log('[torrents]Error: Magnet Remove') }
+
+			clearInterval(interval);
+		}
+		catch(err) {
+			console.log('[torrents]Close Error:', err);
+		}
+	})
+	
 	let torrentFilesNumber = torrent.files.length;
 	let id = -1;
 	for(i = 0; i < torrentFilesNumber; i++) {
@@ -88,20 +104,6 @@ const handleTorrents = (req, res, next, client) => {
 	if(isAllow === 1) {
 		try {
 
-			isAllow = 0;
-			res.on('close', () => {
-				isAllow = 1;
-				console.log(`[Client Is Disconnected]`);
-				try {
-					try { client.remove(magnetURI) }
-					catch(err) { console.log('[torrents]Error: Magnet Remove') }
-
-					clearInterval(interval);
-				}
-				catch(err) {
-					console.log('[torrents]Close Error:', err);
-				}
-			})
 			if(client.get(magnetURI)) {
 
 				const torrent = client.get(magnetURI);
