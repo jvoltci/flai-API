@@ -6,17 +6,18 @@ const streamHead = (req, res, next, torrent) => {
 	res.on('close', () => {
 		isAllow = 1;
 		console.log(`[Client Is Disconnected]`);
-		try {
-			coolStream.destroy();
-			heatStream.destroy();
-			try { client.remove(magnetURI) }
-			catch(err) { console.log('[torrents]Error: Magnet Remove') }
 
-			clearInterval(interval);
-		}
-		catch(err) {
-			console.log('[torrents]Close Error:', err);
-		}
+		try { coolStream.destroy() }
+		catch { console.log("10|coolStream.destroy() Invalid") }
+
+		try { heatStream.destroy() }
+		catch { console.log("10|heatStream.destroy() Invalid") }
+		
+		try { client.remove(magnetURI) }
+		catch(err) { console.log('13|Cannot Remove Magnet') }
+
+		try { clearInterval(interval) }
+		catch { console.log("16|Unable To Clear Interval") }
 	})
 
 	let torrentFilesNumber = torrent.files.length;
@@ -95,7 +96,7 @@ const streamHead = (req, res, next, torrent) => {
     		zip.finalize();
     		isAllow = 1;
     		try { client.remove(magnetURI) }
-			catch(err) { console.log('[torrents]Error: Magnet Remove') }
+			catch(err) { console.log('95|Cannot Remove Torrent') }
     	}
     }
 
@@ -120,10 +121,10 @@ const handleTorrents = (req, res, next, client) => {
 
 				}).on('error', (err) => {
 
-					console.log('[torrents]Error: Cannot Add Torrent');
+					console.log('120|Cannot Add Torrent');
 
 					try { client.remove(magnetURI) }
-					catch(err) { console.log('Err:', err) }
+					catch(err) { console.log('123|Cannot Remove Torrent') }
 
 					res.redirect('https://flai.ml/#/error');
 				});
@@ -134,7 +135,7 @@ const handleTorrents = (req, res, next, client) => {
 			console.log("[torrents]Error: Zip");
 
 			try { client.remove(magnetURI) }
-			catch(err) { console.log('Error: Magnet Remove') }
+			catch(err) { console.log('134|Cannot Remove Torrent') }
 
 			res.redirect('https://flai.ml/#/error');
 			//process.setMaxListeners(0);
