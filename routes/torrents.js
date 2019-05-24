@@ -112,7 +112,7 @@ const handleTorrents = (req, res, next, client) => {
 			if(client.get(magnetURI)) {
 
 				const torrent = client.get(magnetURI);
-				streamHead(req, res, next, torrent);
+				streamHead(req, res, next, client, torrent);
 			}
 			else {
 				client.add(magnetURI, (torrent) => {
