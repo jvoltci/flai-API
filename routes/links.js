@@ -9,7 +9,7 @@ const handleLinks = (req, res, db) => {
 	.then(data => {
 		if(data[0]) {
 			url = data[0].url;
-			return '';
+			return url;
 		}
 		else
 			return url = '';
