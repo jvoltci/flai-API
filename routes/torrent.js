@@ -1,4 +1,5 @@
-const streamHead = (req, res, next, torrent, id) => {
+
+const streamHead = (req, res, next, torrent, client, id) => {
 
 	let alpha = 0, beta = 0;
 	setTimeout(() => {
@@ -19,7 +20,8 @@ const streamHead = (req, res, next, torrent, id) => {
 	});
 }
 
-const handleTorrent = (req, res, next, db) => {
+const handleTorrent = (req, res, next, client, db) => {
+
 		try {
 
 			if(client.get(magnetURI)) {
@@ -34,7 +36,7 @@ const handleTorrent = (req, res, next, db) => {
 				if(id === -1)
 					return res.redirect('https://flai.ml/#/error');
 
-				streamHead(req, res, next, torrent, id);
+				streamHead(req, res, next, torrent, client, id);
 			}
 			else {
 				client.add(magnetURI, (torrent) => {
@@ -63,7 +65,7 @@ const handleTorrent = (req, res, next, db) => {
 					})
 					.catch(err => console.log(err));
 
-					streamHead(req, res, next, torrent, id);
+					streamHead(req, res, next, torrent, client, id);
 				})
 				.on('error', (err) => {
 		        console.log('Cannot Add torrent:', err);

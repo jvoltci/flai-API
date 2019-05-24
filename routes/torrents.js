@@ -1,24 +1,22 @@
+const WebTorrent = require('webtorrent');
 const Archiver = require('archiver');
 
-const streamHead = (req, res, next, torrent) => {
+const streamHead = (req, res, next, torrent, client) => {
 
 	res.on('close', () => {
-		node -= 1;
-		console.log(`[Client ${node+1} Is Disconnected]`);
+		isAllow = 1;
+		console.log(`[Client Is Disconnected]`);
 
 		try { heatStream.destroy() }
 		catch { console.log("10|heatStream.destroy() Invalid") }
 		
-		try { client.destroy(() => {
-			console.log("Intantianated")
-			client = new WebTorrent();
-		}) }
-		catch(err) { console.log('13|Cannot Destroy client') }
+		try { client.remove(magnetURI) }
+		catch(err) { console.log('13|Cannot Remove client') }
 
 		try { clearInterval(interval) }
 		catch { console.log("16|Unable To Clear Interval") }
 	})
-
+	
 	let torrentFilesNumber = torrent.files.length;
 	let id = -1;
 	for(i = 0; i < torrentFilesNumber; i++) {
@@ -92,8 +90,8 @@ const streamHead = (req, res, next, torrent) => {
     		zip.append(notStreamed, {name: `[${count} Not Downloaded].txt`});
     		clearInterval(interval);
     		zip.finalize();
-    		node -= 1;
-    		try { client.destroy() }
+    		isAllow = 1;
+    		try { client.remove() }
 			catch(err) { console.log('95|Cannot Remove Torrent') }
     	}
     }
@@ -102,26 +100,26 @@ const streamHead = (req, res, next, torrent) => {
 }
 
 
-const handleTorrents = (req, res, next) => {
+const handleTorrents = (req, res, next, client) => {
 
-	if(node < 3) {
+	if(isAllow == 1) {
 		try {
 
 			if(client.get(magnetURI)) {
-				node += 1;
+				isAllow = 0;
 				const torrent = client.get(magnetURI);
-				streamHead(req, res, next, torrent);
+				streamHead(req, res, next, torrent, client);
 			}
 			else {
 				client.add(magnetURI, (torrent) => {
-					node += 1;
-					streamHead(req, res, next, torrent);
+					isAllow = 0;
+					streamHead(req, res, next, torrent, client);
 
 				}).on('error', (err) => {
 
 					console.log('120|Cannot Add Torrent');
 
-					try { client.destroy() }
+					try { client.remove() }
 					catch(err) { console.log('123|Cannot Remove Torrent') }
 
 					res.redirect('https://flai.ml/#/error');
@@ -129,10 +127,10 @@ const handleTorrents = (req, res, next) => {
 			}
 		}
 		catch(err) {
-			node -= 1;
+			isAllow = 1;
 			console.log("[torrents]Error: Zip");
 
-			try { client.destroy() }
+			try { client.remove() }
 			catch(err) { console.log('134|Cannot Remove Torrent') }
 
 			res.redirect('https://flai.ml/#/error');

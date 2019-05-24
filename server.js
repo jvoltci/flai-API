@@ -21,9 +21,9 @@ const db = knex({
 
 let magnetURI = '';
 let password = '';
-node = 0; //Something msterious here
+isAllow = 0; //Something msterious here
 
-let client = new WebTorrent();
+const client = new WebTorrent();
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -41,9 +41,9 @@ app.get('/', (req, res) => { res.send('It is working') })
 app.post('/download', (req, res) => { download.handleDownload(req, res, db) })
 app.get('/links/:id', (req, res) => { links.handleLinks(req, res, db) })
 app.get('/play/:id', (req, res) => { play.handlePlay(req, res, db) })
-app.post('/metadata', (req, res) => { metadata.handleMetadata(req, res) })
-app.get('/torrent/:file_name', (req, res, next) => { torrent.handleTorrent(req, res, next, db)  })
-app.get('/torrents/:file_name', (req, res, next) => { torrents.handleTorrents(req, res, next) })
+app.post('/metadata', (req, res) => { metadata.handleMetadata(req, res, client) })
+app.get('/torrent/:file_name', (req, res, next) => { torrent.handleTorrent(req, res, next, client, db)  })
+app.get('/torrents/:file_name', (req, res, next) => { torrents.handleTorrents(req, res, next, client) })
 
 
 process.on('uncaughtException', (err) => {
