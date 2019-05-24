@@ -7,6 +7,7 @@ const handleLinks = (req, res, db) => {
 	if(fetchedLink.length < 10) res.redirect('https://flai.ml');
 	db('flai').where('link', '=', fetchedLink)
 	.then(data => {
+		console.log(data)
 		if(data[0]) {
 			url = data[0].url;
 			return url;
@@ -15,6 +16,7 @@ const handleLinks = (req, res, db) => {
 			return url = '';
 	})
 	.then(() => {
+		console.log(url)
 		if(url) {
 			if(url[4] !== 's') {
 				try {
