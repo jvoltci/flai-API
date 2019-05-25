@@ -16,11 +16,16 @@ const handleLinks = (req, res, db) => {
 	})
 	.then((url) => {
 		if(url) {
+			let cd = '';
 			if(url[4] !== 's') {
 				try {
 					const request = http.get(url, (response) => {
+						if(response.headers['content-disposition'])
+							cd = response.headers['content-disposition'];
+						else
+							cd = "attachment;filename=flai[Change Extension].zip";
 						res.writeHead(200, {
-							"Content-Disposition": response.headers['content-disposition'],
+							"Content-Disposition": cd,
 							'Content-Type': response.headers['content-type']
 						});
 						response.pipe(res);
@@ -33,8 +38,12 @@ const handleLinks = (req, res, db) => {
 			else {
 				try {
 					const request = https.get(url, (response) => {
+						if(response.headers['content-disposition'])
+							cd = response.headers['content-disposition'];
+						else
+							cd = "attachment;filename=flai[Change Extension].zip";
 						res.writeHead(200, {
-							"Content-Disposition": response.headers['content-disposition'],
+							"Content-Disposition": cd,
 							'Content-Type': response.headers['content-type']
 						});
 						response.pipe(res);
