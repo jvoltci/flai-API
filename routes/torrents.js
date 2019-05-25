@@ -81,6 +81,8 @@ const streamHead = (req, res, next, torrent, client) => {
     	}
     	if(j > torrentFilesNumber) {
 
+    		isAllow = 1;
+    		
     		let count = 0;
     		for(q = 0; q < notStreamed.length; q++)
     			if(notStreamed[q] === '\n')
@@ -89,8 +91,7 @@ const streamHead = (req, res, next, torrent, client) => {
     		zip.append(notStreamed, {name: `[${count} Not Downloaded].txt`});
     		clearInterval(interval);
     		zip.finalize();
-    		isAllow = 1;
-    		try { client.remove() }
+    		try { client.remove(magnetURI) }
 			catch(err) { console.log('95|Cannot Remove Torrent') }
     	}
     }
@@ -118,7 +119,7 @@ const handleTorrents = (req, res, next, client) => {
 
 					console.log('120|Cannot Add Torrent');
 
-					try { client.remove() }
+					try { client.remove(magnetURI) }
 					catch(err) { console.log('123|Cannot Remove Torrent') }
 
 					res.redirect('https://flai.ml/#/error');
@@ -127,9 +128,9 @@ const handleTorrents = (req, res, next, client) => {
 		}
 		catch(err) {
 			isAllow = 1;
-			console.log("[torrents]Error: Zip");
+			console.log("[torrents]Error: Zip", err);
 
-			try { client.remove() }
+			try { client.remove(magnetURI) }
 			catch(err) { console.log('134|Cannot Remove Torrent') }
 
 			res.redirect('https://flai.ml/#/error');
