@@ -32,7 +32,10 @@ const streamHead = (req, res, next, torrent, client) => {
         'Content-disposition': `attachment; filename=${torrent.name}.zip`
     });
     const zip = Archiver('zip');
-    zip.pipe(res);
+    zip.pipe(res)
+    .on('error', (err) => {
+    	console.log(err);
+    })
 
     let j = 0;
 
@@ -92,7 +95,7 @@ const streamHead = (req, res, next, torrent, client) => {
     		clearInterval(interval);
     		zip.finalize();
     		try { client.remove(magnetURI) }
-			catch(err) { console.log('95|Cannot Remove Torrent') }
+			catch(err) { console.log('95|Cannot Remove Torrent', err) }
     	}
     }
 
