@@ -20,14 +20,17 @@ const handleLinks = (req, res, db) => {
 			if(url[4] !== 's') {
 				try {
 					const request = http.get(url, (response) => {
-						if(response.headers['content-disposition'])
-							cd = response.headers['content-disposition'];
-						else
-							cd = "attachment;filename=flai[Change Extension].zip";
-						res.writeHead(200, {
-							"Content-Disposition": cd,
-							'Content-Type': response.headers['content-type']
-						});
+						if(response.headers['content-disposition']) {
+							res.writeHead(200, {
+								"Content-Disposition": response.headers['content-disposition'],
+								'Content-Type': response.headers['content-type']
+							});
+						}
+						else {
+							res.writeHead(200, {
+								'Content-Type': response.headers['content-type']
+							});
+						}
 						response.pipe(res);
 					});
 				}
@@ -38,14 +41,17 @@ const handleLinks = (req, res, db) => {
 			else {
 				try {
 					const request = https.get(url, (response) => {
-						if(response.headers['content-disposition'])
-							cd = response.headers['content-disposition'];
-						else
-							cd = "attachment;filename=flai[Change Extension].zip";
-						res.writeHead(200, {
-							"Content-Disposition": cd,
-							'Content-Type': response.headers['content-type']
-						});
+						if(response.headers['content-disposition']) {
+							res.writeHead(200, {
+								"Content-Disposition": response.headers['content-disposition'],
+								'Content-Type': response.headers['content-type']
+							});
+						}
+						else {
+							res.writeHead(200, {
+								'Content-Type': response.headers['content-type']
+							});
+						}
 						response.pipe(res);
 					});
 				}
