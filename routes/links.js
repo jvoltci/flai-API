@@ -26,7 +26,7 @@ const handleLinks = (req, res, db) => {
                     		cd = response.headers['content-disposition'];
                     	}
                     	else
-                    		cd = "attachment;filename=flai[Changed Extension].mp3"
+                    		cd = "attachment;filename=flai.mp3"
                         res.writeHead(200, {
                             "Content-Disposition": cd,
                             'Content-Type': response.headers['content-type']
@@ -45,7 +45,7 @@ const handleLinks = (req, res, db) => {
                     		cd = response.headers['content-disposition'];
                     	}
                     	else
-                    		cd = "attachment;filename=flai[Changed Extension].mp3"
+                    		cd = "attachment;filename=flai.mp3"
                         res.writeHead(200, {
                             "Content-Disposition": cd,
                             'Content-Type': response.headers['content-type']
