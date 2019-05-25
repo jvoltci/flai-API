@@ -55,7 +55,7 @@ const handleLinks = (req, res, db) => {
                             cd = "attachment;filename=flai[Changed Extension].zip";
                         }
                         if(response.headers['content-type']) {
-                            ct = 'Content-Type': response.headers['content-type']
+                            ct = response.headers['content-type'];
                         }
                         else {
                             ct = 'application/octet-stream';
