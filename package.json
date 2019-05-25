@@ -15,7 +15,6 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "knex": "^0.16.5",
-    "parse-torrent": "^6.1.2",
     "pg": "^7.10.0",
     "request": "^2.88.0",
     "webtorrent": "^0.103.1"
