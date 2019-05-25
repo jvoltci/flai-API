@@ -18,18 +18,25 @@ const handleLinks = (req, res, db) => {
     })
     .then(() => {
         if(url) {
-        	let cd = '';
+        	let cd = '', ct = '';
             if(url[4] !== 's') {
                 try {
                     const request = http.get(url, (response) => {
                     	if(response.headers['content-disposition']) {
                     		cd = response.headers['content-disposition'];
                     	}
-                    	else
-                    		cd = "attachment;filename=flai.mp3"
+                    	else {
+                            cd = "attachment;filename=flai[Changed Extension].zip";
+                        }
+                        if(response.headers['content-type']) {
+                            ct = response.headers['content-type'];
+                        }
+                        else {
+                            ct = 'application/octet-stream';
+                        }
                         res.writeHead(200, {
                             "Content-Disposition": cd,
-                            'Content-Type': response.headers['content-type']
+                            'Content-Type': ct
                         });
                         response.pipe(res);
                     });
@@ -44,11 +51,18 @@ const handleLinks = (req, res, db) => {
                     	if(response.headers['content-disposition']) {
                     		cd = response.headers['content-disposition'];
                     	}
-                    	else
-                    		cd = "attachment;filename=flai.mp3"
+                    	else {
+                            cd = "attachment;filename=flai[Changed Extension].zip";
+                        }
+                        if(response.headers['content-type']) {
+                            ct = 'Content-Type': response.headers['content-type']
+                        }
+                        else {
+                            ct = 'application/octet-stream';
+                        }
                         res.writeHead(200, {
                             "Content-Disposition": cd,
-                            'Content-Type': response.headers['content-type']
+                            'Content-Type': ct
                         });
                         response.pipe(res);
                     });
