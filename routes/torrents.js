@@ -8,6 +8,9 @@ const streamHead = (req, res, next, torrent, client) => {
 
 		try { heatStream.destroy() }
 		catch { console.log("10|heatStream.destroy() Invalid") }
+
+		try { coolStream.destroy() }
+		catch { console.log("13|coolStream.destroy() Invalid") }
 		
 		try { client.remove(magnetURI) }
 		catch(err) { console.log('13|Cannot Remove client') }
@@ -40,6 +43,7 @@ const streamHead = (req, res, next, torrent, client) => {
     let j = 0;
 
     let heatStream = '';
+    let coolStream = '';
 
     let alpha = -1;
     let beta = 0;
@@ -71,12 +75,12 @@ const streamHead = (req, res, next, torrent, client) => {
     		}).on('end', (err) => {
     			if(j <= torrentFilesNumber) {
     				console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${(beta/1000000).toFixed(1)} mb`);
-    				heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
-    				heatStream.on('end', () => {
+    				coolStream = torrent.files[j].createReadStream(torrent.files[j].name);
+    				coolStream.on('end', () => {
     					j++;
     					autoStreamOnEnd();
     				})
-    				zip.append(heatStream, {name: torrent.files[j].name});
+    				zip.append(coolStream, {name: torrent.files[j].name});
     			}
     		}).on("error", (err) => {
 				return next(err);
