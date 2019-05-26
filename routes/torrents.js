@@ -46,8 +46,6 @@ const streamHead = (req, res, next, torrent, client) => {
 
     let notStreamed = '';
 
-    zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
-
     interval = setInterval(() => {
     	if(alpha === beta && j <= torrentFilesNumber) {
     		if(j < torrentFilesNumber) {
