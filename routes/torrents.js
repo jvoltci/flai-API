@@ -35,10 +35,16 @@ const streamHead = (req, res, next, torrent, client) => {
     zip.pipe(res)
     .on('error', (err) => {
     	console.log(err);
-    });
+    })
 
-    let heatStream = '', notStreamed = '';
-    let j = 0, alpha = -1, beta = 0;
+    let j = 0;
+
+    let heatStream = '';
+
+    let alpha = -1;
+    let beta = 0;
+
+    let notStreamed = '';
 
     zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
 
