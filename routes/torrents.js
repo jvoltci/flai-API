@@ -1,23 +1,8 @@
 const Archiver = require('archiver');
 
 const streamHead = (req, res, next, torrent, client) => {
-
-	res.on('close', () => {
-		isAllow = 1;
-		console.log(`[Client Is Disconnected]`);
-
-		try { heatStream.destroy() }
-		catch { console.log("10|heatStream.destroy() Invalid") }
-
-		try { coolStream.destroy() }
-		catch { console.log("13|coolStream.destroy() Invalid") }
-		
-		try { client.remove(magnetURI) }
-		catch(err) { console.log('13|Cannot Remove client') }
-
-		try { clearInterval(interval) }
-		catch { console.log("16|Unable To Clear Interval") }
-	})
+	let flag = 0;
+	
 	
 	let torrentFilesNumber = torrent.files.length;
 	let id = -1;
@@ -36,8 +21,8 @@ const streamHead = (req, res, next, torrent, client) => {
     });
     const zip = Archiver('zip');
     zip.pipe(res)
-    .on('error', (err) => {
-    	console.log(err);
+    .on('end', (err) => {
+    	flag = 1;
     })
 
     let j = 0;
@@ -89,6 +74,7 @@ const streamHead = (req, res, next, torrent, client) => {
     	if(j > torrentFilesNumber) {
 
     		isAllow = 1;
+    		let now = Date.now();
     		
     		let count = 0;
     		for(q = 0; q < notStreamed.length; q++)
@@ -98,8 +84,14 @@ const streamHead = (req, res, next, torrent, client) => {
     		zip.append(notStreamed, {name: `[${count} Not Downloaded].txt`});
     		clearInterval(interval);
     		zip.finalize();
-    		try { client.remove(magnetURI) }
-			catch(err) { console.log('95|Cannot Remove Torrent', err) }
+    		setInterval(() => {
+    			if(flag === 0)
+    				console.log((Date.now() - h)/(60*60))
+    			else
+    				console.log('Done Zip!')
+    		}, 1000)
+    		/*try { client.remove(magnetURI) }
+			catch(err) { console.log('95|Cannot Remove Torrent', err) }*/
     	}
     }
 
