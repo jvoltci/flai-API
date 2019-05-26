@@ -54,8 +54,10 @@ const streamHead = (req, res, next, torrent, client) => {
 	    		j++;
 	    		autoStreamOnEnd();
     		}
-    		else
+    		else {
+    			zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
     			round++;
+    		}
     	}
     	else {
     		zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
