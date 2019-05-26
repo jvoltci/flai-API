@@ -1,8 +1,20 @@
 const Archiver = require('archiver');
 
 const streamHead = (req, res, next, torrent, client) => {
-	let flag = 0;
-	
+
+	res.on('close', () => {
+		isAllow = 1;
+		console.log(`[Client Is Disconnected]`);
+
+		try { heatStream.destroy() }
+		catch { console.log("10|heatStream.destroy() Invalid") }
+		
+		try { client.remove(magnetURI) }
+		catch(err) { console.log('13|Cannot Remove client') }
+
+		try { clearInterval(interval) }
+		catch { console.log("16|Unable To Clear Interval") }
+	})
 	
 	let torrentFilesNumber = torrent.files.length;
 	let id = -1;
@@ -21,14 +33,13 @@ const streamHead = (req, res, next, torrent, client) => {
     });
     const zip = Archiver('zip');
     zip.pipe(res)
-    .on('end', (err) => {
-    	flag = 1;
+    .on('error', (err) => {
+    	console.log(err);
     })
 
     let j = 0;
 
     let heatStream = '';
-    let coolStream = '';
 
     let alpha = -1;
     let beta = 0;
@@ -60,12 +71,12 @@ const streamHead = (req, res, next, torrent, client) => {
     		}).on('end', (err) => {
     			if(j <= torrentFilesNumber) {
     				console.log(`(${j}/${torrentFilesNumber}) | ${torrent.files[j].name} | ${(beta/1000000).toFixed(1)} mb`);
-    				coolStream = torrent.files[j].createReadStream(torrent.files[j].name);
-    				coolStream.on('end', () => {
+    				heatStream = torrent.files[j].createReadStream(torrent.files[j].name);
+    				heatStream.on('end', () => {
     					j++;
     					autoStreamOnEnd();
     				})
-    				zip.append(coolStream, {name: torrent.files[j].name});
+    				zip.append(heatStream, {name: torrent.files[j].name});
     			}
     		}).on("error", (err) => {
 				return next(err);
@@ -74,7 +85,6 @@ const streamHead = (req, res, next, torrent, client) => {
     	if(j > torrentFilesNumber) {
 
     		isAllow = 1;
-    		let now = Date.now();
     		
     		let count = 0;
     		for(q = 0; q < notStreamed.length; q++)
@@ -84,14 +94,6 @@ const streamHead = (req, res, next, torrent, client) => {
     		zip.append(notStreamed, {name: `[${count} Not Downloaded].txt`});
     		clearInterval(interval);
     		zip.finalize();
-    		setInterval(() => {
-    			if(flag === 0)
-    				console.log((Date.now() - h)/(60*60))
-    			else
-    				console.log('Done Zip!')
-    		}, 1000)
-    		/*try { client.remove(magnetURI) }
-			catch(err) { console.log('95|Cannot Remove Torrent', err) }*/
     	}
     }
 
