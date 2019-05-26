@@ -82,7 +82,7 @@ const streamHead = (req, res, next, torrent, client) => {
 				return next(err);
 			});
     	}
-    	if(j > torrentFilesNumber) {
+    	if(j === torrentFilesNumber+1) {
 
     		isAllow = 1;
     		
