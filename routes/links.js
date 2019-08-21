@@ -63,7 +63,7 @@ const handleLinks = (req, res, db) => {
                     }
                 }
             }
-            })
+            )
         else {
             password = '';
             res.redirect('https://flai.ml');
