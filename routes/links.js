@@ -1,6 +1,6 @@
 const http = require('http');
 const https = require('https');
-const request = require('request');
+const requeste = require('request');
  
 //const { setFileName } = require('./lib/setFileName');
  
@@ -20,7 +20,7 @@ const handleLinks = (req, res, db) => {
     .then(() => {
         if(url) {
             let isRedirectedUrl = false;
-            request.head({ url: url, followRedirect: false}, (err, res) => {
+            requeste.head({ url: url, followRedirect: false}, (err, res) => {
                 if(res.headers.location) {
                     url = res.headers.location;
                     isRedirectedUrl = true;
