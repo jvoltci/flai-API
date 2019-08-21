@@ -8,9 +8,8 @@ I have used [Heroku](https://www.heroku.com/) hobby dyno server to implement it.
 ## Documentation
 ### Start
 
-* Paste link into Downloadable box.
+* Paste link into Download box.
 * Enter password into Password box as "jvoltci" (without quote).
-* Enter extension in next box.
 * Submit download button.
 
 ### API
