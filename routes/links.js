@@ -1,6 +1,6 @@
 const http = require('http');
 const https = require('https');
-const requeste = require('request');
+const request = require('request');
  
 //const { setFileName } = require('./lib/setFileName');
  
@@ -19,12 +19,9 @@ const handleLinks = (req, res, db) => {
     })
     .then(() => {
         if(url) {
-            let isRedirectedUrl = false;
-            requeste.head({ url: url, followRedirect: false}, (err, res) => {
-                if(res.headers.location) {
-                    url = res.headers.location;
-                    isRedirectedUrl = true;
-                }
+            request.head({ url: url, followRedirect: false}, (err, resE) => {
+                if(resE.headers.location)
+                    url = resE.headers.location;
 
                 let cd = '';
                 if(url[4] !== 's') {
@@ -35,12 +32,10 @@ const handleLinks = (req, res, db) => {
                             }
                             else
                                 cd = "attachment;filename=flai[Changed Extension].zip"
-                            if(!isRedirectedUrl) {
-                                res.writeHead(200, {
-                                    "Content-Disposition": cd,
-                                    'Content-Type': response.headers['content-type']
-                                });
-                            }
+                            res.writeHead(200, {
+                                "Content-Disposition": cd,
+                                'Content-Type': response.headers['content-type']
+                            });
                             response.pipe(res);
                         });
                     }
@@ -56,15 +51,11 @@ const handleLinks = (req, res, db) => {
                             }
                             else
                                 cd = "attachment;filename=flai[Changed Extension].zip"
-                            if(!isRedirectedUrl) {
-                                res.writeHead(200, {
-                                    "Content-Disposition": cd,
-                                    'Content-Type': response.headers['content-type']
-                                });
-                            }
-                            console.log('Up')
+                            res.writeHead(200, {
+                                "Content-Disposition": cd,
+                                'Content-Type': response.headers['content-type']
+                            });
                             response.pipe(res);
-                            console.log('Down');
                         });
                     }
                     catch(error) {
