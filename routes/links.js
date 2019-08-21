@@ -22,6 +22,7 @@ const handleLinks = (req, res, db) => {
             request.head({ url: url, followRedirect: false}, (err, res) => {
                 if(res.headers.location)
                     url = res.headers.location;
+                console.log(url);
 
                 let cd = '';
                 if(url[4] !== 's') {
