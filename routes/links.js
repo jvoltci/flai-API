@@ -19,9 +19,12 @@ const handleLinks = (req, res, db) => {
     })
     .then(() => {
         if(url) {
+            let isRedirectedUrl = false;
             request.head({ url: url, followRedirect: false}, (err, res) => {
-                if(res.headers.location)
+                if(res.headers.location) {
                     url = res.headers.location;
+                    isRedirectedUrl = true;
+                }
                 console.log(url);
 
                 let cd = '';
@@ -33,10 +36,12 @@ const handleLinks = (req, res, db) => {
                             }
                             else
                                 cd = "attachment;filename=flai[Changed Extension].zip"
-                            res.writeHead(200, {
-                                "Content-Disposition": cd,
-                                'Content-Type': response.headers['content-type']
-                            });
+                            if(!isRedirectedUrl) {
+                                res.writeHead(200, {
+                                    "Content-Disposition": cd,
+                                    'Content-Type': response.headers['content-type']
+                                });
+                            }
                             response.pipe(res);
                         });
                     }
@@ -52,10 +57,12 @@ const handleLinks = (req, res, db) => {
                             }
                             else
                                 cd = "attachment;filename=flai[Changed Extension].zip"
-                            res.writeHead(200, {
-                                "Content-Disposition": cd,
-                                'Content-Type': response.headers['content-type']
-                            });
+                            if(!isRedirectedUrl) {
+                                res.writeHead(200, {
+                                    "Content-Disposition": cd,
+                                    'Content-Type': response.headers['content-type']
+                                });
+                            }
                             response.pipe(res);
                         });
                     }
