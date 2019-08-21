@@ -25,21 +25,12 @@ const handleLinks = (req, res, db) => {
                     url = res.headers.location;
                     isRedirectedUrl = true;
                 }
+
                 let cd = '';
                 if(url[4] !== 's') {
                     try {
-                        requeste.get(url, (err, response) => {
-                            if(response.headers['content-disposition']) {
-                                cd = response.headers['content-disposition'];
-                            }
-                            else
-                                cd = "attachment;filename=flai[Changed Extension].zip"
-                            if(!isRedirectedUrl) {
-                                res.writeHead(200, {
-                                    "Content-Disposition": cd,
-                                    'Content-Type': response.headers['content-type']
-                                });
-                            }
+                        const request = http.get(url, (response) => {
+                            
                             response.pipe(res);
                         });
                     }
@@ -49,18 +40,8 @@ const handleLinks = (req, res, db) => {
                 }
                 else {
                     try {
-                        requeste.get(url, (err, response) => {
-                            if(response.headers['content-disposition']) {
-                                cd = response.headers['content-disposition'];
-                            }
-                            else
-                                cd = "attachment;filename=flai[Changed Extension].zip"
-                            if(!isRedirectedUrl) {
-                                res.writeHead(200, {
-                                    "Content-Disposition": cd,
-                                    'Content-Type': response.headers['content-type']
-                                });
-                            }
+                        const request = https.get(url, (response) => {
+                            
                             response.pipe(res);
                         });
                     }
