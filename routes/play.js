@@ -22,33 +22,34 @@ const handlePlay = (req, res, db) => {
 				request.head({ url: url, followRedirect: false}, (err, res) => {
 	                if(res.headers.location)
 	                    url = res.headers.location;
+
+	                if(url[4] !== 's') {
+						try {
+							const request = http.get(url, (response) => {
+								res.writeHead(200, {
+									'Content-Type': response.headers['content-type']
+								});
+								response.pipe(res);
+							});
+						}
+						catch(error) {
+							res.redirect('https://flai.ml/#/error');
+						}
+					}
+					else {
+						try {
+							const request = https.get(url, (response) => {
+								res.writeHead(200, {
+									'Content-Type': response.headers['content-type']
+								});
+								response.pipe(res);
+							});
+						}
+						catch(error) {
+							res.redirect('https://flai.ml/#/error');
+						}
+					}
 	            })
-				if(url[4] !== 's') {
-					try {
-						const request = http.get(url, (response) => {
-							res.writeHead(200, {
-								'Content-Type': response.headers['content-type']
-							});
-							response.pipe(res);
-						});
-					}
-					catch(error) {
-						res.redirect('https://flai.ml/#/error');
-					}
-				}
-				else {
-					try {
-						const request = https.get(url, (response) => {
-							res.writeHead(200, {
-								'Content-Type': response.headers['content-type']
-							});
-							response.pipe(res);
-						});
-					}
-					catch(error) {
-						res.redirect('https://flai.ml/#/error');
-					}
-				}
 			}
 			else {
 				res.redirect('https://flai.ml');
