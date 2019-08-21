@@ -25,12 +25,10 @@ const handleLinks = (req, res, db) => {
                     url = res.headers.location;
                     isRedirectedUrl = true;
                 }
-                console.log(url);
-
                 let cd = '';
                 if(url[4] !== 's') {
                     try {
-                        const request = http.get(url, (response) => {
+                        requeste.get(url, (err, response) => {
                             if(response.headers['content-disposition']) {
                                 cd = response.headers['content-disposition'];
                             }
@@ -51,7 +49,7 @@ const handleLinks = (req, res, db) => {
                 }
                 else {
                     try {
-                        const request = https.get(url, (response) => {
+                        requeste.get(url, (err, response) => {
                             if(response.headers['content-disposition']) {
                                 cd = response.headers['content-disposition'];
                             }
