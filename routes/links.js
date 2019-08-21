@@ -1,5 +1,6 @@
 const http = require('http');
 const https = require('https');
+const request = require('request');
  
 //const { setFileName } = require('./lib/setFileName');
  
@@ -18,25 +19,22 @@ const handleLinks = (req, res, db) => {
     })
     .then(() => {
         if(url) {
-        	let cd = '', ct = '';
+            request.head({ url: url, followRedirect: false}, (err, res) => {
+                if(res.headers.location)
+                    url = res.headers.location;
+            })
+        	let cd = '';
             if(url[4] !== 's') {
                 try {
                     const request = http.get(url, (response) => {
                     	if(response.headers['content-disposition']) {
                     		cd = response.headers['content-disposition'];
                     	}
-                    	else {
-                            cd = "attachment;filename=flai[Changed Extension].zip";
-                        }
-                        if(response.headers['content-type']) {
-                            ct = response.headers['content-type'];
-                        }
-                        else {
-                            ct = 'application/octet-stream';
-                        }
+                    	else
+                    		cd = "attachment;filename=flai[Changed Extension].zip"
                         res.writeHead(200, {
                             "Content-Disposition": cd,
-                            'Content-Type': ct
+                            'Content-Type': response.headers['content-type']
                         });
                         response.pipe(res);
                     });
@@ -51,18 +49,11 @@ const handleLinks = (req, res, db) => {
                     	if(response.headers['content-disposition']) {
                     		cd = response.headers['content-disposition'];
                     	}
-                    	else {
-                            cd = "attachment;filename=flai[Changed Extension].zip";
-                        }
-                        if(response.headers['content-type']) {
-                            ct = response.headers['content-type'];
-                        }
-                        else {
-                            ct = 'application/octet-stream';
-                        }
+                    	else
+                    		cd = "attachment;filename=flai[Changed Extension].zip"
                         res.writeHead(200, {
                             "Content-Disposition": cd,
-                            'Content-Type': ct
+                            'Content-Type': response.headers['content-type']
                         });
                         response.pipe(res);
                     });

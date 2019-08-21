@@ -1,5 +1,6 @@
 const http = require('http');
 const https = require('https');
+const request = require('request');
 
 const handlePlay = (req, res, db) => {
 
@@ -18,6 +19,10 @@ const handlePlay = (req, res, db) => {
 		})
 		.then(() => {
 			if(url) {
+				request.head({ url: url, followRedirect: false}, (err, res) => {
+	                if(res.headers.location)
+	                    url = res.headers.location;
+	            })
 				if(url[4] !== 's') {
 					try {
 						const request = http.get(url, (response) => {

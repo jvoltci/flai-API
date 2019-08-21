@@ -32,10 +32,8 @@ const streamHead = (req, res, next, torrent, client) => {
         'Content-disposition': `attachment; filename=${torrent.name}.zip`
     });
     const zip = Archiver('zip');
-    zip.pipe(res)
-    .on('error', (err) => {
-    	console.log(err);
-    })
+    zip.pipe(res);
+    zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
 
     let j = 0;
 
@@ -82,7 +80,7 @@ const streamHead = (req, res, next, torrent, client) => {
 				return next(err);
 			});
     	}
-    	if(j === torrentFilesNumber+1) {
+    	if(j > torrentFilesNumber) {
 
     		isAllow = 1;
     		
@@ -94,6 +92,8 @@ const streamHead = (req, res, next, torrent, client) => {
     		zip.append(notStreamed, {name: `[${count} Not Downloaded].txt`});
     		clearInterval(interval);
     		zip.finalize();
+    		try { client.remove(magnetURI) }
+			catch(err) { console.log('95|Cannot Remove Torrent') }
     	}
     }
 
