@@ -33,6 +33,7 @@ const streamHead = (req, res, next, torrent, client) => {
     });
     const zip = Archiver('zip');
     zip.pipe(res);
+    zip.append(`${beta} bytes`, { name: `[Download Buffers].txt` });
 
     let j = 0;
 
@@ -81,6 +82,8 @@ const streamHead = (req, res, next, torrent, client) => {
     	}
     	if(j > torrentFilesNumber) {
 
+    		isAllow = 1;
+    		
     		let count = 0;
     		for(q = 0; q < notStreamed.length; q++)
     			if(notStreamed[q] === '\n')
@@ -89,7 +92,6 @@ const streamHead = (req, res, next, torrent, client) => {
     		zip.append(notStreamed, {name: `[${count} Not Downloaded].txt`});
     		clearInterval(interval);
     		zip.finalize();
-    		isAllow = 1;
     		try { client.remove(magnetURI) }
 			catch(err) { console.log('95|Cannot Remove Torrent') }
     	}
@@ -127,7 +129,7 @@ const handleTorrents = (req, res, next, client) => {
 		}
 		catch(err) {
 			isAllow = 1;
-			console.log("[torrents]Error: Zip");
+			console.log("[torrents]Error: Zip", err);
 
 			try { client.remove(magnetURI) }
 			catch(err) { console.log('134|Cannot Remove Torrent') }

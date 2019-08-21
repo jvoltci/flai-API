@@ -1,5 +1,6 @@
 const http = require('http');
 const https = require('https');
+const request = require('request');
 
 const handlePlay = (req, res, db) => {
 
@@ -18,32 +19,37 @@ const handlePlay = (req, res, db) => {
 		})
 		.then(() => {
 			if(url) {
-				if(url[4] !== 's') {
-					try {
-						const request = http.get(url, (response) => {
-							res.writeHead(200, {
-								'Content-Type': response.headers['content-type']
+				request.head({ url: url, followRedirect: false}, (err, resE) => {
+	                if(resE.headers.location)
+	                    url = resE.headers.location;
+
+	                if(url[4] !== 's') {
+						try {
+							const request = http.get(url, (response) => {
+								res.writeHead(200, {
+									'Content-Type': response.headers['content-type']
+								});
+								response.pipe(res);
 							});
-							response.pipe(res);
-						});
+						}
+						catch(error) {
+							res.redirect('https://flai.ml/#/error');
+						}
 					}
-					catch(error) {
-						res.redirect('https://flai.ml/#/error');
-					}
-				}
-				else {
-					try {
-						const request = https.get(url, (response) => {
-							res.writeHead(200, {
-								'Content-Type': response.headers['content-type']
+					else {
+						try {
+							const request = https.get(url, (response) => {
+								res.writeHead(200, {
+									'Content-Type': response.headers['content-type']
+								});
+								response.pipe(res);
 							});
-							response.pipe(res);
-						});
+						}
+						catch(error) {
+							res.redirect('https://flai.ml/#/error');
+						}
 					}
-					catch(error) {
-						res.redirect('https://flai.ml/#/error');
-					}
-				}
+	            })
 			}
 			else {
 				res.redirect('https://flai.ml');
