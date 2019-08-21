@@ -19,9 +19,9 @@ const handlePlay = (req, res, db) => {
 		})
 		.then(() => {
 			if(url) {
-				request.head({ url: url, followRedirect: false}, (err, res) => {
-	                if(res.headers.location)
-	                    url = res.headers.location;
+				request.head({ url: url, followRedirect: false}, (err, resE) => {
+	                if(resE.headers.location)
+	                    url = resE.headers.location;
 
 	                if(url[4] !== 's') {
 						try {
