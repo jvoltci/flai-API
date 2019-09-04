@@ -1,5 +1,8 @@
 const Archiver = require('archiver');
 
+let alpha = -1;
+let beta = 0;
+
 const streamHead = (req, res, next, torrent, client) => {
 
 	res.on('close', () => {
@@ -38,9 +41,6 @@ const streamHead = (req, res, next, torrent, client) => {
     let j = 0;
 
     let heatStream = '';
-
-    let alpha = -1;
-    let beta = 0;
 
     let notStreamed = '';
 
