@@ -10,7 +10,7 @@ const handleDownload = (req, res, db) => {
 	if (password === process.env.PASS) {
 		url = req.body.user.url;
 
-		db('flai').where('url', '=', url)
+		db.collection('flai').find({ url }).project({ url: 1 }).toArray()
 		.then(data => {
 			if(data[0]) {
 				link = data[0].link;
@@ -18,8 +18,11 @@ const handleDownload = (req, res, db) => {
 			else {
 				now = Date().toString();
 				link = makeid(10);
-				db('flai').insert({link: link, url: url, date: now}).returning('*')
-					.then(data => console.log(link));
+				db.collection('flai').insertOne({link, url, date: now}, (error, result) => {
+					if (result) {
+						console.log(link)
+					}
+				})
 			}
 		})
 		.then(() => {
@@ -27,7 +30,7 @@ const handleDownload = (req, res, db) => {
 		})
 	}
 	else
-		return res.redirect('https://flai.ml/#/error');
+		return res.redirect('https://jvoltci.github.io/flai/#/error');
 }
 
 module.exports = {

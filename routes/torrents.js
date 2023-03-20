@@ -10,13 +10,13 @@ const streamHead = (req, res, next, torrent, client) => {
 		console.log(`[Client Is Disconnected]`);
 
 		try { heatStream.destroy() }
-		catch { console.log("10|heatStream.destroy() Invalid") }
+		catch { console.log("13|heatStream.destroy() Invalid") }
 		
 		try { client.remove(magnetURI) }
-		catch(err) { console.log('13|Cannot Remove client') }
+		catch(err) { console.log('16|Cannot Remove client') }
 
 		try { clearInterval(interval) }
-		catch { console.log("16|Unable To Clear Interval") }
+		catch { console.log("19|Unable To Clear Interval") }
 	})
 	
 	let torrentFilesNumber = torrent.files.length;
@@ -28,7 +28,7 @@ const streamHead = (req, res, next, torrent, client) => {
 		}
 	}
 	if(id === -1)
-		return res.redirect('https://flai.ml/#/error');
+		return res.redirect('https://jvoltci.github.io/flai/#/error');
 
 	res.writeHead(200, {
         'Content-Type': 'application/zip',
@@ -118,12 +118,12 @@ const handleTorrents = (req, res, next, client) => {
 
 				}).on('error', (err) => {
 
-					console.log('120|Cannot Add Torrent');
+					console.log('121|Cannot Add Torrent');
 
 					try { client.remove(magnetURI) }
 					catch(err) { console.log('123|Cannot Remove Torrent') }
 
-					res.redirect('https://flai.ml/#/error');
+					res.redirect('https://jvoltci.github.io/flai/#/error');
 				});
 			}
 		}
@@ -132,9 +132,9 @@ const handleTorrents = (req, res, next, client) => {
 			console.log("[torrents]Error: Zip", err);
 
 			try { client.remove(magnetURI) }
-			catch(err) { console.log('134|Cannot Remove Torrent') }
+			catch(err) { console.log('135|Cannot Remove Torrent') }
 
-			res.redirect('https://flai.ml/#/error');
+			res.redirect('https://jvoltci.github.io/flai/#/error');
 			//process.setMaxListeners(0);
 		}
 	}

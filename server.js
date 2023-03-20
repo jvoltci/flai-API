@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const knex = require('knex');
+const { MongoClient } = require("mongodb")
 const WebTorrent = require('webtorrent')
 
 const download = require('./routes/download');
@@ -11,15 +11,15 @@ const metadata = require('./routes/metadata');
 const torrent = require('./routes/torrent');
 const torrents = require('./routes/torrents');
 
-const db = knex({
-  client: 'pg',
-  connection: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
-  }
-});
+// Database config
+const connectionUrl = process.env.DATABASE//'mongodb+srv://jvoltci:jvoltci@genesis.ffs6wtd.mongodb.net/test'
+const dbClient = new MongoClient(connectionUrl)
+const databaseName = "flaiDB"
+const db = dbClient.db(databaseName)
+dbClient.connect()
+console.log('Database Connected successfully to server')
 
-let magnetURI = '';
+magnetURI = '';
 let password = '';
 isAllow = 1; //Something msterious here
 

@@ -28,16 +28,16 @@ const handleMetadata = (req, res, client) => {
 					try { client.remove(magnetURI) }
 					catch(err) { console.log('[metadata]Error: Magnet Remove') }
 
-					res.redirect('https://flai.ml/#/error');
+					res.redirect('https://jvoltci.github.io/flai/#/error');
 				})
 			}
 		}
 		else
-			return res.redirect('https://flai.ml/#/error');
+			return res.redirect('https://jvoltci.github.io/flai/#/error');
 	}
 	catch(err) {
 		console.log('[metadata]Error: Metadata');
-		res.redirect('https://flai.ml/#/error');
+		res.redirect('https://jvoltci.github.io/flai/#/error');
 	}
 }
 

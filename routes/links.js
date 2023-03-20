@@ -7,8 +7,8 @@ const request = require('request');
 const handleLinks = (req, res, db) => {
  
     let fetchedLink = req.params.id;
-    if(fetchedLink.length < 10) res.redirect('https://flai.ml');
-    db('flai').where('link', '=', fetchedLink)
+    if(fetchedLink.length < 10) res.redirect('https://jvoltci.github.io/flai');
+    db.collection('flai').find({ link: fetchedLink }).project({ link: 1 }).toArray()
     .then(data => {
         if(data[0]) {
             url = data[0].url;
@@ -31,7 +31,7 @@ const handleLinks = (req, res, db) => {
                         });
                     }
                     catch(error) {
-                        res.redirect('https://flai.ml/#/error');
+                        res.redirect('https://jvoltci.github.io/flai/#/error');
                     }
                 }
                 else {
@@ -41,7 +41,7 @@ const handleLinks = (req, res, db) => {
                         });
                     }
                     catch(error) {
-                        res.redirect('https://flai.ml/#/error');
+                        res.redirect('https://jvoltci.github.io/flai/#/error');
                     }
                 }
             }

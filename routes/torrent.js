@@ -3,7 +3,7 @@ const streamHead = (req, res, next, torrent, client, id) => {
 	let alpha = 0, beta = 0;
 	setTimeout(() => {
 		if(alpha === beta)
-			res.redirect('https://flai.ml/#/error/timeout');
+			res.redirect('https://jvoltci.github.io/flai/#/error/timeout');
 	}, 25000);
 
 	let stream = torrent.files[id].createReadStream();
@@ -33,7 +33,7 @@ const handleTorrent = (req, res, next, client, db) => {
 					}
 				}
 				if(id === -1)
-					return res.redirect('https://flai.ml/#/error');
+					return res.redirect('https://jvoltci.github.io/flai/#/error');
 
 				streamHead(req, res, next, torrent, client, id);
 			}
@@ -48,9 +48,9 @@ const handleTorrent = (req, res, next, client, db) => {
 						}
 					}
 					if(id === -1)
-						return res.redirect('https://flai.ml/#/error');
+						return res.redirect('https://jvoltci.github.io/flai/#/error');
 
-					db('flai').where('url', '=', magnetURI)
+						db.collection('flai').find({ url: magnetURI }).project({ url: 1 }).toArray()
 					.then(data => {
 						if(data[0]) {
 							link = data[0].link;
@@ -58,8 +58,11 @@ const handleTorrent = (req, res, next, client, db) => {
 						else {
 							now = Date().toString();
 							link = "torrent/" + torrent.name;
-							db('flai').insert({link: link, url: magnetURI, date: now}).returning('*')
-								.then(data => console.log(link));
+							db.collection('flai').insertOne({link, url: magnetURI, date: now}, (error, result) => {
+								if (result) {
+									console.log(link)
+								}
+							})
 						}
 					})
 					.catch(err => console.log(err));
@@ -72,13 +75,13 @@ const handleTorrent = (req, res, next, client, db) => {
 		        try { client.remove(magnetURI) }
 		        catch(err) { console.log('[torrent]Error: Magnet Remove') }
 
-		        res.redirect('https://flai.ml/#/error');
+		        res.redirect('https://jvoltci.github.io/flai/#/error');
 		      });
 			}
 	}
 	catch(e) {
 		console.log("[torrent]Z-Error: ",e);
-		res.redirect('https://flai.ml/#/error');
+		res.redirect('https://jvoltci.github.io/flai/#/error');
 	}
 }
 
